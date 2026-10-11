@@ -6,7 +6,7 @@ import { version } from '../version.js';
 
 const HINT = 'Click an example to run it in the command line. Hover over a word in any program to see what it does.';
 
-export function playgroundMarkup() {
+export function playgroundMarkup(): DocumentFragment {
   const template = document.createElement('template');
   template.innerHTML = `
   <div class="pg-sidebar">
@@ -65,7 +65,7 @@ export function playgroundMarkup() {
   </div>
   `;
   const markup = template.content;
-  markup.querySelector('.logo-version').textContent = 'Logo v' + version;
+  markup.querySelector('.logo-version')!.textContent = 'Logo v' + version;
   markup.appendChild(referenceSection(HINT));
   return markup;
 }
