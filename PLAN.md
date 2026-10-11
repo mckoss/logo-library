@@ -346,6 +346,8 @@ Open questions are tracked as issues in this repo.
         links (including the frozen 1.8.11 links)
   - [x] One fix found on the way: a Tiles tile named after a built-in object key (`constructor`)
         made `clean()` throw, so the whole link failed to open; now it's dropped like any unknown tile
+- [x] Styles scoped to the controls (#6): no rule depends on the site's `.post-content` any more, the
+      Playground page's paragraph width moved to the site's CSS, and the demo pages are pixel-identical
 - [ ] Steps 4–5: Svelte spike on Turtle Tiles, and the decision
 - [x] Example pages (`examples/`): hand-written plain HTML, one per element, with their own
       Playground and music player pages, deployed at mckoss.com/logo-library/ and tested on

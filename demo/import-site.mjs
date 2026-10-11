@@ -189,6 +189,11 @@ function hostCSS() {
     '/* The boxes the host gives the elements: blocks, like the divs they replace. */',
     'logo-example, logo-worksheet, logo-playground, logo-reference { display: block; }',
     '',
+    '/* The Playground page\'s text keeps a reading width beside the wide',
+    '   Playground. (It was in custom.css\'s Interactive Logo section, but it styles',
+    '   the page\'s paragraphs, not the control.) */',
+    'div.post-content logo-playground ~ p, .article-wide .post-content > p { max-width: 680px; }',
+    '',
     '/* assets/css/custom.css: the Turtle Tiles page\'s body, which stays with the host */',
     ttBody,
   ].join('\n');

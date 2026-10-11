@@ -55,8 +55,8 @@ For each entry a page uses, write in its `<head>`, after your own styles:
 
 and **follow the imports**: each imported chunk's own `imports` are
 preloaded too, and its `css` added, all the way down (as Vite's own HTML
-output does). For the `lessons` entry of 2.0.0, served at `/logo/assets/`,
-that gives:
+output does). For the `lessons` entry, served at `/logo/assets/`, that gives
+tags like these (the hashes differ from build to build):
 
 ```html
 <link rel="stylesheet" href="/logo/assets/lessons-CjInuMdp.css">
