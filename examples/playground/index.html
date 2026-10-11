@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>logo-playground | logo-library</title>
+<link rel="icon" href="data:,">
+<style>
+  body { max-width: 72rem; margin: 0 auto; padding: 1rem 1rem 3rem; font: 16px/1.5 system-ui, sans-serif; color: #201e1d; background: #fff; }
+  .intro { max-width: 50rem; }
+  pre { overflow-x: auto; }
+  .markup { padding: .75rem 1rem; border: 1px solid #ccc; font-size: 14px; }
+  logo-playground { display: block; margin: 1.5rem 0; }
+</style>
+<!--#logo-entry playground-->
+</head>
+<body>
+<div class="intro">
+<p><a href="../">logo-library</a></p>
+<h1>&lt;logo-playground&gt;</h1>
+<p>The whole Logo Playground: programs saved in the browser, an editor, Play, Step and the
+debugger, the stage, a command line, and the language reference. Its Examples folder comes from
+the JSON inside it. The <code>playground</code> entry defines it, and Open in Playground on the
+other pages lands here. This page's markup:</p>
+
+<pre class="markup">&lt;logo-playground&gt;
+&lt;script type="application/json" class="pg-examples-data"&gt;
+[{"lesson": "Shapes", "url": "../example/", "examples": [
+  {"name": "Square", "auto": false, "code": "to square :size\n  repeat 4 [fd :size rt 90]\nend", "run": "square 100"},
+  {"name": "Star", "auto": false, "code": "repeat 5 [fd 150 rt 144]", "run": null}]},
+ {"lesson": "Patterns", "url": "../worksheet/", "examples": [
+  {"name": "Spiral", "auto": false, "code": "repeat 90 [fd repcount * 2 rt 89]", "run": null}]}]
+&lt;/script&gt;
+&lt;/logo-playground&gt;</pre>
+
+<p>Each lesson has a title and a page (its link in the folder); each example a
+<code>name</code>, <code>auto</code> (true if the name was made up), its <code>code</code>, and a
+command to <code>run</code> after it, or <code>null</code>. See
+<a href="https://github.com/mckoss/logo-library/blob/main/CONTRACT.md#logo-playground">CONTRACT.md</a>.</p>
+</div>
+
+<logo-playground>
+<script type="application/json" class="pg-examples-data">
+[{"lesson": "Shapes", "url": "../example/", "examples": [
+  {"name": "Square", "auto": false, "code": "to square :size\n  repeat 4 [fd :size rt 90]\nend", "run": "square 100"},
+  {"name": "Star", "auto": false, "code": "repeat 5 [fd 150 rt 144]", "run": null}]},
+ {"lesson": "Patterns", "url": "../worksheet/", "examples": [
+  {"name": "Spiral", "auto": false, "code": "repeat 90 [fd repcount * 2 rt 89]", "run": null}]}]
+</script>
+</logo-playground>
+</body>
+</html>
