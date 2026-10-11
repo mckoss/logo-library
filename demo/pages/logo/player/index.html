@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Music Player Program | mckoss.com</title>
+<meta name="description" content="The helper program that lets Logo play songs by note name: do re mi." />
+<meta name="robots" content="noodp"/>
+<link rel="canonical" href="https://mckoss.com/logo/player/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="The helper program that lets Logo play songs by note name: do re mi." />
+<meta name="twitter:title" content="The Music Player Program | mckoss.com" />
+
+
+<meta property="og:type" content="article" />
+<meta content="The Music Player Program | mckoss.com" property="og:title">
+<meta content="The helper program that lets Logo play songs by note name: do re mi." property="og:description">
+<meta property="og:url" content="https://mckoss.com/logo/player/" />
+<meta property="og:site_name" content="mckoss.com | Mike Koss" />
+
+<meta property="article:published_time" content="1995-10-21 10:00:00 -0700 -0700" />
+
+
+
+
+
+<script type="application/ld+json">
+{ 
+    "@context": "http://schema.org", 
+    "@type": "BlogPosting",
+    "headline": "The Music Player Program",
+    "genre": "",  
+    "url": "https:\/\/mckoss.com\/logo\/player\/",
+    "datePublished": "1995-10-21 10:00:00 -0700 -0700",
+    "description": "The helper program that lets Logo play songs by note name: do re mi.",
+    "author": {
+        "@type": "Person",
+        "name": "Mike Koss"
+    }
+ }
+</script>
+
+
+
+
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap">
+
+
+
+
+<link rel="stylesheet" href="/css/site.css">
+
+
+<script src="/js/site.js" defer></script>
+
+
+
+
+
+
+
+<!--#logo-entry lessons-->
+
+
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  
+<header class="topbar">
+  <div class="topbar-row">
+    <a class="topbar-name" href="/">Mike Koss</a>
+    <button type="button" class="menu-button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav id="site-menu" class="menu" aria-label="Site" hidden>
+    
+
+
+
+  
+<a href="/pages/about/">About</a>
+  
+
+  
+<a href="/pages/contact/">Contact</a>
+  
+
+
+  </nav>
+</header>
+
+  <div class="layout">
+    
+<aside class="sidebar">
+  <div class="brand">
+    <a class="brand-name" href="/">Mike<br>Koss</a>
+    <span class="brand-host">mckoss.com</span>
+  </div>
+  <nav class="site-nav" aria-label="Site">
+    
+
+
+
+  
+<a href="/pages/about/">About</a>
+  
+
+  
+<a href="/pages/contact/">Contact</a>
+  
+
+
+  </nav>
+  
+    <nav class="tag-rows" aria-labelledby="tags-label">
+      <span class="label" id="tags-label">Tags</span>
+      
+
+
+
+
+
+<a class="tag-row" href="/"><span class="name">All</span> <span class="count">21</span></a>
+
+
+
+
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+
+  
+<a class="tag-row" href="/tags/ai/"><span class="name">AI</span> <span class="count">13</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/projects/"><span class="name">Projects</span> <span class="count">7</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/vibe-coding/"><span class="name">Vibe Coding</span> <span class="count">6</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/history/"><span class="name">History</span> <span class="count">5</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/web/"><span class="name">Web</span> <span class="count">4</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/claude/"><span class="name">Claude</span> <span class="count">3</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/midjourney/"><span class="name">Midjourney</span> <span class="count">3</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/beauty/"><span class="name">Beauty</span> <span class="count">2</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/education/"><span class="name">Education</span> <span class="count">2</span></a>
+  
+
+
+    </nav>
+  
+  <div class="social"><a href="https://instagram.com/mckoss" rel="noopener">Instagram</a>
+<a href="https://github.com/mckoss" rel="noopener">GitHub</a>
+<a href="mailto:mike@mckoss.com">Email</a>
+</div>
+</aside>
+
+    <main id="main" class="main">
+      
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">All Posts</a><span class="sep" aria-hidden="true">/</span><a href="/logo/">Logo Programming</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">Music Player</span>
+</nav>
+
+<header class="article-header">
+  <h1 class="post-title">The Music Player Program</h1>
+  <div class="article-meta">
+    <time datetime="1995-10-21T10:00:00-07:00">October 21, 1995</time>
+    <span>By Mike Koss</span>
+  </div>
+</header>
+
+
+
+<div class="article-body">
+  
+  <div class="side-block try-top">
+<span class="label">Try it</span>
+
+<a class="btn btn-primary" href="/logo/playground/">Logo Playground</a>
+
+</div>
+  <article>
+    <div class="post-content">
+      <p>This is the helper program that lets Logo play songs by note name. It&rsquo;s built
+into every Logo page on this site, so you don&rsquo;t need to load it. Try
+<code>do re mi fa sol la ti high do</code>, or copy the program into the
+<a href="/logo/playground/">playground</a> and add your own instruments.</p>
+<p>It plays notes with three commands that this site adds to Logo:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Command</th>
+					<th>What it does</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>PLAYNOTE 60 1</code></td>
+					<td>Play note number 60 (middle C) for 1 beat. One higher is a half step up; 12 higher is an octave.</td>
+			</tr>
+			<tr>
+					<td><code>SETINSTRUMENT &quot;flute</code></td>
+					<td>Choose an instrument by name, or by a General MIDI number from 0 to 127.</td>
+			</tr>
+			<tr>
+					<td><code>SETTEMPO 120</code></td>
+					<td>Set the speed in beats per minute.</td>
+			</tr>
+	</tbody>
+</table>
+<logo-example try="do re mi fa sol la ti high do" name="Music Player">
+<pre><code><span class="lg-c">; Player - play songs with solfege notes: do re mi fa sol la ti</span>
+<span class="lg-c">;</span>
+<span class="lg-c">; Mike Koss, 10/21/95; rewritten in 2026 for Logo in the browser.</span>
+<span class="lg-c">;</span>
+<span class="lg-c">; Notes:       do re mi fa sol la ti</span>
+<span class="lg-c">; Lengths:     eighth quarter half whole, or beats &lt;count&gt;</span>
+<span class="lg-c">; Octaves:     dinosaur low middle high</span>
+<span class="lg-c">; Accidentals: flat natural sharp</span>
+<span class="lg-c">; Instruments: piano harpsichord musicbox guitar hendrix violin</span>
+<span class="lg-c">;              trumpet brass flute banjo steeldrum tom gun,</span>
+<span class="lg-c">;              or instrument &lt;number&gt;</span>
+<span class="lg-c">;</span>
+<span class="lg-c">; Built on three commands: PLAYNOTE &lt;midi-note&gt; &lt;beats&gt;,</span>
+<span class="lg-c">; SETINSTRUMENT &lt;name or number&gt; and SETTEMPO &lt;beats-per-minute&gt;.</span>
+
+<span class="lg-k">to</span> reset
+<span class="lg-p">make</span> <span class="lg-w">&quot;octave</span> <span class="lg-n">0</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;length</span> <span class="lg-n">1</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;accidental</span> <span class="lg-n">0</span>
+<span class="lg-p">settempo</span> <span class="lg-n">240</span>
+piano
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> note <span class="lg-v">:step</span>
+<span class="lg-p">playnote</span> <span class="lg-n">60</span> + <span class="lg-v">:step</span> + <span class="lg-n">12</span> * <span class="lg-v">:octave</span> + <span class="lg-v">:accidental</span> <span class="lg-v">:length</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> do
+note <span class="lg-n">0</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> re
+note <span class="lg-n">2</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> mi
+note <span class="lg-n">4</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> fa
+note <span class="lg-n">5</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> sol
+note <span class="lg-n">7</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> la
+note <span class="lg-n">9</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> ti
+note <span class="lg-n">11</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> beats <span class="lg-v">:count</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;length</span> <span class="lg-v">:count</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> eighth
+beats <span class="lg-n">0.5</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> quarter
+beats <span class="lg-n">1</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> half
+beats <span class="lg-n">2</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> whole
+beats <span class="lg-n">4</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> dinosaur
+<span class="lg-p">make</span> <span class="lg-w">&quot;octave</span> -<span class="lg-n">2</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> low
+<span class="lg-p">make</span> <span class="lg-w">&quot;octave</span> -<span class="lg-n">1</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> middle
+<span class="lg-p">make</span> <span class="lg-w">&quot;octave</span> <span class="lg-n">0</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> high
+<span class="lg-p">make</span> <span class="lg-w">&quot;octave</span> <span class="lg-n">1</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> flat
+<span class="lg-p">make</span> <span class="lg-w">&quot;accidental</span> -<span class="lg-n">1</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> natural
+<span class="lg-p">make</span> <span class="lg-w">&quot;accidental</span> <span class="lg-n">0</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> sharp
+<span class="lg-p">make</span> <span class="lg-w">&quot;accidental</span> <span class="lg-n">1</span>
+<span class="lg-k">end</span>
+
+<span class="lg-c">; Choose an instrument by its General MIDI number, 0 to 127; the</span>
+<span class="lg-c">; worksheet&#39;s REPEAT 128 [INSTRUMENT REPCOUNT ...] plays them all.</span>
+<span class="lg-k">to</span> instrument <span class="lg-v">:number</span>
+<span class="lg-p">setinstrument</span> <span class="lg-v">:number</span>
+<span class="lg-k">end</span>
+
+<span class="lg-c">; Choose an instrument by name. SETINSTRUMENT takes a name or a number.</span>
+<span class="lg-k">to</span> piano
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;piano</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> harpsichord
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;harpsichord</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> musicbox
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;musicbox</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> guitar
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;guitar</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> hendrix
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;hendrix</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> violin
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;violin</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> trumpet
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;trumpet</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> brass
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;brass</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> flute
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;flute</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> banjo
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;banjo</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> steeldrum
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;steeldrum</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> tom
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;tom</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> gun
+<span class="lg-p">setinstrument</span> <span class="lg-w">&quot;gun</span>
+<span class="lg-k">end</span>
+
+reset</code></pre>
+</logo-example>
+
+<p><em>I wrote the first version of this program in October 1995 for MSW Logo,
+where it played notes by sending raw messages to a MIDI synthesizer. That
+<a href="https://github.com/mckoss/original-mckoss.com/blob/master/logo/player.lgo">original player.lgo</a>
+is still in the archive of the old site. This 2026 version keeps its words but
+plays them in the browser.</em></p>
+
+    </div>
+  </article>
+  
+  
+  <aside class="side" aria-label="About this project">
+    
+    <div class="side-block side-try">
+<span class="label">Try it</span>
+
+<a class="btn btn-primary" href="/logo/playground/">Logo Playground</a>
+
+</div>
+    
+    
+    
+  </aside>
+  
+</div>
+
+
+
+
+<nav class="prev-next" aria-label="More in this series">
+  
+  <a href="/logo/logomusic/"><span class="dir">← Previous</span><span class="title">Making Music with Logo</span></a>
+  
+  
+  <a href="/logo/rolldice/"><span class="dir">Next →</span><span class="title">How to &#34;Roll the Dice&#34;</span></a>
+  
+</nav>
+
+
+
+
+      <div class="social-row mobile-only"><a href="https://instagram.com/mckoss" rel="noopener">Instagram</a>
+<a href="https://github.com/mckoss" rel="noopener">GitHub</a>
+<a href="mailto:mike@mckoss.com">Email</a>
+</div>
+<footer class="site-footer">
+  All rights reserved by <a href="https://mckoss.com">Mike Koss</a>
+</footer>
+
+    </main>
+  </div>
+  
+
+
+
+</body>
+</html>

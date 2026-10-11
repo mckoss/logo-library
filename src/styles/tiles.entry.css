@@ -1,0 +1,3 @@
+/* The tiles entry's stylesheet. */
+@import "./controls.css";
+@import "./tiles.css";

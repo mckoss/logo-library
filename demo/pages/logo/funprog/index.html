@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fun Programs | mckoss.com</title>
+<meta name="description" content="Bigger programs: a jack-o&rsquo;-lantern, recursive trees and the Towers of Hanoi." />
+<meta name="robots" content="noodp"/>
+<link rel="canonical" href="https://mckoss.com/logo/funprog/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="Bigger programs: a jack-o&rsquo;-lantern, recursive trees and the Towers of Hanoi." />
+<meta name="twitter:title" content="Fun Programs | mckoss.com" />
+
+
+<meta property="og:type" content="article" />
+<meta content="Fun Programs | mckoss.com" property="og:title">
+<meta content="Bigger programs: a jack-o&rsquo;-lantern, recursive trees and the Towers of Hanoi." property="og:description">
+<meta property="og:url" content="https://mckoss.com/logo/funprog/" />
+<meta property="og:site_name" content="mckoss.com | Mike Koss" />
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{ 
+    "@context": "http://schema.org", 
+    "@type": "BlogPosting",
+    "headline": "Fun Programs",
+    "genre": "",  
+    "url": "https:\/\/mckoss.com\/logo\/funprog\/",
+    "datePublished": "0001-01-01 00:00:00 \u002b0000 UTC",
+    "description": "Bigger programs: a jack-o\u0026rsquo;-lantern, recursive trees and the Towers of Hanoi.",
+    "author": {
+        "@type": "Person",
+        "name": "Mike Koss"
+    }
+ }
+</script>
+
+
+
+
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap">
+
+
+
+
+<link rel="stylesheet" href="/css/site.css">
+
+
+<script src="/js/site.js" defer></script>
+
+
+
+
+
+
+
+<!--#logo-entry lessons-->
+
+
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  
+<header class="topbar">
+  <div class="topbar-row">
+    <a class="topbar-name" href="/">Mike Koss</a>
+    <button type="button" class="menu-button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav id="site-menu" class="menu" aria-label="Site" hidden>
+    
+
+
+
+  
+<a href="/pages/about/">About</a>
+  
+
+  
+<a href="/pages/contact/">Contact</a>
+  
+
+
+  </nav>
+</header>
+
+  <div class="layout">
+    
+<aside class="sidebar">
+  <div class="brand">
+    <a class="brand-name" href="/">Mike<br>Koss</a>
+    <span class="brand-host">mckoss.com</span>
+  </div>
+  <nav class="site-nav" aria-label="Site">
+    
+
+
+
+  
+<a href="/pages/about/">About</a>
+  
+
+  
+<a href="/pages/contact/">Contact</a>
+  
+
+
+  </nav>
+  
+    <nav class="tag-rows" aria-labelledby="tags-label">
+      <span class="label" id="tags-label">Tags</span>
+      
+
+
+
+
+
+<a class="tag-row" href="/"><span class="name">All</span> <span class="count">21</span></a>
+
+
+
+
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+    
+    
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+  
+
+  
+
+
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+    
+  
+
+
+  
+<a class="tag-row" href="/tags/ai/"><span class="name">AI</span> <span class="count">13</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/projects/"><span class="name">Projects</span> <span class="count">7</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/vibe-coding/"><span class="name">Vibe Coding</span> <span class="count">6</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/history/"><span class="name">History</span> <span class="count">5</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/web/"><span class="name">Web</span> <span class="count">4</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/claude/"><span class="name">Claude</span> <span class="count">3</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/midjourney/"><span class="name">Midjourney</span> <span class="count">3</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/beauty/"><span class="name">Beauty</span> <span class="count">2</span></a>
+  
+
+  
+<a class="tag-row" href="/tags/education/"><span class="name">Education</span> <span class="count">2</span></a>
+  
+
+
+    </nav>
+  
+  <div class="social"><a href="https://instagram.com/mckoss" rel="noopener">Instagram</a>
+<a href="https://github.com/mckoss" rel="noopener">GitHub</a>
+<a href="mailto:mike@mckoss.com">Email</a>
+</div>
+</aside>
+
+    <main id="main" class="main">
+      
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">All Posts</a><span class="sep" aria-hidden="true">/</span><a href="/logo/">Logo Programming</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">Fun Programs</span>
+</nav>
+
+<header class="article-header">
+  <h1 class="post-title">Fun Programs</h1>
+  <div class="article-meta">
+    
+    <span>By Mike Koss</span>
+  </div>
+</header>
+
+
+
+<div class="article-body">
+  
+  <div class="side-block try-top">
+<span class="label">Try it</span>
+
+<a class="btn btn-primary" href="/logo/playground/">Logo Playground</a>
+
+</div>
+  <article>
+    <div class="post-content">
+      <h2 id="pumpkin">Pumpkin</h2>
+<figure class="logo-fig"><img src="/logo/funprog/pumpkin.jpg"
+			alt="A jack-o&#39;-lantern drawn by Logo: an orange circle with triangle eyes and nose and a zigzag mouth">
+</figure>
+
+<p>Click <strong>Run</strong> to draw a pumpkin, or change the command to <code>pumpkins</code> for a
+ring of seven.</p>
+<p><em>In 1995 this program filled shapes with MSW Logo&rsquo;s FILL and SETFLOODCOLOR
+commands. It now uses FILLED, the standard way to fill a shape in modern
+Logo, which draws a shape and fills it in one step.</em></p>
+<logo-example try="pumpkin 200" name="Pumpkin">
+<pre><code><span class="lg-c">; Fillpoly</span>
+<span class="lg-c">;</span>
+<span class="lg-c">; Draws a polygon filled in with a color. The :size is the approximate</span>
+<span class="lg-c">; diameter. The polygon is centered on the turtle.</span>
+<span class="lg-k">to</span> fillpoly <span class="lg-v">:sides</span> <span class="lg-v">:size</span> <span class="lg-v">:color</span>
+<span class="lg-p">local</span> <span class="lg-w">&quot;step</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;step</span> <span class="lg-n">3.14</span>*<span class="lg-v">:size</span>/<span class="lg-v">:sides</span>
+<span class="lg-p">pu</span> <span class="lg-p">bk</span> <span class="lg-v">:size</span>/<span class="lg-n">2</span> <span class="lg-p">lt</span> <span class="lg-n">90</span> <span class="lg-p">bk</span> <span class="lg-v">:step</span>/<span class="lg-n">2</span> <span class="lg-p">pd</span>
+<span class="lg-p">filled</span> <span class="lg-v">:color</span> [<span class="lg-p">repeat</span> <span class="lg-v">:sides</span> [<span class="lg-p">fd</span> <span class="lg-v">:step</span> <span class="lg-p">rt</span> <span class="lg-n">360</span>/<span class="lg-v">:sides</span>]]
+<span class="lg-p">pu</span> <span class="lg-p">fd</span> <span class="lg-v">:step</span>/<span class="lg-n">2</span> <span class="lg-p">rt</span> <span class="lg-n">90</span> <span class="lg-p">fd</span> <span class="lg-v">:size</span>/<span class="lg-n">2</span>
+<span class="lg-k">end</span>
+
+<span class="lg-c">; Draws the head of the Pumpkin (i.e., the orange circle)</span>
+<span class="lg-k">to</span> head <span class="lg-v">:size</span>
+fillpoly <span class="lg-n">50</span> <span class="lg-v">:size</span> <span class="lg-w">&quot;orange</span>
+<span class="lg-k">end</span>
+
+<span class="lg-c">; Draws the mouth of the pumpkin - turtle starts in the middle</span>
+<span class="lg-k">to</span> mouth <span class="lg-v">:size</span>
+<span class="lg-p">local</span> <span class="lg-w">&quot;dzMouth</span>
+<span class="lg-p">local</span> <span class="lg-w">&quot;ptSave</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;dzMouth</span> <span class="lg-v">:size</span>/<span class="lg-n">8</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;ptSave</span> <span class="lg-p">pos</span>
+
+<span class="lg-p">pd</span>
+<span class="lg-p">lt</span> <span class="lg-n">45</span> <span class="lg-p">fd</span> <span class="lg-v">:dzMouth</span>
+<span class="lg-p">lt</span> <span class="lg-n">90</span> <span class="lg-p">fd</span> <span class="lg-v">:dzMouth</span>
+<span class="lg-p">rt</span> <span class="lg-n">90</span> <span class="lg-p">fd</span> <span class="lg-v">:dzMouth</span>
+<span class="lg-p">rt</span> <span class="lg-n">45</span>
+<span class="lg-p">pu</span> <span class="lg-p">setpos</span> <span class="lg-v">:ptSave</span> <span class="lg-p">pd</span>
+<span class="lg-p">rt</span> <span class="lg-n">45</span> <span class="lg-p">fd</span> <span class="lg-v">:dzMouth</span>
+<span class="lg-p">rt</span> <span class="lg-n">90</span> <span class="lg-p">fd</span> <span class="lg-v">:dzMouth</span>
+<span class="lg-p">lt</span> <span class="lg-n">90</span> <span class="lg-p">fd</span> <span class="lg-v">:dzMouth</span>
+<span class="lg-p">lt</span> <span class="lg-n">45</span>
+<span class="lg-p">pu</span> <span class="lg-p">setpos</span> <span class="lg-v">:ptSave</span>
+<span class="lg-k">end</span>
+
+<span class="lg-c">; A generic move function - always picks up the pen.</span>
+<span class="lg-c">; x and y are relative to the current heading of the turtle.</span>
+<span class="lg-k">to</span> move <span class="lg-v">:dx</span> <span class="lg-v">:dy</span>
+<span class="lg-p">pu</span> <span class="lg-p">fd</span> <span class="lg-v">:dy</span> <span class="lg-p">rt</span> <span class="lg-n">90</span> <span class="lg-p">fd</span> <span class="lg-v">:dx</span> <span class="lg-p">lt</span> <span class="lg-n">90</span>
+<span class="lg-k">end</span>
+
+<span class="lg-c">; Draws a pumpkin of a given diameter.</span>
+<span class="lg-k">to</span> pumpkin <span class="lg-v">:size</span>
+<span class="lg-p">local</span> <span class="lg-w">&quot;dxEye</span>
+<span class="lg-p">local</span> <span class="lg-w">&quot;dyEye</span>
+<span class="lg-p">local</span> <span class="lg-w">&quot;dyMouth</span>
+<span class="lg-p">local</span> <span class="lg-w">&quot;ptCenter</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;dxEye</span> <span class="lg-v">:size</span>/<span class="lg-n">5</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;dyEye</span> <span class="lg-v">:size</span>/<span class="lg-n">8</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;dyMouth</span> <span class="lg-v">:size</span>/<span class="lg-n">3</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;ptCenter</span> <span class="lg-p">pos</span>
+
+<span class="lg-p">setpensize</span> <span class="lg-n">5</span>
+
+head <span class="lg-v">:size</span>
+tri <span class="lg-v">:size</span>
+
+move -<span class="lg-v">:dxEye</span> <span class="lg-v">:dyEye</span> <span class="lg-p">rt</span> <span class="lg-n">180</span>
+tri <span class="lg-v">:size</span>
+move -<span class="lg-n">2</span>*<span class="lg-v">:dxEye</span> <span class="lg-n">0</span>
+tri <span class="lg-v">:size</span>
+
+<span class="lg-p">pu</span> <span class="lg-p">setpos</span> <span class="lg-v">:ptCenter</span>
+<span class="lg-p">fd</span> <span class="lg-v">:dyMouth</span> <span class="lg-p">rt</span> <span class="lg-n">180</span>
+mouth <span class="lg-v">:size</span>
+
+<span class="lg-p">pu</span> <span class="lg-p">setpos</span> <span class="lg-v">:ptCenter</span>
+<span class="lg-k">end</span>
+
+<span class="lg-c">; A cool array of 7 pumpkins.</span>
+<span class="lg-k">to</span> pumpkins
+pumpkin <span class="lg-n">200</span>
+<span class="lg-p">repeat</span> <span class="lg-n">6</span> [<span class="lg-p">fd</span> <span class="lg-n">210</span> pumpkin <span class="lg-n">200</span> <span class="lg-p">bk</span> <span class="lg-n">210</span> <span class="lg-p">rt</span> <span class="lg-n">60</span>]
+<span class="lg-p">ht</span>
+<span class="lg-k">end</span>
+
+<span class="lg-c">; Draws triangular eyes and nose dimensioned for the :size&#39;d pumpkin head.</span>
+<span class="lg-k">to</span> tri <span class="lg-v">:size</span>
+fillpoly <span class="lg-n">3</span> <span class="lg-v">:size</span>/<span class="lg-n">6</span> <span class="lg-w">&quot;black</span>
+<span class="lg-k">end</span></code></pre>
+</logo-example>
+<h2 id="recursive-trees">Recursive Trees</h2>
+<figure class="logo-fig"><img src="/logo/funprog/rtree.gif"
+			alt="A branching tree drawn by the rtree program">
+</figure>
+
+<p>You can make some nifty pictures of trees by using recursion.</p>
+<logo-example try="tree 100" name="Tree">
+<pre><code><span class="lg-k">to</span> tree <span class="lg-v">:size</span>
+  <span class="lg-p">if</span> <span class="lg-v">:size</span> &lt; <span class="lg-n">5</span> [<span class="lg-p">stop</span>]
+  <span class="lg-p">fd</span> <span class="lg-v">:size</span>
+  <span class="lg-p">lt</span> <span class="lg-n">30</span> tree <span class="lg-v">:size</span>*.<span class="lg-n">7</span>
+  <span class="lg-p">rt</span> <span class="lg-n">60</span> tree <span class="lg-v">:size</span>*.<span class="lg-n">7</span>
+  <span class="lg-p">lt</span> <span class="lg-n">30</span> <span class="lg-p">bk</span> <span class="lg-v">:size</span>
+<span class="lg-k">end</span></code></pre>
+</logo-example>
+<p>Adding a little randomness makes the trees look more natural:</p>
+<logo-example try="rtree 100" name="Random Tree">
+<pre><code><span class="lg-k">to</span> rtree <span class="lg-v">:size</span>
+  <span class="lg-p">if</span> <span class="lg-v">:size</span> &lt; <span class="lg-n">5</span> [<span class="lg-p">stop</span>]
+  <span class="lg-p">fd</span> <span class="lg-v">:size</span>
+  <span class="lg-p">lt</span> <span class="lg-n">30</span> rtree <span class="lg-v">:size</span>*(((<span class="lg-p">random</span> <span class="lg-n">5</span>)+<span class="lg-n">5</span>)/<span class="lg-n">10</span>)
+  <span class="lg-p">rt</span> <span class="lg-n">60</span> rtree <span class="lg-v">:size</span>*(((<span class="lg-p">random</span> <span class="lg-n">5</span>)+<span class="lg-n">5</span>)/<span class="lg-n">10</span>)
+  <span class="lg-p">lt</span> <span class="lg-n">30</span> <span class="lg-p">bk</span> <span class="lg-v">:size</span>
+<span class="lg-k">end</span></code></pre>
+</logo-example>
+<h2 id="towers-of-hanoi">Towers of Hanoi</h2>
+<p>The Towers of Hanoi puzzle may be familiar to you. It is a game of 3 pegs and
+a number of disks. Each disk has a different size. The puzzle starts with all
+the disks on one peg, with the largest disks on the bottom. The problem is to
+move the disks from the first peg to the last peg without ever placing a
+larger disk on top of a smaller one.</p>
+<p>A simple program to solve this problem is this one. It merely prints the
+&ldquo;moves&rdquo; to be made.</p>
+<logo-example try="tower 3 1 3 2" name="Towers of Hanoi">
+<pre><code><span class="lg-k">to</span> move <span class="lg-v">:from</span> <span class="lg-v">:to</span>
+(<span class="lg-p">print</span> <span class="lg-w">&quot;Move</span> <span class="lg-w">&quot;disk</span> <span class="lg-w">&quot;on</span> <span class="lg-w">&quot;peg</span> <span class="lg-v">:from</span> <span class="lg-w">&quot;to</span> <span class="lg-w">&quot;peg</span> <span class="lg-v">:to</span> &quot;.)
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> tower <span class="lg-v">:disks</span> <span class="lg-v">:from</span> <span class="lg-v">:to</span> <span class="lg-v">:using</span>
+<span class="lg-p">if</span> <span class="lg-v">:disks</span> = <span class="lg-n">1</span> [move <span class="lg-v">:from</span> <span class="lg-v">:to</span> <span class="lg-p">stop</span>]
+tower <span class="lg-v">:disks</span>-<span class="lg-n">1</span> <span class="lg-v">:from</span> <span class="lg-v">:using</span> <span class="lg-v">:to</span>
+move <span class="lg-v">:from</span> <span class="lg-v">:to</span>
+tower <span class="lg-v">:disks</span>-<span class="lg-n">1</span> <span class="lg-v">:using</span> <span class="lg-v">:to</span> <span class="lg-v">:from</span>
+<span class="lg-k">end</span></code></pre>
+</logo-example>
+<figure class="logo-fig"><img src="/logo/funprog/hanoi.gif"
+			alt="The Towers of Hanoi animation in the MSW Logo window, with disks stacked on three pegs">
+</figure>
+
+<p>A more complex version animates all the moves. Click <strong>Run</strong> for six disks,
+then try <code>towers 10</code> with the speed set to Instant. Set the speed to Slow or
+Crawl to watch the individual moves.</p>
+<logo-example try="towers 6" name="Animated Towers of Hanoi">
+<pre><code><span class="lg-k">to</span> drawdisk <span class="lg-v">:disk</span> <span class="lg-v">:peg</span> <span class="lg-v">:height</span> <span class="lg-v">:fDraw</span>
+<span class="lg-p">pu</span>
+<span class="lg-p">setxy</span> <span class="lg-v">:peg</span>*<span class="lg-n">150</span>-<span class="lg-n">300</span> <span class="lg-v">:height</span>*<span class="lg-n">10</span>
+<span class="lg-p">ifelse</span> <span class="lg-v">:fDraw</span> [<span class="lg-p">penpaint</span> <span class="lg-p">setpensize</span> <span class="lg-n">5</span>] [<span class="lg-p">penerase</span> <span class="lg-p">setpensize</span> <span class="lg-n">7</span>]
+<span class="lg-p">pd</span>
+<span class="lg-p">bk</span> <span class="lg-v">:disk</span>*<span class="lg-n">5</span>
+<span class="lg-p">fd</span> <span class="lg-v">:disk</span>*<span class="lg-n">10</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> move <span class="lg-v">:from</span> <span class="lg-v">:to</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;moves</span> <span class="lg-v">:moves</span> + <span class="lg-n">1</span>
+<span class="lg-c">; (print :moves &#34;. &#34;Move &#34;disk &#34;on &#34;peg :from &#34;to &#34;peg :to &#34;.)</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;height</span> (<span class="lg-p">item</span> <span class="lg-v">:from</span> <span class="lg-v">:stacks</span>)
+<span class="lg-p">make</span> <span class="lg-w">&quot;disk</span> (<span class="lg-p">item</span> <span class="lg-v">:height</span> (<span class="lg-p">item</span> <span class="lg-v">:from</span> <span class="lg-v">:pegs</span>))
+<span class="lg-p">setitem</span> <span class="lg-v">:height</span> (<span class="lg-p">item</span> <span class="lg-v">:from</span> <span class="lg-v">:pegs</span>) &quot;.
+<span class="lg-p">setitem</span> <span class="lg-v">:from</span> <span class="lg-v">:stacks</span> (<span class="lg-p">item</span> <span class="lg-v">:from</span> <span class="lg-v">:stacks</span>)-<span class="lg-n">1</span>
+drawdisk <span class="lg-v">:disk</span> <span class="lg-v">:from</span> <span class="lg-v">:height</span> <span class="lg-w">&quot;false</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;height</span> (<span class="lg-p">item</span> <span class="lg-v">:to</span> <span class="lg-v">:stacks</span>)+<span class="lg-n">1</span>
+<span class="lg-p">setitem</span> <span class="lg-v">:to</span> <span class="lg-v">:stacks</span> <span class="lg-v">:height</span>
+<span class="lg-p">setitem</span> <span class="lg-v">:height</span> (<span class="lg-p">item</span> <span class="lg-v">:to</span> <span class="lg-v">:pegs</span>) <span class="lg-v">:disk</span>
+drawdisk <span class="lg-v">:disk</span> <span class="lg-v">:to</span> <span class="lg-v">:height</span> <span class="lg-w">&quot;true</span>
+<span class="lg-c">; show :stacks</span>
+<span class="lg-c">; show :pegs</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> start <span class="lg-v">:disks</span>
+<span class="lg-p">cs</span>
+<span class="lg-p">ht</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;moves</span> <span class="lg-n">0</span>
+<span class="lg-p">rt</span> <span class="lg-n">90</span>
+<span class="lg-p">setpensize</span> [<span class="lg-n">5</span> <span class="lg-n">5</span>]
+<span class="lg-p">make</span> <span class="lg-w">&quot;stacks</span> (<span class="lg-p">array</span> <span class="lg-n">3</span>)
+<span class="lg-p">setitem</span> <span class="lg-n">1</span> <span class="lg-v">:stacks</span> <span class="lg-v">:disks</span>
+<span class="lg-p">setitem</span> <span class="lg-n">2</span> <span class="lg-v">:stacks</span> <span class="lg-n">0</span>
+<span class="lg-p">setitem</span> <span class="lg-n">3</span> <span class="lg-v">:stacks</span> <span class="lg-n">0</span>
+<span class="lg-p">make</span> <span class="lg-w">&quot;pegs</span> (<span class="lg-p">array</span> <span class="lg-n">3</span>)
+<span class="lg-p">repeat</span> <span class="lg-n">3</span> [<span class="lg-p">setitem</span> <span class="lg-p">repcount</span> <span class="lg-v">:pegs</span> (<span class="lg-p">array</span> <span class="lg-v">:disks</span>)]
+<span class="lg-p">make</span> <span class="lg-w">&quot;firstPeg</span> (<span class="lg-p">item</span> <span class="lg-n">1</span> <span class="lg-v">:pegs</span>)
+<span class="lg-p">repeat</span> <span class="lg-v">:disks</span> [<span class="lg-p">setitem</span> <span class="lg-p">repcount</span> <span class="lg-v">:firstPeg</span> <span class="lg-v">:disks</span>-repcount+<span class="lg-n">1</span>]
+<span class="lg-p">repeat</span> <span class="lg-v">:disks</span> [drawdisk <span class="lg-v">:disks</span>-repcount+<span class="lg-n">1</span> <span class="lg-n">1</span> <span class="lg-p">repcount</span> <span class="lg-w">&quot;true</span>]
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> tower <span class="lg-v">:disks</span> <span class="lg-v">:from</span> <span class="lg-v">:to</span> <span class="lg-v">:using</span>
+<span class="lg-p">if</span> <span class="lg-v">:disks</span> = <span class="lg-n">1</span> [move <span class="lg-v">:from</span> <span class="lg-v">:to</span> <span class="lg-p">stop</span>]
+tower <span class="lg-v">:disks</span>-<span class="lg-n">1</span> <span class="lg-v">:from</span> <span class="lg-v">:using</span> <span class="lg-v">:to</span>
+move <span class="lg-v">:from</span> <span class="lg-v">:to</span>
+tower <span class="lg-v">:disks</span>-<span class="lg-n">1</span> <span class="lg-v">:using</span> <span class="lg-v">:to</span> <span class="lg-v">:from</span>
+<span class="lg-k">end</span>
+
+<span class="lg-k">to</span> towers <span class="lg-v">:disks</span>
+start <span class="lg-v">:disks</span>
+tower <span class="lg-v">:disks</span> <span class="lg-n">1</span> <span class="lg-n">3</span> <span class="lg-n">2</span>
+<span class="lg-k">end</span></code></pre>
+</logo-example>
+
+    </div>
+  </article>
+  
+  
+  <aside class="side" aria-label="About this project">
+    
+    <div class="side-block side-try">
+<span class="label">Try it</span>
+
+<a class="btn btn-primary" href="/logo/playground/">Logo Playground</a>
+
+</div>
+    
+    
+    
+  </aside>
+  
+</div>
+
+
+
+
+<nav class="prev-next" aria-label="More in this series">
+  
+  <a href="/logo/logows3/"><span class="dir">← Previous</span><span class="title">Worksheet: Music Words</span></a>
+  
+  
+  <a href="/logo/playground/"><span class="dir">Next →</span><span class="title">Logo Playground</span></a>
+  
+</nav>
+
+
+
+
+      <div class="social-row mobile-only"><a href="https://instagram.com/mckoss" rel="noopener">Instagram</a>
+<a href="https://github.com/mckoss" rel="noopener">GitHub</a>
+<a href="mailto:mike@mckoss.com">Email</a>
+</div>
+<footer class="site-footer">
+  All rights reserved by <a href="https://mckoss.com">Mike Koss</a>
+</footer>
+
+    </main>
+  </div>
+  
+
+
+
+</body>
+</html>

@@ -1,0 +1,509 @@
+/* The host page's body (the site's .tt-body: full screen, no scrolling or
+   selection) stays with the host. */
+turtle-tiles { display: block; }
+
+/* Turtle Tiles (/logo/tiles/): a full-screen app for programming the
+   turtle with picture tiles; see assets/js/logo/tiles.js. The drawing
+   fills all the room the controls leave. A gutter down the left, one tile
+   wide, has Home, Clear, Colors, Music and Turtle. Under the drawing the strip has
+   its own row, the whole width (one line of tiles, growing to three, then
+   scrolling); under that are the tape buttons (with Repeat) and the turn
+   wheel in the corner with Move, Back and Step size beside it. The
+   crayons and notes open in pop-ups, and step sizes and repeat counts
+   in a spinner. The script sets the tile
+   size (--b) and picks the arrangement (data-layout): "wide" puts the tape
+   buttons beside the top of the wheel and the tiles in a row beside its
+   bottom; "tall" runs the tape buttons the whole width, above the wheel
+   and two rows of tiles. */
+.turtle-tiles {
+  --b: 60px;
+  --gap: 6px;
+  --pad: 8px;
+  --w: calc(var(--b) * 2 + var(--gap));
+  box-sizing: border-box;
+  height: 100vh;
+  height: 100dvh;
+  padding: var(--pad);
+  gap: var(--gap);
+  display: grid;
+  /* The wheel is two tiles wide: it fills the bottom left corner, under
+     the left gutter and the first tile's width of the drawing. */
+  grid-template-columns: var(--b) var(--b) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto var(--b) var(--b);
+  grid-template-areas:
+    "left stage stage"
+    "strip strip strip"
+    "wheel wheel line"
+    "wheel wheel tiles";
+}
+/* A short wide screen: the gutter two buttons wide. */
+.turtle-tiles[data-layout="wide2"] {
+  grid-template-areas:
+    "left left stage"
+    "strip strip strip"
+    "wheel wheel line"
+    "wheel wheel tiles";
+}
+.turtle-tiles[data-layout="wide2"] .tt-left {
+  display: grid;
+  grid-template-columns: repeat(2, var(--b));
+  grid-auto-rows: var(--b);
+  align-content: start;
+}
+.turtle-tiles[data-layout="wide2"] .tt-left > * { display: contents; }
+/* A tall screen: two rows under the strip: the wheel, two columns of
+   tiles, then the tape buttons three by two. */
+.turtle-tiles[data-layout="tall"] {
+  grid-template-columns: var(--b) var(--b) auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto var(--w);
+  grid-template-areas:
+    "left stage stage stage"
+    "strip strip strip strip"
+    "wheel wheel tiles line";
+}
+.turtle-tiles[data-layout="tall"] .tt-line {
+  display: grid;
+  grid-template-columns: repeat(3, var(--b));
+  grid-template-rows: var(--b) var(--b);
+  justify-content: end;
+  align-content: space-between;
+  column-gap: var(--gap);
+}
+.tt-stage-area {
+  grid-area: stage;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tt-stage .logo-stage {
+  background: #fff;
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .12);
+  pointer-events: none;   /* no panning or zooming by little fingers */
+}
+.tt-stage .logo-view-tools, .tt-stage .logo-output { display: none; }
+
+.tt-button {
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  width: var(--b);
+  height: var(--b);
+  background: var(--tile-color, #8a8478);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .2);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.tt-button svg { width: 60%; height: 60%; }
+.tt-button:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, .2); }
+.tt-button:disabled { opacity: .35; cursor: default; }
+.tt-button:focus-visible { outline: 3px solid #3b3a36; outline-offset: 2px; }
+.tt-grownups {
+  --tile-color: #b9b2a5;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: clamp(28px, calc(var(--b) * .55), 40px);
+  height: clamp(28px, calc(var(--b) * .55), 40px);
+  opacity: .55;
+}
+.tt-version {
+  position: absolute;
+  left: 8px;
+  bottom: 4px;
+  font-size: 10px;
+  color: #000;
+  opacity: .3;
+  pointer-events: none;
+}
+.tt-menu-version { font-size: .75rem; font-weight: 400; opacity: .6; }
+.tt-grownups.tt-holding { animation: tt-hold .8s linear forwards; }
+@keyframes tt-hold { to { transform: scale(1.4); opacity: 1; } }
+
+/* The left gutter: Home, Clear and Speed, then Colors, Music and Turtle. */
+.tt-left { grid-area: left; display: flex; flex-direction: column; gap: var(--gap); min-height: 0; }
+.tt-stage-tools, .tt-left .tt-pop-buttons { display: flex; flex-direction: column; gap: var(--gap); }
+.tt-clear { --tile-color: #c98a9a; }
+
+/* The tape buttons: Record, Repeat, Play, Step, Rewind and the trash can.
+   While recording, Record glows and the strip's border turns red. */
+.tt-line {
+  grid-area: line;
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  min-width: 0;
+}
+.tt-record { --tile-color: #fff; box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px #e0d6d6; }
+.tt-record[aria-pressed="true"] { --tile-color: #ffe1e1; animation: tt-recording 1.6s ease-in-out infinite; }
+@keyframes tt-recording {
+  50% { box-shadow: 0 3px 0 rgba(0, 0, 0, .2), 0 0 0 5px rgba(229, 57, 53, .35); }
+}
+.tt-play { --tile-color: #2e9d48; }
+.tt-step, .tt-rewind { --tile-color: #7d8ea3; }
+.tt-trash { --tile-color: #a39a8a; }
+.tt-speed { --tile-color: #fff; box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px #e0dbd0; }
+.tt-speed svg, .tt-speed-choice svg { width: 82%; height: 82%; }
+.tt-speed-choice { --tile-color: #fff; border-radius: calc(var(--b) * .2); box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px #e0dbd0; }
+.tt-speed-choice[aria-pressed="true"] { box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 3px #3d7fd9; }
+
+/* The strip, on its own row: its tiles wrap onto a second and a third
+   line as it fills, and only then does it scroll. */
+/* The strip's row: the program it shows, then the strip. */
+.tt-strip-row { grid-area: strip; display: flex; align-items: flex-start; gap: var(--gap); min-width: 0; }
+.tt-prog {
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(var(--b) * .2);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px rgba(0, 0, 0, .06);
+  cursor: default;
+}
+.tt-prog-letter { display: grid; place-items: center; width: 100%; height: 100%; }
+.tt-prog-letter svg { width: 80%; height: 80%; }
+/* Its top half goes up a program and its bottom half down, each marked
+   with a small triangle (none above A, none below D). */
+.tt-prog-step {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.tt-prog-step[hidden] { display: none; }
+.tt-prog-up { top: 0; }
+.tt-prog-down { bottom: 0; }
+.tt-prog-step svg { position: absolute; left: 0; width: 100%; height: 200%; fill: rgba(0, 0, 0, .45); pointer-events: none; }
+.tt-prog-up svg { top: 0; }
+.tt-prog-down svg { bottom: 0; }
+.tt-prog-step:focus-visible { outline: 3px solid #3b3a36; outline-offset: -3px; }
+/* Going to another program scrolls the letter and the strip. */
+.tt-scrolling { overflow: hidden !important; }
+.tt-plays {
+  --tile-color: #fff;
+  border-radius: calc(var(--b) * .2);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px #e0dbd0;
+}
+.tt-plays svg { width: 78%; height: 78%; }
+/* Playing a program is a round Play button. */
+.tt-tile[data-tile="call"] { border-radius: 50%; }
+/* Every button that opens a pop-up has a small triangle in its corner. */
+.tt-pop { position: relative; }
+.tt-pop::after {
+  content: "";
+  position: absolute;
+  right: 9%;
+  bottom: 9%;
+  border-style: solid;
+  border-width: calc(var(--b) * .08) calc(var(--b) * .065) 0;
+  border-color: var(--pop-mark, rgba(0, 0, 0, .45)) transparent transparent;
+  pointer-events: none;
+}
+.tt-music { --pop-mark: rgba(255, 255, 255, .85); }
+/* A program that would play itself can't be picked. */
+.tt-source.tt-blocked { opacity: .3; filter: grayscale(.6); cursor: not-allowed; }
+.tt-strip-area {
+  position: relative;
+  --line: calc(var(--b) * .76 + 6px);  /* a line of the strip: a repeat's height */
+  flex: 1;
+  box-sizing: border-box;
+  min-width: 0;
+  max-height: calc(var(--line) * 3 + var(--gap) * 2 + 12px);
+  padding: 4px;
+  background: #fff;
+  border: 2px dashed #d6cfbf;
+  border-radius: calc(var(--b) * .22);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.tt-recording .tt-strip-area { border-color: #e57373; }
+.tt-strip, .tt-strip-ghost {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
+  gap: var(--gap) calc(var(--gap) - 1px);
+  min-height: var(--line);
+}
+/* Every line as tall as a repeat, so three lines fill the strip exactly. */
+:is(.tt-strip, .tt-strip-ghost) > .tt-tile { margin: 3px 0; }
+.tt-strip.tt-empty::before {
+  content: "";
+  box-sizing: border-box;
+  width: calc(var(--b) * .72);
+  height: calc(var(--b) * .72);
+  border: 2px dashed #d6cfbf;
+  border-radius: 10px;
+}
+
+/* The tiles by the wheel: one row on wide screens; on tall ones two rows,
+   filled down then across, with the ruler first. */
+.tt-tiles { grid-area: tiles; display: flex; gap: var(--gap); min-width: 0; }
+.tt-tiles .tt-group { display: flex; gap: var(--gap); }
+.turtle-tiles[data-layout="tall"] .tt-tiles {
+  display: grid;
+  grid-template-rows: var(--b) var(--b);
+  grid-auto-flow: column;
+  grid-auto-columns: var(--b);
+}
+.turtle-tiles[data-layout="tall"] .tt-tiles .tt-group { display: contents; }
+
+/* The Colors and Music buttons, and their pop-ups. */
+.tt-pop { border-radius: calc(var(--b) * .2); }
+.tt-size svg { width: 78%; height: 78%; }
+.tt-colors, .tt-size { --tile-color: #fff; box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px #e0dbd0; }
+/* White tiles: Next color, the white crayon (Invisible) and, in strips
+   saved before it, Draw and Don't draw. */
+.tt-tile:is([data-tile="pendown"], [data-tile="penup"], [data-tile="nextcolor"], [data-tile="invisible"], .tt-crayon-item) {
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px #e0dbd0;
+}
+.tt-colors svg { width: 78%; height: 78%; }
+.tt-music { --tile-color: #d81b60; }
+.tt-look { --tile-color: #fff; box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px #e0dbd0; }
+.tt-look svg, .tt-look-choice svg { width: 78%; height: 78%; }
+.tt-popup .tt-looks { grid-template-columns: repeat(3, var(--b)); }
+.tt-look-choice {
+  --tile-color: #fff;
+  border-radius: calc(var(--b) * .2);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px #e0dbd0;
+}
+.tt-look-choice[aria-pressed="true"] { box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 3px #3d7fd9; }
+
+/* Where the turtle is, laid over the stage (never in a snapshot): a
+   flashing dot in the pen's color, and with the turtle its x, y and its
+   heading. Which shows depends on the Turtle choice (data-look). */
+.tt-marker-pos {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  display: none;
+}
+.turtle-tiles:is([data-look="xy"], [data-look="arrow"]) .tt-marker-pos { display: block; }
+/* At other speeds, the stage's turtle is the speed's animal. */
+.turtle-tiles:not([data-animal="turtle"]) .tt-marker-pos { display: block; }
+.turtle-tiles:not([data-animal="turtle"]):not([data-look="arrow"]) .logo-sprite { visibility: hidden; }
+.turtle-tiles[data-look="turtle"] :is(.tt-pos-dot, .tt-pos-xy, .tt-pos-heading) { display: none; }
+.tt-pos-animal { display: none; position: absolute; left: 0; top: 0; opacity: .85; }
+.tt-pos-animal svg { display: block; width: 100%; height: 100%; }
+.turtle-tiles:not([data-animal="turtle"]):not([data-look="arrow"]) .tt-pos-animal { display: block; }
+/* The turtle is drawn see-through, so the drawing under it shows. */
+.turtle-tiles .logo-sprite { opacity: .55; }
+.turtle-tiles[data-look="arrow"] .logo-sprite { visibility: hidden; }
+.tt-pos-dot {
+  position: absolute;
+  left: -6px;
+  top: -6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(0, 0, 0, .35);
+  animation: tt-pos-flash 1s ease-in-out infinite alternate;
+}
+@keyframes tt-pos-flash { from { opacity: 1; } to { opacity: .25; } }
+.tt-pos-xy, .tt-pos-heading {
+  position: absolute;
+  font: 600 20px/1 Archivo, sans-serif;
+  color: #6e6b65;
+  opacity: .7;
+  white-space: nowrap;
+}
+.tt-pos-xy { left: 0; top: 0; transform: translate(16px, -50%); }  /* beside the dot (see tiles.js) */
+.tt-pos-heading { left: 0; top: 0; }
+.turtle-tiles[data-look="arrow"] :is(.tt-pos-xy, .tt-pos-heading, .tt-pos-dot) { display: none; }
+/* Just an arrow, flashing like the dot. */
+.tt-pos-arrow {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  animation: tt-pos-flash 1s ease-in-out infinite alternate;
+}
+.turtle-tiles[data-look="arrow"] .tt-pos-arrow { display: block; }
+.tt-pop[aria-expanded="true"] { outline: 3px solid #3b3a36; outline-offset: 2px; }
+.tt-popup {
+  position: fixed;
+  z-index: 15;
+  padding: 10px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .28);
+}
+.tt-popup .tt-group { display: grid; grid-template-columns: repeat(4, var(--b)); gap: var(--gap); }
+.tt-popup .tt-crayons { grid-template-columns: repeat(3, var(--b)); }
+.turtle-tiles:not(.tt-recording) .tt-source[data-tile="repeat"] { opacity: .4; }
+
+.tt-tile {
+  box-sizing: border-box;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--b);
+  height: var(--b);
+  border-radius: calc(var(--b) * .2);
+  background: var(--tile-color);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px rgba(0, 0, 0, .06);
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+}
+.tt-tile svg { width: 78%; height: 78%; pointer-events: none; }
+.tt-tile:focus-visible, .tt-wheel-ring:focus-visible {
+  outline: 3px solid #3b3a36;
+  outline-offset: 2px;
+}
+:is(.tt-strip, .tt-strip-ghost) .tt-tile { width: calc(var(--b) * .76); height: calc(var(--b) * .76); box-shadow: 0 2px 0 rgba(0, 0, 0, .2); }
+/* The playhead: the tile Play or Step plays next. */
+.tt-strip .tt-tile.tt-next { outline: 3px dashed #2e9d48; outline-offset: 2px; }
+/* The picked tile (or repeat), which recording goes after. */
+.tt-strip .tt-item.tt-selected { outline: 3px solid #3d7fd9; outline-offset: 2px; }
+.tt-tile.tt-active { transform: scale(1.12); box-shadow: 0 0 0 4px #ffd400, 0 3px 0 rgba(0, 0, 0, .2); }
+.tt-bounce { animation: tt-bounce .35s ease-out; }
+@keyframes tt-bounce { 40% { transform: scale(1.18) rotate(-4deg); } }
+.tt-lifted { opacity: .25; }
+.tt-ghost {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  margin: 0;
+  pointer-events: none;
+  opacity: .9;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .25);
+}
+.tt-ghost-trash { opacity: .35; filter: grayscale(1); }
+/* The trash can lights up under a tile dragged onto it, and turns red and
+   pulses after one tap, waiting for a second to empty the strip. */
+.tt-trash.tt-drop { transform: scale(1.15); box-shadow: 0 0 0 4px #e57373, 0 3px 0 rgba(0, 0, 0, .2); }
+.tt-trash.tt-armed { --tile-color: #e53935; animation: tt-armed .6s ease-in-out infinite alternate; }
+@keyframes tt-armed { to { box-shadow: 0 0 0 8px rgba(229, 57, 53, .35), 0 3px 0 rgba(0, 0, 0, .2); } }
+.tt-marker {
+  flex: none;
+  width: 5px;
+  height: calc(var(--b) * .76);
+  border-radius: 3px;
+  background: #ffb000;
+}
+
+/* The turn wheel: the ring with the arm, and the turtle to tap in the
+   middle, stacked in one grid cell. */
+.tt-wheel {
+  grid-area: wheel;
+  display: grid;
+  place-items: center;
+  width: var(--w);
+  height: var(--w);
+}
+.tt-wheel > * { grid-area: 1 / 1; }
+.tt-wheel-ring { width: 100%; height: 100%; touch-action: none; cursor: pointer; border-radius: 50%; }
+.tt-turn-go {
+  width: calc(var(--b) * .82);
+  height: calc(var(--b) * .82);
+  border-radius: 50%;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .2), inset 0 0 0 3px #2e9d48;
+}
+.tt-turn-go svg { width: 94%; height: 94%; overflow: visible; }
+.tt-turn-degrees {
+  font: 800 19px Archivo, sans-serif;
+  fill: #1d5fb5;
+  opacity: .6;
+}
+
+.tt-repeat {
+  flex: none;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border-radius: calc(var(--b) * .2);
+  background: #ffe2b8;
+  box-shadow: inset 0 0 0 2px #f08c00;
+}
+.tt-repeat .tt-tile { width: calc(var(--b) * .64); height: calc(var(--b) * .64); }
+.tt-repeat .tt-repeat-head { width: calc(var(--b) * .76); height: calc(var(--b) * .76); }
+.tt-repeat-head { position: relative; }
+.tt-dots {
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 1px;
+}
+.tt-dot {
+  width: clamp(3px, calc(var(--b) * .07), 6px);
+  height: clamp(3px, calc(var(--b) * .07), 6px);
+  border-radius: 50%;
+  background: #fff;
+  opacity: .55;
+}
+.tt-dot.tt-on { opacity: 1; box-shadow: 0 0 0 1px #7a4500; }
+/* For big counts, a bar instead of dots. */
+.tt-progress {
+  position: absolute;
+  bottom: 4px;
+  left: 12%;
+  right: 12%;
+  height: clamp(3px, calc(var(--b) * .07), 6px);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, .45);
+  overflow: hidden;
+}
+.tt-progress-fill { display: block; width: 0; height: 100%; background: #fff; }
+/* An open repeat, taking the tiles being recorded: its box is open at the
+   end, and the Repeat button pulses until it's tapped again to close it. */
+.tt-repeat.tt-open { box-shadow: inset 0 0 0 2px #f08c00; border-right: 3px dashed #f08c00; border-radius: calc(var(--b) * .2) 0 0 calc(var(--b) * .2); }
+.tt-source.tt-open { animation: tt-open-repeat 1s ease-in-out infinite alternate; }
+@keyframes tt-open-repeat { to { box-shadow: 0 0 0 6px rgba(240, 140, 0, .45), 0 3px 0 rgba(0, 0, 0, .2); } }
+/* The count pop-up: up, the number, down. */
+.tt-count-pop:not([hidden]) { display: flex; flex-direction: column; align-items: center; gap: var(--gap); }
+.tt-count-step { border-radius: calc(var(--b) * .2); }
+.tt-count-num { min-width: var(--b); font: 800 calc(var(--b) * .6) / 1 Archivo, sans-serif; text-align: center; color: #3b3a36; }
+.tt-repeat-head svg { margin-bottom: 14%; width: 90%; height: 90%; }
+.tt-repeat-body {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  align-items: center;
+  gap: 3px;
+  min-width: calc(var(--b) * .64);
+  min-height: calc(var(--b) * .64);
+}
+.tt-playing .tt-group, .tt-playing .tt-wheel { opacity: .5; }
+
+.tt-menu {
+  position: fixed;
+  inset: auto 16px 16px auto;
+  z-index: 20;
+  max-width: 360px;
+  max-height: calc(100% - 32px);
+  overflow: auto;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .3);
+  -webkit-user-select: text;
+  user-select: text;
+}
+.tt-menu h2 { margin: 0 0 6px; font-size: 1.2rem; }
+.tt-menu p { margin: 0 0 12px; font-size: .95rem; line-height: 1.4; }
+.tt-menu-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.tt-menu-link { font-size: .95rem; }

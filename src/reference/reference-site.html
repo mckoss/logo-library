@@ -1,0 +1,109 @@
+<!-- This site's additions to the Logo reference, shown before jslogo's own
+     language.html. Same markup: <dt> for each way to write a command, then
+     <dd> for its description and <dd class=example> for examples. -->
+<h3 id="site">On This Site</h3>
+<h4>Music</h4>
+<dl>
+  <dt><code>playnote <var>note</var> <var>beats</var></code>
+  <dd>Play a note and wait for it to finish. Notes are MIDI numbers: 60 is middle C, 61 is a half step higher, 72 is an octave higher.
+  <dd class=example>playnote 60 1 playnote 64 1 playnote 67 2</dd>
+
+  <dt><code>setinstrument <var>name</var></code>
+  <dt><code>setinstrument <var>number</var></code>
+  <dd>Choose the instrument: piano, harpsichord, musicbox, organ, guitar, bass, hendrix, violin, trumpet, brass, clarinet, flute, synth, banjo, steeldrum, tom or gun, or a General MIDI program number from 0 to 127.
+  <dd class=example>setinstrument "flute playnote 72 2</dd>
+
+  <dt><code>settempo <var>bpm</var></code>
+  <dd>Set the speed in beats per minute.
+  <dd class=example>settempo 60 playnote 60 1</dd>
+</dl>
+<h4>Music Player Words</h4>
+<p>The <a href="/logo/player/">music player</a> is built in, so these words are always ready.</p>
+<dl>
+  <dt><code>do</code>
+  <dt><code>re</code>
+  <dt><code>mi</code>
+  <dt><code>fa</code>
+  <dt><code>sol</code>
+  <dt><code>la</code>
+  <dt><code>ti</code>
+  <dd>Play a note of the scale.
+  <dd class=example>do re mi fa sol la ti high do</dd>
+
+  <dt><code>note <var>step</var></code>
+  <dd>Play the note <var>step</var> half steps above do.
+  <dd class=example>repeat 12 [note repcount]</dd>
+
+  <dt><code>eighth</code>
+  <dt><code>quarter</code>
+  <dt><code>half</code>
+  <dt><code>whole</code>
+  <dt><code>beats <var>count</var></code>
+  <dd>How long the next notes last.
+  <dd class=example>eighth do re mi whole fa</dd>
+
+  <dt><code>dinosaur</code>
+  <dt><code>low</code>
+  <dt><code>middle</code>
+  <dt><code>high</code>
+  <dd>Which octave the next notes are in.
+  <dd class=example>dinosaur do low do middle do high do</dd>
+
+  <dt><code>flat</code>
+  <dt><code>natural</code>
+  <dt><code>sharp</code>
+  <dd>Lower or raise the next notes by a half step.
+  <dd class=example>sharp do natural do</dd>
+
+  <dt><code>piano</code>
+  <dt><code>harpsichord</code>
+  <dt><code>musicbox</code>
+  <dt><code>guitar</code>
+  <dt><code>hendrix</code>
+  <dt><code>violin</code>
+  <dt><code>trumpet</code>
+  <dt><code>brass</code>
+  <dt><code>flute</code>
+  <dt><code>banjo</code>
+  <dt><code>steeldrum</code>
+  <dt><code>tom</code>
+  <dt><code>gun</code>
+  <dt><code>instrument <var>number</var></code>
+  <dd>Choose an instrument by name, or by General MIDI number.
+  <dd class=example>banjo do re mi</dd>
+
+  <dt><code>reset</code>
+  <dd>Back to quarter notes, the middle octave, piano and the normal tempo.
+</dl>
+<h4>Colors</h4>
+<dl>
+  <dt><code>"rainbow</code>
+  <dd>A color for <code>setpencolor</code> that goes round the rainbow: each time the pen is set to it, it takes the next color of red, orange, yellow, green, blue and purple (and red after any other color).
+  <dd class=example>repeat 12 [setpencolor "rainbow fd 60 bk 60 rt 30]</dd>
+</dl>
+<h4>Debugging</h4>
+<dl>
+  <dt><code>pause</code>
+  <dd>Pause the program here, to look at its variables and the turtle. Then Step through it one command at a time, or Continue. The playground's Step button, and its "Break at" buttons for each procedure, pause a program too.
+  <dd class=example>fd 50 pause rt 90 fd 50</dd>
+</dl>
+<h4>Arrow Shortcuts</h4>
+<dl>
+  <dt><code>&larr;</code>
+  <dt><code>&rarr;</code>
+  <dd>Turn left or right 15 degrees: one-character commands for steering the turtle by hand.
+  <dd class=example>&rarr; &rarr; &rarr; &uarr; &uarr; &uarr;</dd>
+
+  <dt><code>&uarr;</code>
+  <dt><code>&darr;</code>
+  <dd>Move forward or back 10 steps.
+  <dd class=example>&uarr; &uarr; &uarr; &uarr; &uarr;</dd>
+</dl>
+<h4>The Stage</h4>
+<dl>
+  <dt><code>window</code>
+  <dt><code>wrap</code>
+  <dt><code>fence</code>
+  <dd>The turtle starts in WINDOW mode here: it can go past the edges, and the stage zooms out to keep the whole drawing in view. WRAP makes it come back on the other side; FENCE stops it at the edge.
+  <dd class=example>wrap repeat 20 [fd 300 rt 100]</dd>
+</dl>

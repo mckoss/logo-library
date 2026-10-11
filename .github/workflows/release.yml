@@ -1,0 +1,37 @@
+# On a version tag (v1.9.0), build and test, then attach the package
+# tarball to a GitHub Release. mckoss.com installs it by that URL:
+# https://github.com/mckoss/logo-library/releases/download/vX.Y.Z/mckoss-logo-library-X.Y.Z.tgz
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: The tag matches package.json
+        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+      - name: Install
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Build and test
+        run: npm test
+      - name: Pack
+        run: npm pack
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" mckoss-logo-library-*.tgz --title "$GITHUB_REF_NAME" --generate-notes

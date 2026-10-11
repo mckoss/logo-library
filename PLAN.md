@@ -323,11 +323,12 @@ Open questions are tracked as issues in this repo.
 
 - [ ] Step 1: extract (in progress)
   - [x] Repo created; plan and fork point recorded
-  - [ ] Package scaffold, jslogo dependency, Vite build with per-control entries and a manifest
-  - [ ] Code moved with no behavior change, wrapped as the five custom elements
-  - [ ] Demo host pages emulating mckoss.com's lesson, playground, reference and tiles pages
-  - [ ] The site's e2e suite ported and passing against the demo hosts
-  - [ ] CI, and a release tarball
+  - [x] Package scaffold, jslogo dependency, Vite build with per-control entries and a manifest
+  - [x] Code moved with no behavior change, wrapped as the five custom elements
+  - [x] Demo host pages emulating mckoss.com's lesson, playground, reference and tiles pages
+  - [x] The site's e2e suite ported and passing against the demo hosts (166 tests)
+  - [x] CI, and a release workflow that attaches the tarball to a GitHub Release
+  - [ ] Merge, and tag the first release (waiting on the version issue, #1)
 - [ ] Step 2: switch the site
 - [ ] Step 3: TypeScript
 - [ ] Steps 4–5: Svelte spike on Turtle Tiles, and the decision

@@ -1,0 +1,163 @@
+; Player - play songs with solfege notes: do re mi fa sol la ti
+;
+; Mike Koss, 10/21/95; rewritten in 2026 for Logo in the browser.
+;
+; Notes:       do re mi fa sol la ti
+; Lengths:     eighth quarter half whole, or beats <count>
+; Octaves:     dinosaur low middle high
+; Accidentals: flat natural sharp
+; Instruments: piano harpsichord musicbox guitar hendrix violin
+;              trumpet brass flute banjo steeldrum tom gun,
+;              or instrument <number>
+;
+; Built on three commands: PLAYNOTE <midi-note> <beats>,
+; SETINSTRUMENT <name or number> and SETTEMPO <beats-per-minute>.
+
+to reset
+make "octave 0
+make "length 1
+make "accidental 0
+settempo 240
+piano
+end
+
+to note :step
+playnote 60 + :step + 12 * :octave + :accidental :length
+end
+
+to do
+note 0
+end
+
+to re
+note 2
+end
+
+to mi
+note 4
+end
+
+to fa
+note 5
+end
+
+to sol
+note 7
+end
+
+to la
+note 9
+end
+
+to ti
+note 11
+end
+
+to beats :count
+make "length :count
+end
+
+to eighth
+beats 0.5
+end
+
+to quarter
+beats 1
+end
+
+to half
+beats 2
+end
+
+to whole
+beats 4
+end
+
+to dinosaur
+make "octave -2
+end
+
+to low
+make "octave -1
+end
+
+to middle
+make "octave 0
+end
+
+to high
+make "octave 1
+end
+
+to flat
+make "accidental -1
+end
+
+to natural
+make "accidental 0
+end
+
+to sharp
+make "accidental 1
+end
+
+; Choose an instrument by its General MIDI number, 0 to 127; the
+; worksheet's REPEAT 128 [INSTRUMENT REPCOUNT ...] plays them all.
+to instrument :number
+setinstrument :number
+end
+
+; Choose an instrument by name. SETINSTRUMENT takes a name or a number.
+to piano
+setinstrument "piano
+end
+
+to harpsichord
+setinstrument "harpsichord
+end
+
+to musicbox
+setinstrument "musicbox
+end
+
+to guitar
+setinstrument "guitar
+end
+
+to hendrix
+setinstrument "hendrix
+end
+
+to violin
+setinstrument "violin
+end
+
+to trumpet
+setinstrument "trumpet
+end
+
+to brass
+setinstrument "brass
+end
+
+to flute
+setinstrument "flute
+end
+
+to banjo
+setinstrument "banjo
+end
+
+to steeldrum
+setinstrument "steeldrum
+end
+
+to tom
+setinstrument "tom
+end
+
+to gun
+setinstrument "gun
+end
+
+reset

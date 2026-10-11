@@ -1,0 +1,3 @@
+[submodule "vendor/jslogo"]
+	path = vendor/jslogo
+	url = https://github.com/mckoss/jslogo.git

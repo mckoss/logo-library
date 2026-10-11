@@ -20,12 +20,20 @@ A host serves `dist/` as is (no renaming: chunks import each other by
 relative path), and for each entry a page uses, emits:
 
 - `<script type="module" src="…/{entry file}">`
-- `<link rel="modulepreload">` for the entry's `imports`
-- `<link rel="stylesheet">` for its `css`
+- `<link rel="modulepreload">` for the entry's `imports`, and theirs in turn
+  (follow `imports` through the chunks, as Vite does)
+- `<link rel="stylesheet">` for the `css` of the entry and of every chunk it
+  imports
 
 mckoss.com serves `dist/` at `/logo/assets/`. Shared state (the drawing
 speed, the audio context, the reference index) is shared by every control on
 a page, whichever entries loaded it.
+
+The package's stylesheets go after the host's own, as the site's Logo
+styles did after its theme.
+
+`dist/LICENSE-jslogo.md` is jslogo's license (Apache 2.0), which has to be
+served or distributed along with the code.
 
 `dist/player.lgo` is the music player library's source, for a page that
 shows it. The package already runs it before every program; a host never
@@ -38,6 +46,11 @@ where they show the Logo version.
 
 All are custom elements in light DOM (no shadow DOM). Each fills the box its
 host gives it, and adds no styles outside itself.
+
+The host styles the content it writes inside the elements, before and
+without the script (the code's colors, the worksheet's printable boxes), by
+the element names (`logo-example`, `logo-worksheet`). It makes those
+elements `display: block`.
 
 ### `<logo-example>`
 
@@ -100,7 +113,8 @@ command line, and the language reference.
 - **Content:** a `<script type="application/json" class="pg-examples-data">`
   listing the Examples folder: lessons in order, each with `lesson` (title),
   `url` (its page) and `examples`. Each example has `name`, `auto` (true if
-  the name was made up), `code`, and `run` (a command to run after it, or "").
+  the name was made up), `code`, and `run` (a command to run after it, or
+  `""` or `null` for none; Hugo writes `null`).
 
 ### `<logo-reference>`
 
@@ -111,7 +125,10 @@ The Logo language reference with its search, on a page of its own.
 ```
 
 - **Content:** none; the reference is the package's.
-- **`hint`** (optional): the line shown under the search box.
+- **`hint`** (optional): the line shown under the search box. Default: "Type
+  the start of a command's name to find it."
+- A page holds at most one reference (in a `<logo-reference>` or a
+  `<logo-playground>`): it has a fixed heading id.
 
 ### `<turtle-tiles>`
 
@@ -124,6 +141,8 @@ Turtle Tiles, filling its box. The host makes that box the whole screen.
 ```
 
 - **Content:** none.
+- **Landmark:** it's the page's `main` landmark (it takes `role="main"`
+  unless the host gives it a role or puts it inside a `<main>`).
 - **Query string:** `?p=…` on the page's URL opens a shared link: the
   package loads its programs, then removes `p` from the address with
   `history.replaceState`.
