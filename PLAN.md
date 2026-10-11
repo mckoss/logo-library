@@ -191,11 +191,16 @@ behavior.
      format are frozen.
 7. **Accessibility:** keyboard, focus and ARIA live inside the controls. The
    site provides headings and landmarks.
-8. **Development loop:** with `hugo server` and an env var such as
-   `LOGO_DEV=http://localhost:5173`, the site's templates load `@vite/client`
-   and the source entries from this repo's Vite dev server. That gives hot
-   reload of a control inside the real Hugo page. Without the variable, they
-   use the installed `dist/`.
+8. **Development loop (#3):** one server at a time, no dev-server hooks in
+   the site.
+   - **Normal flow:** develop and test here, against the demo hosts
+     (`npm test`, and the GitHub Pages demo at mckoss.com/logo-library/logo/).
+     Release, then bump the version the site installs; the site's own tests
+     run against that release.
+   - **Checking an unreleased change inside the site (occasionally):**
+     install from a local checkout (`"@mckoss/logo-library":
+     "file:../logo-library"`), run `npm run build` here, then the site's
+     usual `hugo server`.
 9. **Testing:**
    - **Here:** component and app tests against the demo hosts.
    - **The site:** its Playwright suite as a contract test against its Hugo
@@ -308,8 +313,6 @@ Open questions are tracked as issues in this repo.
   compiler.
 - **Theme:** confirm the token set (CSS custom properties) the controls read
   from the site.
-- **Local development:** `LOGO_DEV` pointing Hugo at the Vite dev server for
-  hot reload, versus `npm link` / `file:../logo-library`.
 
 ## Done when
 
