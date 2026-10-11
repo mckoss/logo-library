@@ -181,6 +181,16 @@ must read what older ones wrote.
 | `mckoss.logo.tiles.look` | Turtle Tiles' turtle look |
 | `mckoss.logo.tiles.speed` | Turtle Tiles' speed (its animal) |
 
+A page that shares mckoss.com's origin but should keep its own saved
+programs (this repo's demo and examples) names a prefix for these keys:
+
+```html
+<meta name="logo-library-storage" content="logo-library-demo.">
+```
+
+The controls then use `logo-library-demo.mckoss.logo.files` and so on. A page
+without it uses the keys as listed.
+
 The Turtle Tiles share-link format (`?p=`) is frozen the same way: see
 [SHARE-LINKS.md](SHARE-LINKS.md).
 

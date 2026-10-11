@@ -66,7 +66,7 @@
 // What a program is, the tiles' names, colors and Logo, and a program as
 // Logo are in program.ts; share links are in share.ts.
 import type { SpeedName, Stage, TurtleAt } from '../engine/index.js';
-import { logoPath } from '../engine/paths.js';
+import { logoPath, storageKey } from '../engine/host.js';
 import {
   BLUE, CRAYONS, HOME, MAX_COUNT, MAX_UNITS, NAMES, NOTES, PROGRAM_COLORS, STEP, TILE, TILES, UNIT,
   clean, codeFor, isName, moveLabel, namedLogo, normalize, plays, stepsOf, tileFor, toLogo, turnLabel, turnTint,
@@ -78,12 +78,12 @@ import { SHARE_PARAM, pack, unpack } from './share.js';
 import type { IncomingPayload, SharePayload } from './share.js';
 
 const { LogoStage } = self;
-const SAVE_KEY = 'mckoss.logo.tiles';
+const SAVE_KEY = storageKey('mckoss.logo.tiles');
 // Each program's color (PROGRAM_COLORS, pastel), and a deeper shade of it
 // for its letter.
 const PROGRAM_INK: Record<ProgramName, string> = { A: '#c62828', B: '#2e7d32', C: '#1565c0', D: '#5d4037' };
 let programs: Programs = { A: [], B: [], C: [], D: [] };
-const IMPORT_KEY = 'mckoss.logo.import';
+const IMPORT_KEY = storageKey('mckoss.logo.import');
 const TITLE = 'Turtle Tiles';
 const PRELUDE = 'setpensize 2';
 // The colors Next color goes round: setpencolor "rainbow (see
@@ -99,7 +99,7 @@ const SPEEDS: { id: AnimalId; label: string; speed: SpeedName }[] = [
   { id: 'rabbit', label: 'Rabbit: fast', speed: 'fast' },
   { id: 'bolt', label: 'Lightning: at once', speed: 'instant' },
 ];
-const SPEED_KEY = 'mckoss.logo.tiles.speed';
+const SPEED_KEY = storageKey('mckoss.logo.tiles.speed');
 // The animals, side on and facing right, in a 64 x 64 box.
 const ANIMALS: Record<AnimalId, string> = {
   snail: '<path d="M5 51 C5 46 9 45 14 45 H44 C50 45 52 41 53 36 L54 31 C55 27 60 27 61 31 C62 35 60 38 59 42 ' +
@@ -295,7 +295,7 @@ const LOOKS: { id: LookId; label: string; icon: string }[] = [
     icon: '<svg viewBox="-23 -23 46 46" aria-hidden="true">' +
       '<path d="M-3 16 V-2 H-11 L0 -17 L11 -2 H3 V16 Z" fill="#d64545"/></svg>' },
 ];
-const LOOK_KEY = 'mckoss.logo.tiles.look';
+const LOOK_KEY = storageKey('mckoss.logo.tiles.look');
 
 // The pop-ups: the crayons, the notes, the turtle display choices, the
 // programs to play, the speeds, and the spinner (`count`). Each opens from

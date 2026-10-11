@@ -7,6 +7,7 @@
 // The view is in turtle steps; the canvas fills the host's width and keeps
 // that aspect ratio, drawn at the screen's full resolution.
 import { definitions, program } from './program.js';
+import { storageKey } from './host.js';
 import type { Debugger, DebugMode } from './debug.js';
 import type { ViewControls } from './view.js';
 
@@ -49,7 +50,7 @@ const SPEEDS: Record<SpeedName, { steps: number; degrees: number } | null> = {
   slow: { steps: 4, degrees: 6 },
   crawl: { steps: 1.5, degrees: 3 },
 };
-const SPEED_KEY = 'mckoss.logo.speed';
+const SPEED_KEY = storageKey('mckoss.logo.speed');
 // Whether `value` names a drawing speed.
 const isSpeed = (value: string): value is SpeedName => value in SPEEDS;
 let saved = 'fast';
