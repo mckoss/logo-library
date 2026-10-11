@@ -2,9 +2,12 @@
 # vX.Y.Z from package.json's version. mckoss.com installs it by that URL:
 # https://github.com/mckoss/logo-library/releases/download/vX.Y.Z/mckoss-logo-library-X.Y.Z.tgz
 #
-# Started either by pushing the tag (git tag v2.0.0 && git push origin
-# v2.0.0), or from the Actions tab ("Run workflow" on main), which creates the
-# tag on the commit it ran on.
+# Started by tagging a release, any of these ways:
+# - pushing the tag: git tag v2.0.1 && git push origin v2.0.1
+# - GitHub's Releases page, "Draft a new release" with a new tag vX.Y.Z:
+#   the tarball is attached to that release
+# - the Actions tab, "Run workflow" on main: creates the tag and release
+# The tag must match package.json's version.
 name: Release
 
 on:
@@ -56,4 +59,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
-        run: gh release create "$TAG" mckoss-logo-library-*.tgz --target "$GITHUB_SHA" --title "$TAG" --generate-notes
+        run: |
+          # (A release made on GitHub's Releases page already exists: attach the tarball to it.)
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" mckoss-logo-library-*.tgz --clobber
+          else
+            gh release create "$TAG" mckoss-logo-library-*.tgz --target "$GITHUB_SHA" --title "$TAG" --generate-notes
+          fi
