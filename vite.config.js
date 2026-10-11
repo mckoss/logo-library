@@ -63,10 +63,10 @@ export default defineConfig({
     modulePreload: { polyfill: false },
     rolldownOptions: {
       input: {
-        lessons: path('./src/entries/lessons.js'),
-        playground: path('./src/entries/playground.js'),
-        reference: path('./src/entries/reference.js'),
-        tiles: path('./src/entries/tiles.js'),
+        lessons: path('./src/entries/lessons.ts'),
+        playground: path('./src/entries/playground.ts'),
+        reference: path('./src/entries/reference.ts'),
+        tiles: path('./src/entries/tiles.ts'),
       },
       output: {
         entryFileNames: '[name]-[hash].js',

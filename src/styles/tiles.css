@@ -3,7 +3,7 @@
 turtle-tiles { display: block; }
 
 /* Turtle Tiles (/logo/tiles/): a full-screen app for programming the
-   turtle with picture tiles; see assets/js/logo/tiles.js. The drawing
+   turtle with picture tiles; see src/tiles/tiles.ts. The drawing
    fills all the room the controls leave. A gutter down the left, one tile
    wide, has Home, Clear, Colors, Music and Turtle. Under the drawing the strip has
    its own row, the whole width (one line of tiles, growing to three, then
@@ -320,7 +320,7 @@ turtle-tiles { display: block; }
   opacity: .7;
   white-space: nowrap;
 }
-.tt-pos-xy { left: 0; top: 0; transform: translate(16px, -50%); }  /* beside the dot (see tiles.js) */
+.tt-pos-xy { left: 0; top: 0; transform: translate(16px, -50%); }  /* beside the dot (see tiles.ts) */
 .tt-pos-heading { left: 0; top: 0; }
 .turtle-tiles[data-look="arrow"] :is(.tt-pos-xy, .tt-pos-heading, .tt-pos-dot) { display: none; }
 /* Just an arrow, flashing like the dot. */

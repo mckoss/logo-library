@@ -49,7 +49,7 @@ as the tiles they became (`OLD` in the tiles code).
 
 To keep old links working:
 
-- Loading is forgiving. `clean()` in `tiles.js` drops tiles it doesn't know,
+- Loading is forgiving. `clean()` in `src/tiles/program.ts` drops tiles it doesn't know,
   rounds and clamps numbers into range, and turns old names into new tiles.
   Never refuse a whole link over one tile.
 - Don't rename or remove a `t` value or a field, and don't change what one

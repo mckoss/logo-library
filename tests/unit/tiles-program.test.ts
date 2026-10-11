@@ -114,6 +114,11 @@ describe('clean', () => {
       .toEqual([{ t: 'red' }, { t: 'do' }]);
   });
 
+  it('drops tiles named after built-in object keys, keeping the rest', () => {
+    expect(clean([{ t: 'constructor' }, { t: 'toString' }, { t: 'hasOwnProperty' }, { t: '__proto__' }, { t: 'penup' }]))
+      .toEqual([{ t: 'penup' }]);
+  });
+
   it('makes a program of anything', () => {
     expect(clean(undefined)).toEqual([]);
     expect(clean(null)).toEqual([]);

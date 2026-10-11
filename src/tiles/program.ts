@@ -179,7 +179,8 @@ export function clean(list: unknown, inside?: boolean): Item[] {
     if (!item) return [];
     // (The comparisons below coerce what they're given, as the JSON may
     // hold anything.)
-    if (OLD[item.t as string]) return OLD[item.t as string].map(i => ({ ...i }));
+    // (Own keys only: a tile named "constructor" is just unknown.)
+    if (Object.hasOwn(OLD, item.t as string)) return OLD[item.t as string].map(i => ({ ...i }));
     if (item.t === 'move') {
       const n = Math.max(1, Math.min(MAX_UNITS, Math.round(Math.abs(Number(item.d) || UNIT * 2) / UNIT)));
       return [{ t: 'move', d: ((item.d as number) < 0 ? -1 : 1) * n * UNIT }];
@@ -193,7 +194,7 @@ export function clean(list: unknown, inside?: boolean): Item[] {
       return inside ? [] : [{ t: 'repeat', n, body: clean(item.body, true) }];
     }
     if (item.t === 'call') return isName(item.p) ? [{ t: 'call', p: item.p }] : [];
-    return TILE[item.t as string] ? [{ t: item.t as PlainTileId }] : [];
+    return Object.hasOwn(TILE, item.t as string) ? [{ t: item.t as PlainTileId }] : [];
   });
 }
 

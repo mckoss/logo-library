@@ -321,15 +321,23 @@ Open questions are tracked as issues in this repo.
 
 ## Progress
 
-- [ ] Step 1: extract (in progress)
+- [ ] Step 1: extract (done except the release)
   - [x] Repo created; plan and fork point recorded
   - [x] Package scaffold, jslogo dependency, Vite build with per-control entries and a manifest
   - [x] Code moved with no behavior change, wrapped as the five custom elements
   - [x] Demo host pages emulating mckoss.com's lesson, playground, reference and tiles pages
   - [x] The site's e2e suite ported and passing against the demo hosts (166 tests)
   - [x] CI, and a release workflow that attaches the tarball to a GitHub Release
-  - [ ] Merge, and tag the first release (waiting on the version issue, #1)
+  - [x] Merged (#7)
+  - [ ] Tag the first release (waiting on the version issue, #1)
 - [ ] Step 2: switch the site
-- [ ] Step 3: TypeScript
+- [x] Step 3: TypeScript
+  - [x] Setup (strict tsconfig, Vitest), and the engine in strict TypeScript
+  - [x] The lessons, reference, Playground and Turtle Tiles in strict TypeScript, typed against the engine
+  - [x] Pure logic extracted word for word, with unit tests: view math, programs, instruments,
+        the reference's words, the Playground's saved files and examples, Tiles' programs and share
+        links (including the frozen 1.8.11 links)
+  - [x] One fix found on the way: a Tiles tile named after a built-in object key (`constructor`)
+        made `clean()` throw, so the whole link failed to open; now it's dropped like any unknown tile
 - [ ] Steps 4–5: Svelte spike on Turtle Tiles, and the decision
 - [ ] Step 7: e2e tests split between here and the site
