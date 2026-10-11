@@ -168,10 +168,13 @@ The end-to-end tests (`npm run test:e2e`) start that server themselves; set
 
 1. Bump `version` in `package.json` (and `package-lock.json`, with
    `npm version X.Y.Z --no-git-tag-version`), and merge it to `main`.
-2. Tag that commit `vX.Y.Z` and push the tag.
-3. The release workflow (`.github/workflows/release.yml`) checks that the tag
-   matches `package.json`, runs the tests, runs `npm pack`, and attaches
-   `mckoss-logo-library-X.Y.Z.tgz` to the GitHub Release `vX.Y.Z`: the URL
+2. Start the release workflow (`.github/workflows/release.yml`): in the
+   Actions tab, **Release → Run workflow** on `main`, or push a `vX.Y.Z` tag
+   on that commit.
+3. It checks the version (a pushed tag must match `package.json`; Run
+   workflow needs a version not released yet), runs the tests, runs
+   `npm pack`, and attaches `mckoss-logo-library-X.Y.Z.tgz` to the GitHub
+   Release `vX.Y.Z` (creating the tag if it ran from Run workflow): the URL
    that hosts install.
 
 ## License
