@@ -166,16 +166,18 @@ The end-to-end tests (`npm run test:e2e`) start that server themselves; set
 
 ## Releasing
 
-1. Bump `version` in `package.json` (and `package-lock.json`, with
-   `npm version X.Y.Z --no-git-tag-version`), and merge it to `main`.
-2. Start the release workflow (`.github/workflows/release.yml`): in the
-   Actions tab, **Release → Run workflow** on `main`, or push a `vX.Y.Z` tag
-   on that commit.
-3. It checks the version (a pushed tag must match `package.json`; Run
-   workflow needs a version not released yet), runs the tests, runs
-   `npm pack`, and attaches `mckoss-logo-library-X.Y.Z.tgz` to the GitHub
-   Release `vX.Y.Z` (creating the tag if it ran from Run workflow): the URL
-   that hosts install.
+Every push to `main` that passes CI is released: CI attaches
+`mckoss-logo-library-X.Y.Z.tgz` to the GitHub Release `vX.Y.Z`, `X.Y.Z` being
+`package.json`'s version (and creates the tag). That's the URL hosts install.
+
+So every pull request bumps the version, and CI checks it does
+(`.github/scripts/version-is-new.mjs`):
+
+```sh
+npm version patch --no-git-tag-version   # fixes; minor for features, major for CONTRACT.md changes
+```
+
+A version that's released already is never released again (CI skips it).
 
 ## License
 

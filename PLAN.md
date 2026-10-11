@@ -210,8 +210,10 @@ behavior.
 
 ### Distribution by URL (no npm registry)
 
-- **Here:** on a `vX.Y.Z` tag, CI builds, runs `npm pack`, and attaches
-  `mckoss-logo-library-X.Y.Z.tgz` to that GitHub Release.
+- **Here:** every push to `main` that passes CI is released: CI runs
+  `npm pack` and attaches `mckoss-logo-library-X.Y.Z.tgz` to the GitHub
+  Release `vX.Y.Z` of `package.json`'s version. Pull requests must bump the
+  version, so each merge is a release.
 - **The site:**
   `"@mckoss/logo-library": "https://github.com/mckoss/logo-library/releases/download/vX.Y.Z/mckoss-logo-library-X.Y.Z.tgz"`
   in its `package.json`.
