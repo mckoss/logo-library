@@ -225,8 +225,7 @@ behavior.
 
 ### Step 2 checklist: the site's changes
 
-Prepared ahead; nothing here has been done to the site yet. In
-mckoss/mckoss.github.io, on one branch:
+Done in mckoss/mckoss.github.io#91:
 
 1. **Install:** `package.json` gets
    `"@mckoss/logo-library": "https://github.com/mckoss/logo-library/releases/download/v2.0.0/mckoss-logo-library-2.0.0.tgz"`.
@@ -382,7 +381,7 @@ Open questions are tracked as issues in this repo.
   - [x] CI, and a release workflow that attaches the tarball to a GitHub Release
   - [x] Merged (#7)
   - [x] Released as v2.0.0, after the examples (#13), the demo's own storage (#12) and the CSS scoped to the controls (#6)
-- [ ] Step 2: switch the site (checklist above; waiting on the owner's go)
+- [x] Step 2: switch the site: mckoss.com runs on 2.0.0 (mckoss.github.io#91); its tests are the integration only (57), the runtime's own are here
 - [x] Step 3: TypeScript
   - [x] Setup (strict tsconfig, Vitest), and the engine in strict TypeScript
   - [x] The lessons, reference, Playground and Turtle Tiles in strict TypeScript, typed against the engine
