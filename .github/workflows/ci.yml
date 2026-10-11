@@ -1,5 +1,5 @@
-# Build the package, the demo hosts that emulate mckoss.com, and run the
-# end-to-end tests against them.
+# Type-check, run the unit tests, then build the package and the demo hosts
+# that emulate mckoss.com, and run the end-to-end tests against them.
 name: CI
 
 on:
@@ -30,8 +30,12 @@ jobs:
         run: |
           npm ci
           npx playwright install --with-deps chromium
-      - name: Build and test
-        run: npm test
+      - name: Type check
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm run test:unit
+      - name: Build and end-to-end tests
+        run: npm run test:e2e
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

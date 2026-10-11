@@ -27,8 +27,12 @@ jobs:
         run: |
           npm ci
           npx playwright install --with-deps chromium
-      - name: Build and test
-        run: npm test
+      - name: Type check
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm run test:unit
+      - name: Build and end-to-end tests
+        run: npm run test:e2e
       - name: Pack
         run: npm pack
       - name: Release
