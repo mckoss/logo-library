@@ -223,6 +223,52 @@ behavior.
   build. That needs no release step but builds on every install. The release
   tarball is the plan.
 
+### Step 2 checklist: the site's changes
+
+Prepared ahead; nothing here has been done to the site yet. In
+mckoss/mckoss.github.io, on one branch:
+
+1. **Install:** `package.json` gets
+   `"@mckoss/logo-library": "https://github.com/mckoss/logo-library/releases/download/v2.0.0/mckoss-logo-library-2.0.0.tgz"`.
+   The Pages workflow runs `npm ci` *before* `hugo` (today it runs after).
+2. **Serve `dist/`:** a module mount,
+   `source = "node_modules/@mckoss/logo-library/dist"`,
+   `target = "static/logo/assets"`. Remove the `third_party/jslogo` mount and
+   submodule.
+3. **Emit the tags:** a `logo-entry` partial that reads the manifest
+   (`os.ReadFile "node_modules/@mckoss/logo-library/dist/manifest.json" |
+   transform.Unmarshal`), finds the entry by `name`, follows `imports` and
+   `css` through the chunks, and writes the stylesheet, `modulepreload` and
+   module script tags under `/logo/assets/` (the algorithm of
+   `demo/build-hosts.mjs`'s `entryTags`). `head.html` calls it for a page's
+   `scripts` (`logo` → `lessons` or `playground`, `reference`, `tiles`)
+   instead of concatenating `[params.scripts.*]`, which goes from
+   `config.toml`.
+4. **Markup:** the ```` ```logo ```` render hook and `logo-code.html` write
+   `<logo-example try view name><pre><code>…</code></pre></logo-example>`;
+   the `logo-worksheet`, `logo-playground` and `logo-reference` shortcodes and
+   partials write `<logo-worksheet>`, `<logo-playground>` (keeping the
+   examples JSON) and `<logo-reference hint>`; `layouts/logo/tiles.html`
+   writes `<turtle-tiles aria-label>` (CONTRACT.md has each).
+   `demo/import-site.mjs` shows the exact before and after.
+5. **CSS:** `custom.css` loses its Interactive Logo section (now the
+   package's) except the host's rules `import-site.mjs` keeps: the
+   `logo-example`/`logo-worksheet` content styles by element name, `display:
+   block` on the elements, the Playground page's paragraph width, and the
+   Turtle Tiles page's body.
+6. **Version:** `logo-version.html` reads `version` from the package's
+   `package.json` (`os.ReadFile` + `transform.Unmarshal`);
+   `logoVersion` goes from `config.toml`.
+7. **Music player page:** `logo-file` reads
+   `node_modules/@mckoss/logo-library/dist/player.lgo`.
+8. **Delete:** `assets/js/logo/`, `assets/logo/player.lgo`,
+   `assets/logo/reference-site.html`, the jslogo submodule.
+9. **Tests:** the site's e2e suite passes unchanged against the Hugo
+   build. Then step 7 splits it.
+
+The site had no Logo changes after the fork point (checked at
+2.0.0's release), so nothing needs porting first.
+
 ## Why
 
 - **Same origin:** localStorage programs, share links (`/logo/tiles/?p=`) and
@@ -244,8 +290,7 @@ behavior through each change.
    is its dependency. The music player extension (`music.js`, `player.lgo`)
    and the whole reference are bundled. Lesson content comes in through the
    element contract. Vite build. Demo host pages emulate mckoss.com, and the
-   site's e2e suite is ported to run against them. Release 1.0.0 (see the
-   version issue).
+   site's e2e suite is ported to run against them. Release 2.0.0 (#1).
 2. **Switch the site.** The site emits the elements with their content and
    loads this package's `dist/`. It deletes `assets/js/logo/`, `player.lgo`,
    `reference-site.html`, the jslogo submodule and its config. Its whole e2e
@@ -328,7 +373,7 @@ Open questions are tracked as issues in this repo.
 
 ## Progress
 
-- [ ] Step 1: extract (done except the release)
+- [x] Step 1: extract
   - [x] Repo created; plan and fork point recorded
   - [x] Package scaffold, jslogo dependency, Vite build with per-control entries and a manifest
   - [x] Code moved with no behavior change, wrapped as the five custom elements
@@ -336,8 +381,8 @@ Open questions are tracked as issues in this repo.
   - [x] The site's e2e suite ported and passing against the demo hosts (166 tests)
   - [x] CI, and a release workflow that attaches the tarball to a GitHub Release
   - [x] Merged (#7)
-  - [ ] Tag the first release (waiting on the version issue, #1)
-- [ ] Step 2: switch the site
+  - [x] Released as v2.0.0, after the examples (#13), the demo's own storage (#12) and the CSS scoped to the controls (#6)
+- [ ] Step 2: switch the site (checklist above; waiting on the owner's go)
 - [x] Step 3: TypeScript
   - [x] Setup (strict tsconfig, Vitest), and the engine in strict TypeScript
   - [x] The lessons, reference, Playground and Turtle Tiles in strict TypeScript, typed against the engine
