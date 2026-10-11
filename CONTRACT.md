@@ -29,6 +29,12 @@ mckoss.com serves `dist/` at `/logo/assets/`. Shared state (the drawing
 speed, the audio context, the reference index) is shared by every control on
 a page, whichever entries loaded it.
 
+The package's stylesheets go after the host's own, as the site's Logo
+styles did after its theme.
+
+`dist/LICENSE-jslogo.md` is jslogo's license (Apache 2.0), which has to be
+served or distributed along with the code.
+
 `dist/player.lgo` is the music player library's source, for a page that
 shows it. The package already runs it before every program; a host never
 needs to load it.
@@ -119,7 +125,10 @@ The Logo language reference with its search, on a page of its own.
 ```
 
 - **Content:** none; the reference is the package's.
-- **`hint`** (optional): the line shown under the search box.
+- **`hint`** (optional): the line shown under the search box. Default: "Type
+  the start of a command's name to find it."
+- A page holds at most one reference (in a `<logo-reference>` or a
+  `<logo-playground>`): it has a fixed heading id.
 
 ### `<turtle-tiles>`
 
@@ -132,6 +141,8 @@ Turtle Tiles, filling its box. The host makes that box the whole screen.
 ```
 
 - **Content:** none.
+- **Landmark:** it's the page's `main` landmark (it takes `role="main"`
+  unless the host gives it a role or puts it inside a `<main>`).
 - **Query string:** `?p=…` on the page's URL opens a shared link: the
   package loads its programs, then removes `p` from the address with
   `history.replaceState`.

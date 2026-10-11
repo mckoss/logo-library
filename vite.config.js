@@ -27,14 +27,16 @@ function jslogoGlobals() {
   };
 }
 
-// dist/player.lgo: the music player library as a plain file, for a page
-// that shows its source.
-function playerLibrary() {
+// Plain files in dist/: player.lgo, the music player library, for a page
+// that shows its source; and jslogo's license, which must travel with
+// copies of its code (Apache 2.0; the minifier drops its comments).
+function plainFiles() {
   return {
-    name: 'player-library',
+    name: 'plain-files',
     apply: 'build',
     async generateBundle() {
       this.emitFile({ type: 'asset', fileName: 'player.lgo', source: await readFile(path('./src/library/player.lgo')) });
+      this.emitFile({ type: 'asset', fileName: 'LICENSE-jslogo.md', source: await readFile(JSLOGO + 'LICENSE.md') });
     },
   };
 }
@@ -44,7 +46,7 @@ export default defineConfig({
   resolve: {
     alias: { jslogo: JSLOGO.replace(/\/$/, '') },
   },
-  plugins: [jslogoGlobals(), playerLibrary()],
+  plugins: [jslogoGlobals(), plainFiles()],
   build: {
     outDir: 'dist',
     emptyOutDir: true,
