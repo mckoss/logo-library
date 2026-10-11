@@ -47,6 +47,12 @@ export default defineConfig({
     alias: { jslogo: JSLOGO.replace(/\/$/, '') },
   },
   plugins: [jslogoGlobals(), plainFiles()],
+  // Unit tests (npm run test:unit): the engine's pure logic, in Node. The
+  // end-to-end tests in tests/e2e are Playwright's.
+  test: {
+    include: ['tests/unit/**/*.test.ts'],
+    environment: 'node',
+  },
   build: {
     outDir: 'dist',
     emptyOutDir: true,
@@ -57,10 +63,10 @@ export default defineConfig({
     modulePreload: { polyfill: false },
     rolldownOptions: {
       input: {
-        lessons: path('./src/entries/lessons.js'),
-        playground: path('./src/entries/playground.js'),
-        reference: path('./src/entries/reference.js'),
-        tiles: path('./src/entries/tiles.js'),
+        lessons: path('./src/entries/lessons.ts'),
+        playground: path('./src/entries/playground.ts'),
+        reference: path('./src/entries/reference.ts'),
+        tiles: path('./src/entries/tiles.ts'),
       },
       output: {
         entryFileNames: '[name]-[hash].js',
@@ -74,12 +80,12 @@ export default defineConfig({
             {
               name: 'reference-core',
               priority: 2,
-              test: /[\\/]src[\\/]reference[\\/](reference|texts|index|markup)\.js$|[\\/]reference-site\.html|[\\/]vendor[\\/]jslogo[\\/]language\.html/,
+              test: /[\\/]src[\\/]reference[\\/](reference|texts|index|markup)\.[jt]s$|[\\/]reference-site\.html|[\\/]vendor[\\/]jslogo[\\/]language\.html/,
             },
             {
               name: 'engine',
               priority: 1,
-              test: /[\\/](vendor[\\/]jslogo|src[\\/]engine|src[\\/]library)[\\/]|[\\/]src[\\/]version\.js$|[\\/]package\.json$/,
+              test: /[\\/](vendor[\\/]jslogo|src[\\/]engine|src[\\/]library)[\\/]|[\\/]src[\\/]version\.[jt]s$|[\\/]package\.json$/,
             },
           ],
         },

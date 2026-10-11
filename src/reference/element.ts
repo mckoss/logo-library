@@ -8,7 +8,10 @@ import { referenceSection } from './markup.js';
 const HINT = "Type the start of a command's name to find it.";
 
 export class LogoReferenceElement extends HTMLElement {
-  connectedCallback() {
+  // Set when first connected: the element builds its content only once.
+  private started = false;
+
+  connectedCallback(): void {
     if (this.started) return;
     this.started = true;
     this.classList.add('logo-reference-page');

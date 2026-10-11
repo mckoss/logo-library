@@ -9,6 +9,9 @@ import { LogoPlayground } from './playground.js';
 import { playgroundMarkup } from './markup.js';
 
 export class LogoPlaygroundElement extends HTMLElement {
+  // Whether it has been brought to life (once only, even if it's moved).
+  private started = false;
+
   connectedCallback() {
     if (this.started) return;
     this.started = true;

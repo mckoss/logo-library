@@ -1,0 +1,24 @@
+// Type checking only (`npm run typecheck`); Vite builds the code. The engine
+// is TypeScript, strict. The modules still in JavaScript are part of the
+// program (allowJs) so TypeScript sees their imports, but aren't checked
+// until they're converted (checkJs off). jslogo (vendor/jslogo) stays plain
+// JavaScript outside the program; src/types/jslogo.d.ts describes it.
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
+    "strict": true,
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "tests/unit"]
+}
