@@ -1,11 +1,16 @@
-# On a version tag (v2.0.0), build and test, then attach the package
-# tarball to a GitHub Release. mckoss.com installs it by that URL:
+# Build and test, then attach the package tarball to a GitHub Release,
+# vX.Y.Z from package.json's version. mckoss.com installs it by that URL:
 # https://github.com/mckoss/logo-library/releases/download/vX.Y.Z/mckoss-logo-library-X.Y.Z.tgz
+#
+# Started either by pushing the tag (git tag v2.0.0 && git push origin
+# v2.0.0), or from the Actions tab ("Run workflow" on main), which creates the
+# tag on the commit it ran on.
 name: Release
 
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -21,8 +26,20 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: The tag matches package.json
-        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+      - name: The version, from package.json
+        id: version
+        run: echo "tag=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: The tag matches package.json (tag push), or is new (Run workflow)
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = push ]; then
+            test "$TAG" = "$GITHUB_REF_NAME"
+          else
+            test "$GITHUB_REF_NAME" = main
+            ! gh release view "$TAG" > /dev/null 2>&1
+          fi
       - name: Install
         run: |
           npm ci
@@ -38,4 +55,5 @@ jobs:
       - name: Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" mckoss-logo-library-*.tgz --title "$GITHUB_REF_NAME" --generate-notes
+          TAG: ${{ steps.version.outputs.tag }}
+        run: gh release create "$TAG" mckoss-logo-library-*.tgz --target "$GITHUB_SHA" --title "$TAG" --generate-notes
