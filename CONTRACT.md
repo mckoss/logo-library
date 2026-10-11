@@ -20,8 +20,10 @@ A host serves `dist/` as is (no renaming: chunks import each other by
 relative path), and for each entry a page uses, emits:
 
 - `<script type="module" src="…/{entry file}">`
-- `<link rel="modulepreload">` for the entry's `imports`
-- `<link rel="stylesheet">` for its `css`
+- `<link rel="modulepreload">` for the entry's `imports`, and theirs in turn
+  (follow `imports` through the chunks, as Vite does)
+- `<link rel="stylesheet">` for the `css` of the entry and of every chunk it
+  imports
 
 mckoss.com serves `dist/` at `/logo/assets/`. Shared state (the drawing
 speed, the audio context, the reference index) is shared by every control on
@@ -38,6 +40,11 @@ where they show the Logo version.
 
 All are custom elements in light DOM (no shadow DOM). Each fills the box its
 host gives it, and adds no styles outside itself.
+
+The host styles the content it writes inside the elements, before and
+without the script (the code's colors, the worksheet's printable boxes), by
+the element names (`logo-example`, `logo-worksheet`). It makes those
+elements `display: block`.
 
 ### `<logo-example>`
 
@@ -100,7 +107,8 @@ command line, and the language reference.
 - **Content:** a `<script type="application/json" class="pg-examples-data">`
   listing the Examples folder: lessons in order, each with `lesson` (title),
   `url` (its page) and `examples`. Each example has `name`, `auto` (true if
-  the name was made up), `code`, and `run` (a command to run after it, or "").
+  the name was made up), `code`, and `run` (a command to run after it, or
+  `""` or `null` for none; Hugo writes `null`).
 
 ### `<logo-reference>`
 
