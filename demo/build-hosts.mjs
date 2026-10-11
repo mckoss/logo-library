@@ -14,9 +14,18 @@
 //   Imports and CSS are followed through the imported chunks too, as Vite's
 //   own HTML output (and its backend-integration guide) does.
 // - fills in <!--#logo-version--> with the package's version.
+// It replaces only its own output: build the root site first, then any
+// SITE_BASE ones (npm run hosts builds both).
 //
 // Usage: npm run hosts (after npm run build). LOGO_DIST=<dir> uses another
 // build directory than dist/.
+//
+// SITE_BASE=/logo-library/ builds the site to be served under that path
+// instead of at the root (GitHub Pages serves this repo's demo at
+// mckoss.com/logo-library/): into demo/site/logo-library/, with the pages'
+// root-relative links moved under it, a <meta name="logo-library-root">
+// telling the controls where the Logo pages are (CONTRACT.md, "Paths"), and
+// noindex, as the pages are copies of mckoss.com's.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,7 +35,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pages = path.join(root, 'demo/pages');
 const site = path.join(root, 'demo/site');
 const dist = path.resolve(root, process.env.LOGO_DIST || 'dist');  // (LOGO_DIST: another build)
-const BASE = '/logo/assets/';
+const SITE_BASE = (process.env.SITE_BASE || '/').replace(/\/?$/, '/').replace(/^\/?/, '/');
+const out = path.join(site, SITE_BASE);
+const BASE = SITE_BASE + 'logo/assets/';
 
 function readManifest() {
   for (const rel of ['manifest.json', '.vite/manifest.json']) {
@@ -86,12 +97,27 @@ function render(html, file) {
   });
   html = html.replace(/<!--#logo-version-->/g, version);
   if (/<!--#logo-/.test(html)) throw new Error(`${rel}: unknown <!--#logo-…--> marker`);
+  if (SITE_BASE !== '/') html = underBase(html);
   return html;
 }
 
-fs.rmSync(site, { recursive: true, force: true });
-copyTree(pages, site, render);
+// A page moved under SITE_BASE: its root-relative links (in attributes,
+// and the Playground's examples data), and the head's notes for the
+// controls and for search engines. (The package's own tags, written above,
+// are already under it.)
+function underBase(html) {
+  const assets = SITE_BASE + 'logo/assets/';
+  html = html.replace(/(\s(?:href|src|action)=")\/(?!\/)/g, (all, attr, offset) =>
+    html.startsWith(assets, offset + attr.length) ? all : attr + SITE_BASE);
+  html = html.replace(/("url":\s*")\/(?!\/)/g, `$1${SITE_BASE}`);
+  return html.replace(/<head>/, `<head>
+<meta name="logo-library-root" content="${SITE_BASE}logo/">
+<meta name="robots" content="noindex">`);
+}
+
+fs.rmSync(out, { recursive: true, force: true });
+copyTree(pages, out, render);
 copyTree(dist, path.join(site, BASE));
 
 for (const [rel, name] of [...used].sort()) console.log(`${rel}: ${name}`);
-console.log(`demo/site/ built with @mckoss/logo-library ${version}`);
+console.log(`${path.relative(root, out)}/ built with @mckoss/logo-library ${version}, served at ${SITE_BASE}`);

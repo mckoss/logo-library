@@ -1,4 +1,4 @@
-# On a version tag (v1.9.0), build and test, then attach the package
+# On a version tag (v2.0.0), build and test, then attach the package
 # tarball to a GitHub Release. mckoss.com installs it by that URL:
 # https://github.com/mckoss/logo-library/releases/download/vX.Y.Z/mckoss-logo-library-X.Y.Z.tgz
 name: Release

@@ -157,6 +157,16 @@ The controls link to each other at these paths, which a host serves:
   Playground)
 - `/logo/`: the Logo lessons (Turtle Tiles' grown-ups menu)
 
+A host serving them somewhere else names the root in the page's head, and the
+controls link under it instead (this repo's demo hosts do, on GitHub Pages):
+
+```html
+<meta name="logo-library-root" content="/logo-library/logo/">
+```
+
+The reference links to the music player as `../player/`, relative to the
+Playground's and the reference's pages.
+
 ## Saved in the browser (frozen)
 
 These localStorage keys and their formats outlive releases. Newer versions

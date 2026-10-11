@@ -13,3 +13,17 @@ in its own pages; the lessons themselves stay in the site.
 - [CONTRACT.md](CONTRACT.md): the elements, as host pages use them.
 - [SHARE-LINKS.md](SHARE-LINKS.md): the Turtle Tiles share-link format, which
   must keep working.
+
+## Demo
+
+[mckoss.com/logo-library/logo/](https://mckoss.com/logo-library/logo/) is
+this repo's demo: mckoss.com's Logo pages (imported at the fork point) with
+the latest `main` of this package, deployed by CI to GitHub Pages. It shares
+mckoss.com's browser storage, so saved Playground programs and Turtle Tiles
+show up in both.
+
+To run it locally: `npm install`, `git submodule update --init`, then
+`npm run build && npm run hosts && npm run serve`, and open
+http://localhost:8790/logo/ (or /logo-library/logo/ for the GitHub Pages
+build). `npm test` runs the type check, the unit tests and the end-to-end
+tests.
