@@ -7,7 +7,7 @@
 // The <logo-example> and <logo-worksheet> elements (elements.ts) hand each
 // example and worksheet row to setup(), in page order.
 import type { Stage } from '../engine/index.js';
-import { logoPath } from '../engine/paths.js';
+import { logoPath, storageKey } from '../engine/host.js';
 
 // An example or worksheet row, as LogoStage.program reads it: getters for
 // its current (possibly edited) code and the command to run after it.
@@ -17,7 +17,7 @@ interface PageExample {
 }
 
 const { LogoStage } = self;
-const IMPORT_KEY = 'mckoss.logo.import';
+const IMPORT_KEY = storageKey('mckoss.logo.import');
 
 function button(label: string, parent: Element, onClick: (e: MouseEvent) => unknown,
   className?: string): HTMLButtonElement {

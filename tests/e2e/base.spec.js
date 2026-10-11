@@ -23,6 +23,18 @@ test('under a base path, a lesson runs and Open in Playground stays under it', a
   expect(outside).toEqual([]);
 });
 
+test('under a base path, saved programs use their own keys, apart from mckoss.com\'s', async ({ page }) => {
+  await page.goto(`${BASE}/logo/newwords/`);
+  await page.evaluate(() => localStorage.clear());
+  await page.locator('.logo-code').nth(3).getByRole('button', { name: 'Open in Playground' }).click();
+  await expect(page.locator('.pg-files button[aria-current]')).toHaveText('Make Your Own Words');
+  await page.goto(`${BASE}/logo/tiles/`);
+  await expect(page.locator('turtle-tiles')).toBeVisible();
+  const keys = await page.evaluate(() => Object.keys(localStorage).sort());
+  expect(keys).toContain('logo-library-demo.mckoss.logo.files');
+  expect(keys.filter(key => key.startsWith('mckoss.'))).toEqual([]);
+});
+
 test('under a base path, the reference links to the music player under it', async ({ page }) => {
   await page.goto(`${BASE}/logo/reference/`);
   const link = page.getByRole('link', { name: 'music player' });

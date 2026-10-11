@@ -24,8 +24,10 @@
 // instead of at the root (GitHub Pages serves this repo's demo at
 // mckoss.com/logo-library/): into demo/site/logo-library/, with the pages'
 // root-relative links moved under it, a <meta name="logo-library-root">
-// telling the controls where the Logo pages are (CONTRACT.md, "Paths"), and
-// noindex, as the pages are copies of mckoss.com's.
+// telling the controls where the Logo pages are (CONTRACT.md, "Paths"), a
+// <meta name="logo-library-storage"> so they keep their saved programs apart
+// from mckoss.com's (same origin), and noindex, as the pages are copies of
+// mckoss.com's.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -112,6 +114,7 @@ function underBase(html) {
   html = html.replace(/("url":\s*")\/(?!\/)/g, `$1${SITE_BASE}`);
   return html.replace(/<head>/, `<head>
 <meta name="logo-library-root" content="${SITE_BASE}logo/">
+<meta name="logo-library-storage" content="logo-library-demo.">
 <meta name="robots" content="noindex">`);
 }
 

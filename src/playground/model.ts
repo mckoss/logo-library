@@ -3,12 +3,13 @@
 // procedures a program defines. Side-effect free, so the unit tests can
 // check it without a page.
 import { program } from '../engine/program.js';
+import { storageKey } from '../engine/host.js';
 
 // The localStorage keys the Playground uses. Their formats are frozen (see
 // CONTRACT.md, "Saved in the browser"): newer versions must read what older
-// ones wrote.
-export const FILES_KEY = 'mckoss.logo.files';
-export const IMPORT_KEY = 'mckoss.logo.import';
+// ones wrote. (A page can prefix them: see storageKey.)
+export const FILES_KEY = storageKey('mckoss.logo.files');
+export const IMPORT_KEY = storageKey('mckoss.logo.import');
 
 // The programs, by name: each one's code.
 export type Files = Record<string, string>;
