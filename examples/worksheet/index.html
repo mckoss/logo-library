@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>logo-worksheet | logo-library</title>
+<link rel="icon" href="data:,">
+<style>
+  body { max-width: 50rem; margin: 0 auto; padding: 1rem 1rem 3rem; font: 16px/1.5 system-ui, sans-serif; color: #201e1d; background: #fff; }
+  pre { overflow-x: auto; }
+  .markup { padding: .75rem 1rem; border: 1px solid #ccc; font-size: 14px; }
+  logo-worksheet { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); margin: 1.5rem 0; border-top: 2px solid #201e1d; }
+  logo-worksheet pre { margin: 0; padding: .5rem; min-height: 200px; white-space: pre-wrap; border-bottom: 1px solid #ccc; }
+  .logo-box { min-height: 200px; border-left: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+</style>
+<!--#logo-entry lessons-->
+</head>
+<body>
+<p><a href="../">logo-library</a></p>
+<h1>&lt;logo-worksheet&gt;</h1>
+<p>A worksheet: each row is a turtle program beside an empty box to draw what it makes. Check
+draws the answer in the box. The boxes are in the markup, so a printed page has them. Like
+<code>&lt;logo-example&gt;</code>, it's defined by the <code>lessons</code> entry. This page's
+markup:</p>
+
+<pre class="markup">&lt;logo-worksheet&gt;
+&lt;pre&gt;repeat 3 [fd 100 rt 120]&lt;/pre&gt;&lt;div class="logo-box" aria-label="Space to draw the shape"&gt;&lt;/div&gt;
+&lt;pre data-check="house 80"&gt;to house :size
+  repeat 4 [fd :size rt 90]
+  fd :size rt 30
+  repeat 3 [fd :size rt 120]
+end&lt;/pre&gt;&lt;div class="logo-box" aria-label="Space to draw the shape"&gt;&lt;/div&gt;
+&lt;/logo-worksheet&gt;</pre>
+
+<p>A row's <code>data-check</code> is a command Check runs after the row's definitions. The host
+styles the rows and boxes (this page's styles, in its <code>&lt;head&gt;</code>, put them side by
+side). See <a href="https://github.com/mckoss/logo-library/blob/main/CONTRACT.md#logo-worksheet">CONTRACT.md</a>.</p>
+
+<h2>What will the turtle draw?</h2>
+<logo-worksheet>
+<pre>repeat 3 [fd 100 rt 120]</pre><div class="logo-box" aria-label="Space to draw the shape"></div>
+<pre data-check="house 80">to house :size
+  repeat 4 [fd :size rt 90]
+  fd :size rt 30
+  repeat 3 [fd :size rt 120]
+end</pre><div class="logo-box" aria-label="Space to draw the shape"></div>
+</logo-worksheet>
+</body>
+</html>

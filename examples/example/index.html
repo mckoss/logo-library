@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>logo-example | logo-library</title>
+<link rel="icon" href="data:,">
+<style>
+  body { max-width: 50rem; margin: 0 auto; padding: 1rem 1rem 3rem; font: 16px/1.5 system-ui, sans-serif; color: #201e1d; background: #fff; }
+  pre { overflow-x: auto; }
+  .markup { padding: .75rem 1rem; border: 1px solid #ccc; font-size: 14px; }
+  logo-example { display: block; margin: 0 0 1.5rem; }
+  logo-example pre { margin: 0; padding: 1rem; background: #f3f2f2; }
+</style>
+<!--#logo-entry lessons-->
+</head>
+<body>
+<p><a href="../">logo-library</a></p>
+<h1>&lt;logo-example&gt;</h1>
+<p>A runnable, editable Logo program: Run, Revert Code, Copy, Open in Playground, a drawing
+speed, and a Then run command when it has one. Run opens a stage below it, with Snapshot and Make
+Recording. The program is the text of the <code>&lt;pre&gt;&lt;code&gt;</code>
+inside, so it can be read and printed without the script. The <code>lessons</code> entry defines
+it. This page's markup:</p>
+
+<pre class="markup">&lt;logo-example&gt;
+&lt;pre&gt;&lt;code&gt;repeat 36 [fd 120 rt 170]&lt;/code&gt;&lt;/pre&gt;
+&lt;/logo-example&gt;
+
+&lt;logo-example try="square 100" name="Square"&gt;
+&lt;pre&gt;&lt;code&gt;to square :size
+  repeat 4 [fd :size rt 90]
+end&lt;/code&gt;&lt;/pre&gt;
+&lt;/logo-example&gt;
+
+&lt;logo-example try="flower 12" view="400x400" name="Flower"&gt;
+&lt;pre&gt;&lt;code&gt;to petal :size
+  repeat 2 [repeat 9 [fd :size rt 10] rt 90]
+end
+
+to flower :size
+  repeat 12 [petal :size rt 30]
+end&lt;/code&gt;&lt;/pre&gt;
+&lt;/logo-example&gt;</pre>
+
+<p><code>try</code> is the command to run after the program, <code>view</code> the stage's size in
+turtle steps (600x360 if not given), and <code>name</code> the program's name in the Playground
+and in snapshot file names. See <a href="https://github.com/mckoss/logo-library/blob/main/CONTRACT.md#logo-example">CONTRACT.md</a>.</p>
+
+<h2>A star</h2>
+<logo-example>
+<pre><code>repeat 36 [fd 120 rt 170]</code></pre>
+</logo-example>
+
+<h2>A square</h2>
+<logo-example try="square 100" name="Square">
+<pre><code>to square :size
+  repeat 4 [fd :size rt 90]
+end</code></pre>
+</logo-example>
+
+<h2>A flower</h2>
+<logo-example try="flower 12" view="400x400" name="Flower">
+<pre><code>to petal :size
+  repeat 2 [repeat 9 [fd :size rt 10] rt 90]
+end
+
+to flower :size
+  repeat 12 [petal :size rt 30]
+end</code></pre>
+</logo-example>
+</body>
+</html>

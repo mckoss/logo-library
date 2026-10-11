@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>logo-library</title>
+<meta name="description" content="Logo in the browser as custom elements: runnable examples, worksheets, the Logo Playground, the language reference and Turtle Tiles.">
+<link rel="icon" href="data:,">
+<style>
+  body { max-width: 50rem; margin: 0 auto; padding: 1rem 1rem 3rem; font: 16px/1.5 system-ui, sans-serif; color: #201e1d; background: #fff; }
+  li { margin: .4rem 0; }
+  .version { color: #605d5d; }
+</style>
+</head>
+<body>
+<h1>logo-library</h1>
+<p><code>@mckoss/logo-library</code> puts Logo in a web page as five custom elements: runnable,
+editable programs for lessons, worksheets, the Logo Playground, the language reference, and Turtle
+Tiles (Logo for little ones, with picture tiles). A page installs the package, serves its
+<code>dist/</code> folder, and writes the elements' tags; the turtle, the music player and the
+reference come with it. It runs Logo with <a href="https://github.com/inexorabletash/jslogo">jslogo</a>
+by Joshua Bell.</p>
+
+<p class="version">Version <!--#logo-version--></p>
+
+<h2>Examples</h2>
+<p>Each page shows its markup and the element working. They're plain HTML: see their
+<a href="https://github.com/mckoss/logo-library/tree/main/examples">source</a>.</p>
+<ul>
+  <li><a href="example/"><code>&lt;logo-example&gt;</code></a>: a program to edit and run</li>
+  <li><a href="worksheet/"><code>&lt;logo-worksheet&gt;</code></a>: programs beside boxes to draw what they make</li>
+  <li><a href="playground/"><code>&lt;logo-playground&gt;</code></a>: the Logo Playground</li>
+  <li><a href="reference/"><code>&lt;logo-reference&gt;</code></a>: the language reference</li>
+  <li><a href="tiles/"><code>&lt;turtle-tiles&gt;</code></a>: Turtle Tiles, full screen</li>
+  <li><a href="player/">The music player</a>: the notes and instruments every program can play</li>
+</ul>
+
+<h2>In a real site</h2>
+<p><a href="logo/">mckoss.com's Logo lessons</a>, copied from
+<a href="https://mckoss.com/logo/">mckoss.com</a>, running this version of the package: the
+test fixture for the site's integration.</p>
+
+<h2>More</h2>
+<ul>
+  <li><a href="https://github.com/mckoss/logo-library">github.com/mckoss/logo-library</a>: the
+    source, how to install it, and the elements' contract</li>
+</ul>
+</body>
+</html>

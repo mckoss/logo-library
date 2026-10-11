@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>logo-reference | logo-library</title>
+<link rel="icon" href="data:,">
+<style>
+  body { max-width: 50rem; margin: 0 auto; padding: 1rem 1rem 3rem; font: 16px/1.5 system-ui, sans-serif; color: #201e1d; background: #fff; }
+  pre { overflow-x: auto; }
+  .markup { padding: .75rem 1rem; border: 1px solid #ccc; font-size: 14px; }
+  logo-reference { display: block; margin: 1.5rem 0; }
+</style>
+<!--#logo-entry reference-->
+</head>
+<body>
+<p><a href="../">logo-library</a></p>
+<h1>&lt;logo-reference&gt;</h1>
+<p>The Logo language reference: every command, with a search box and examples that run when
+clicked. The reference itself is the package's, so the element has no content. The
+<code>reference</code> entry defines it. This page's markup:</p>
+
+<pre class="markup">&lt;logo-reference hint="Type a few letters, like fo for forward."&gt;&lt;/logo-reference&gt;</pre>
+
+<p><code>hint</code> is the line under the search box. A page holds one reference at most (the
+Playground has one too). Its link to the music player is <code>../player/</code>, relative to
+this page. See <a href="https://github.com/mckoss/logo-library/blob/main/CONTRACT.md#logo-reference">CONTRACT.md</a>.</p>
+
+<logo-reference hint="Type a few letters, like fo for forward."></logo-reference>
+</body>
+</html>
