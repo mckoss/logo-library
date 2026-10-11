@@ -18,8 +18,8 @@ logo-playground { display: block; }
 }
 .pg-sidebar { min-width: 0; }
 .pg-main { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-div.post-content .pg-list { list-style: none; margin: 0; padding: 0; }
-div.post-content .pg-list li + li { margin-top: 0; }
+.logo-playground .pg-list { list-style: none; margin: 0; padding: 0; }
+.logo-playground .pg-list li + li { margin-top: 0; }
 .pg-list button {
     display: block; width: 100%; padding: 6px 8px; text-align: left;
     border: 0; border-bottom: 1px solid var(--color-divider, color-mix(in srgb, #201e1d 40%, transparent));
@@ -29,11 +29,10 @@ div.post-content .pg-list li + li { margin-top: 0; }
 .pg-list button[aria-current] { background: var(--color-text, #201e1d); color: var(--color-bg, #f3f2f2); }
 .pg-examples details { border-bottom: 1px solid var(--color-divider, color-mix(in srgb, #201e1d 40%, transparent)); }
 .pg-examples summary { padding: 6px 0; font-size: 14px; font-weight: 600; cursor: pointer; }
-.pg-examples .pg-list { padding-left: 12px; }
 .pg-lesson-link { margin-left: 2px; font-weight: 400; text-decoration: none; color: var(--color-accent, #ec3013); }
 .pg-lesson-link:hover { text-decoration: underline; }
 .pg-notice, .pg-example-note { margin: 8px 0 0; font-size: 13px; color: var(--color-neutral-700, #605d5d); }
-div.post-content .pg-name { margin: 0; padding: 0; border: 0; font-size: 22px; }
+.logo-playground .pg-name { margin: 0; padding: 0; border: 0; font-size: 22px; }
 .pg-titlebar { min-height: 30px; }
 .pg-editor {
     width: 100%; min-height: 16em; resize: vertical; padding: 12px 14px;
@@ -47,7 +46,6 @@ div.post-content .pg-name { margin: 0; padding: 0; border: 0; font-size: 22px; }
 @media (max-width: 720px) {
     .logo-playground { grid-template-columns: minmax(0, 1fr); }
 }
-div.post-content .logo-playground ~ p, .article-wide .post-content > p { max-width: 680px; }
 
 /* The playground editor doesn't wrap, so tooltips can find the word under
    the pointer from its line and column. */
@@ -81,10 +79,10 @@ div.post-content .logo-playground ~ p, .article-wide .post-content > p { max-wid
     display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px 16px;
     margin-top: 8px;
 }
-div.post-content .pg-debug-grid h3 {
+.logo-playground .pg-debug-grid h3 {
     margin: 0 0 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
 }
-div.post-content .pg-debug-grid dl {
+.logo-playground .pg-debug-grid dl {
     display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0;
     font: 13px/1.4 ui-monospace, Menlo, monospace;
 }

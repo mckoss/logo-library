@@ -1,3 +1,4 @@
 /* The tiles entry's stylesheet. */
+@import "./base.css";
 @import "./controls.css";
 @import "./tiles.css";

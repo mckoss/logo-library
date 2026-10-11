@@ -1,2 +1,3 @@
 /* The reference entry's stylesheet. */
+@import "./base.css";
 @import "./reference.css";

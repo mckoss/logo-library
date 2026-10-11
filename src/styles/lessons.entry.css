@@ -1,4 +1,5 @@
 /* The lessons entry's stylesheet. */
+@import "./base.css";
 @import "./controls.css";
 @import "./lessons.css";
 @import "./tooltip.css";

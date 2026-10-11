@@ -1,0 +1,16 @@
+/* What every control takes for granted from mckoss.com's theme, which sets
+   it on the whole page: border-box sizing, and buttons in the text's font
+   and color. Here it covers only the controls' own boxes (the lesson
+   elements' toolbars, stages and panels, the whole Playground, reference
+   and Turtle Tiles, and the pop-ups put on the page's body), with no
+   specificity (:where), so any other rule still wins. On mckoss.com it
+   changes nothing. */
+:where(logo-playground, logo-reference, turtle-tiles, .logo-toolbar, .logo-stage, .logo-panel, .logo-tip, .tt-ghost),
+:where(logo-playground, logo-reference, turtle-tiles, .logo-toolbar, .logo-stage, .logo-panel, .logo-tip, .tt-ghost) *,
+:where(logo-playground, logo-reference, turtle-tiles, .logo-toolbar, .logo-stage, .logo-panel, .logo-tip, .tt-ghost) *::before,
+:where(logo-playground, logo-reference, turtle-tiles, .logo-toolbar, .logo-stage, .logo-panel, .logo-tip, .tt-ghost) *::after {
+    box-sizing: border-box;
+}
+:where(logo-example, logo-worksheet, logo-playground, logo-reference, turtle-tiles, .logo-panel, .tt-ghost) button {
+    font: inherit; color: inherit;
+}

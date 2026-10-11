@@ -1,4 +1,5 @@
 /* The playground entry's stylesheet (the Playground includes the reference). */
+@import "./base.css";
 @import "./controls.css";
 @import "./playground.css";
 @import "./reference.css";
