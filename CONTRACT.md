@@ -186,5 +186,19 @@ The Turtle Tiles share-link format (`?p=`) is frozen the same way: see
 
 ## Theme
 
-Controls read the host's look from CSS custom properties, with fallbacks so
-they look right on a page that sets none. Tracked in the theme-tokens issue.
+Controls read the host's look from these CSS custom properties (mckoss.com's
+Modernist tokens), each with mckoss.com's value as its fallback, so they look
+the same on a page that sets none:
+
+| Property | Fallback |
+| --- | --- |
+| `--color-text` | `#201e1d` |
+| `--color-bg` | `#f3f2f2` |
+| `--color-surface` | `#eae9e9` |
+| `--color-divider` | `color-mix(in srgb, #201e1d 40%, transparent)` |
+| `--color-neutral-600` | `#7d7979` |
+| `--color-neutral-700` | `#605d5d` |
+| `--color-accent` | `#ec3013` |
+| `--color-accent-100` | `#fff2ef` |
+| `--color-accent-300` | `#ffc4b8` |
+| `--color-accent-700` | `#ae1800` |

@@ -299,20 +299,21 @@ through every step.
   This package is behavior, the music player and the reference.
 - **Order:** TypeScript first; Svelte only after a spike shows it pays,
   starting with Turtle Tiles.
+- **Version (#1):** 2.0.0, continuing the site's numbering with a major
+  version for the library.
+- **Theme (#2):** the controls read the site's own token names
+  (`--color-text`, `--color-accent`, …), each with mckoss.com's value as its
+  fallback; no `--logo-*` namespace while mckoss.com is the only host.
+- **How Svelte attaches, if adopted (#4):** plain custom elements that mount
+  ordinary Svelte components (`mount(Component, { target: this, props })`),
+  not Svelte's custom-element mode, which has no `<slot>` without shadow DOM,
+  needs string-to-type declarations for attributes, and ties the public
+  contract to Svelte's compiler.
+- **License (#5):** Apache-2.0, the same as jslogo.
 
 ## Still to decide
 
 Open questions are tracked as issues in this repo.
-
-- **How Svelte attaches, if adopted.** The recommendation is plain custom
-  elements that mount ordinary Svelte components
-  (`mount(Component, { target: this, props })`), rather than Svelte's own
-  custom-element mode. That mode has no `<slot>` without shadow DOM (so
-  `<logo-example>` couldn't simply wrap its code), needs string-to-type
-  declarations for attributes, and ties the public contract to Svelte's
-  compiler.
-- **Theme:** confirm the token set (CSS custom properties) the controls read
-  from the site.
 
 ## Done when
 

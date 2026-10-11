@@ -11,31 +11,31 @@ div.post-content .pg-heading ~ .pg-heading { margin-top: 24px; }
 .pg-reference { grid-column: 1 / -1; min-width: 0; }
 .pg-reference-search {
     width: 100%; max-width: 28em; margin: 4px 0;
-    padding: 6px 10px; border: 1px solid var(--color-divider); background: #fff;
-    color: var(--color-text); font: 15px/1.4 inherit;
+    padding: 6px 10px; border: 1px solid var(--color-divider, color-mix(in srgb, #201e1d 40%, transparent)); background: #fff;
+    color: var(--color-text, #201e1d); font: 15px/1.4 inherit;
 }
-.pg-reference-hint { margin: 4px 0 8px; font-size: 13px; color: var(--color-neutral-700); }
+.pg-reference-hint { margin: 4px 0 8px; font-size: 13px; color: var(--color-neutral-700, #605d5d); }
 .pg-reference-body {
     max-height: 36em; overflow: auto; padding: 0 16px 16px;
-    border: 1px solid var(--color-divider); background: #fff;
+    border: 1px solid var(--color-divider, color-mix(in srgb, #201e1d 40%, transparent)); background: #fff;
     font-size: 15px; line-height: 1.5;
 }
 div.post-content .pg-reference-body > * { margin-bottom: 8px; }
 div.post-content .pg-reference-body h3 {
-    margin: 24px 0 8px; padding-top: 12px; border-top: 2px solid var(--color-text);
+    margin: 24px 0 8px; padding-top: 12px; border-top: 2px solid var(--color-text, #201e1d);
     font-size: 20px;
 }
 div.post-content .pg-reference-body h3:first-child { margin-top: 12px; }
 div.post-content .pg-reference-body h4 { margin: 16px 0 4px; font-size: 16px; }
 div.post-content .pg-reference-body p, div.post-content .pg-reference-body li { font-size: 14px; }
 div.post-content .pg-reference-body dl { margin: 0; }
-.pg-ref-entry { padding: 6px 0; border-bottom: 1px solid var(--color-surface); }
+.pg-ref-entry { padding: 6px 0; border-bottom: 1px solid var(--color-surface, #eae9e9); }
 .pg-ref-entry dt code { font-weight: 700; background: none; padding: 0; }
 .pg-ref-entry dt var { font-weight: 400; font-style: italic; }
 .pg-ref-entry dd { margin: 2px 0 0 20px; }
 .pg-ref-entry dd.example {
     display: inline-block; margin: 4px 6px 0 20px; padding: 1px 8px;
     font: 13px/1.5 ui-monospace, Menlo, monospace; white-space: pre-wrap;
-    background: var(--color-surface); cursor: pointer;
+    background: var(--color-surface, #eae9e9); cursor: pointer;
 }
-.pg-ref-entry dd.example:hover { background: var(--color-accent-100); color: var(--color-accent-700); }
+.pg-ref-entry dd.example:hover { background: var(--color-accent-100, #fff2ef); color: var(--color-accent-700, #ae1800); }
