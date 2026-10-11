@@ -1,0 +1,13 @@
+/* Tooltips for words in Logo programs. */
+.logo-tip {
+    position: fixed; z-index: 50; max-width: 26em;
+    padding: 8px 10px; background: var(--color-text); color: var(--color-bg);
+    font-size: 13px; line-height: 1.45; pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+.logo-tip-usage code {
+    display: block; color: #fff; background: none; padding: 0;
+    font: 600 13px/1.5 ui-monospace, Menlo, monospace;
+}
+.logo-tip p { margin: 4px 0 0; }
+.logo-tip-example { opacity: 0.75; font-family: ui-monospace, Menlo, monospace; font-size: 12px; }

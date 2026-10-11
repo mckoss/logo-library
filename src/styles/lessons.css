@@ -1,0 +1,17 @@
+/* Lesson examples and worksheets. (The host styles <logo-example> and
+   <logo-worksheet> themselves, display included: see CONTRACT.md.) */
+.logo-try { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.logo-try input {
+    font: 14px/1.4 ui-monospace, Menlo, monospace;
+    padding: 3px 8px; border: 1px solid var(--color-divider);
+    background: #fff; color: var(--color-text);
+}
+.logo-try input { width: 14em; }
+div.post-content .logo-code code[contenteditable] { display: block; outline: none; }
+div.post-content .logo-code pre:focus-within { box-shadow: inset 0 0 0 2px var(--color-accent-300); }
+
+.logo-panel { margin: -8px 0 24px; }
+
+/* Worksheet rows: the instructions and their Check button, beside the box. */
+div.post-content .logo-worksheet pre { display: flex; flex-direction: column; justify-content: space-between; }
+.logo-box .logo-stage { border: 0; }

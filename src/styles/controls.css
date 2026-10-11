@@ -1,0 +1,49 @@
+/* Copied from mckoss.com's assets/css/custom.css (see PLAN.md, "Fork point"), split
+   by control. Shared by every control that runs Logo: toolbars, buttons,
+   stages and their output. */
+
+/* Interactive Logo: toolbars, stages, the playground. */
+.logo-toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+    margin-top: 8px;
+    font-size: 13px;
+}
+.logo-btn, .logo-speed {
+    padding: 4px 10px;
+    border: 1px solid var(--color-divider); background: var(--color-bg);
+    color: var(--color-text); font: 600 13px/1.4 inherit; cursor: pointer;
+}
+.logo-btn:hover:not(:disabled) { border-color: var(--color-text); }
+.logo-btn:disabled { opacity: 0.45; cursor: default; }
+.logo-btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.logo-btn-primary:hover:not(:disabled) { background: var(--color-accent-700); border-color: var(--color-accent-700); }
+.logo-btn.logo-running { background: var(--color-text); border-color: var(--color-text); }
+
+.logo-stage {
+    position: relative; width: 100%;
+    background: #fff; border: 1px solid var(--color-divider);
+}
+.logo-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+div.post-content .logo-output {
+    margin: 0; padding: 8px 12px; max-height: 12em; overflow: auto;
+    background: var(--color-surface); font: 13px/1.5 ui-monospace, Menlo, monospace;
+    white-space: pre-wrap;
+}
+div.post-content .logo-output.logo-error { color: var(--color-accent-700); }
+
+/* Zoom and pan on a Logo stage. */
+.logo-stage { overflow: hidden; touch-action: none; cursor: grab; }
+.logo-stage.logo-dragging { cursor: grabbing; }
+.logo-stage canvas.logo-guides { pointer-events: none; }
+.logo-view-tools {
+    position: absolute; top: 6px; right: 6px; z-index: 3;
+    display: flex; gap: 2px;
+    opacity: 0.55; transition: opacity 0.15s;
+}
+.logo-stage:hover .logo-view-tools, .logo-view-tools:focus-within { opacity: 1; }
+.logo-view-tools button {
+    min-width: 28px; padding: 2px 6px;
+    border: 1px solid var(--color-divider); background: rgba(255, 255, 255, 0.9);
+    color: var(--color-text); font: 600 12px/1.4 inherit; cursor: pointer;
+}
+.logo-view-tools button:hover { border-color: var(--color-text); }
