@@ -8,6 +8,7 @@
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 const path = p => fileURLToPath(new URL(p, import.meta.url));
 const JSLOGO = path('./vendor/jslogo/');
@@ -46,7 +47,8 @@ export default defineConfig({
   resolve: {
     alias: { jslogo: JSLOGO.replace(/\/$/, '') },
   },
-  plugins: [jslogoGlobals(), plainFiles()],
+  // Svelte: Turtle Tiles' strip and program scroller (src/tiles/*.svelte).
+  plugins: [jslogoGlobals(), plainFiles(), svelte()],
   // Unit tests (npm run test:unit): the engine's pure logic, in Node. The
   // end-to-end tests in tests/e2e are Playwright's.
   test: {

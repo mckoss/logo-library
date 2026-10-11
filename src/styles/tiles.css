@@ -155,40 +155,9 @@ turtle-tiles { display: block; }
 .tt-speed-choice { --tile-color: #fff; border-radius: calc(var(--b) * .2); box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px #e0dbd0; }
 .tt-speed-choice[aria-pressed="true"] { box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 3px #3d7fd9; }
 
-/* The strip, on its own row: its tiles wrap onto a second and a third
-   line as it fills, and only then does it scroll. */
-/* The strip's row: the program it shows, then the strip. */
+/* The strip's row: the program it shows, then the strip (styled in
+   ProgramScroller.svelte and Strip.svelte). */
 .tt-strip-row { grid-area: strip; display: flex; align-items: flex-start; gap: var(--gap); min-width: 0; }
-.tt-prog {
-  position: relative;
-  overflow: hidden;
-  border-radius: calc(var(--b) * .2);
-  box-shadow: 0 3px 0 rgba(0, 0, 0, .2), inset 0 0 0 2px rgba(0, 0, 0, .06);
-  cursor: default;
-}
-.tt-prog-letter { display: grid; place-items: center; width: 100%; height: 100%; }
-.tt-prog-letter svg { width: 80%; height: 80%; }
-/* Its top half goes up a program and its bottom half down, each marked
-   with a small triangle (none above A, none below D). */
-.tt-prog-step {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-.tt-prog-step[hidden] { display: none; }
-.tt-prog-up { top: 0; }
-.tt-prog-down { bottom: 0; }
-.tt-prog-step svg { position: absolute; left: 0; width: 100%; height: 200%; fill: rgba(0, 0, 0, .45); pointer-events: none; }
-.tt-prog-up svg { top: 0; }
-.tt-prog-down svg { bottom: 0; }
-.tt-prog-step:focus-visible { outline: 3px solid #3b3a36; outline-offset: -3px; }
-/* Going to another program scrolls the letter and the strip. */
-.tt-scrolling { overflow: hidden !important; }
 .tt-plays {
   --tile-color: #fff;
   border-radius: calc(var(--b) * .2);
@@ -212,39 +181,6 @@ turtle-tiles { display: block; }
 .tt-music { --pop-mark: rgba(255, 255, 255, .85); }
 /* A program that would play itself can't be picked. */
 .tt-source.tt-blocked { opacity: .3; filter: grayscale(.6); cursor: not-allowed; }
-.tt-strip-area {
-  position: relative;
-  --line: calc(var(--b) * .76 + 6px);  /* a line of the strip: a repeat's height */
-  flex: 1;
-  box-sizing: border-box;
-  min-width: 0;
-  max-height: calc(var(--line) * 3 + var(--gap) * 2 + 12px);
-  padding: 4px;
-  background: #fff;
-  border: 2px dashed #d6cfbf;
-  border-radius: calc(var(--b) * .22);
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-.tt-recording .tt-strip-area { border-color: #e57373; }
-.tt-strip, .tt-strip-ghost {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  align-content: flex-start;
-  gap: var(--gap) calc(var(--gap) - 1px);
-  min-height: var(--line);
-}
-/* Every line as tall as a repeat, so three lines fill the strip exactly. */
-:is(.tt-strip, .tt-strip-ghost) > .tt-tile { margin: 3px 0; }
-.tt-strip.tt-empty::before {
-  content: "";
-  box-sizing: border-box;
-  width: calc(var(--b) * .72);
-  height: calc(var(--b) * .72);
-  border: 2px dashed #d6cfbf;
-  border-radius: 10px;
-}
 
 /* The tiles by the wheel: one row on wide screens; on tall ones two rows,
    filled down then across, with the ruler first. */
@@ -367,15 +303,8 @@ turtle-tiles { display: block; }
   outline: 3px solid #3b3a36;
   outline-offset: 2px;
 }
-:is(.tt-strip, .tt-strip-ghost) .tt-tile { width: calc(var(--b) * .76); height: calc(var(--b) * .76); box-shadow: 0 2px 0 rgba(0, 0, 0, .2); }
-/* The playhead: the tile Play or Step plays next. */
-.tt-strip .tt-tile.tt-next { outline: 3px dashed #2e9d48; outline-offset: 2px; }
-/* The picked tile (or repeat), which recording goes after. */
-.tt-strip .tt-item.tt-selected { outline: 3px solid #3d7fd9; outline-offset: 2px; }
-.tt-tile.tt-active { transform: scale(1.12); box-shadow: 0 0 0 4px #ffd400, 0 3px 0 rgba(0, 0, 0, .2); }
 .tt-bounce { animation: tt-bounce .35s ease-out; }
 @keyframes tt-bounce { 40% { transform: scale(1.18) rotate(-4deg); } }
-.tt-lifted { opacity: .25; }
 .tt-ghost {
   position: fixed;
   left: 0;
@@ -392,13 +321,6 @@ turtle-tiles { display: block; }
 .tt-trash.tt-drop { transform: scale(1.15); box-shadow: 0 0 0 4px #e57373, 0 3px 0 rgba(0, 0, 0, .2); }
 .tt-trash.tt-armed { --tile-color: #e53935; animation: tt-armed .6s ease-in-out infinite alternate; }
 @keyframes tt-armed { to { box-shadow: 0 0 0 8px rgba(229, 57, 53, .35), 0 3px 0 rgba(0, 0, 0, .2); } }
-.tt-marker {
-  flex: none;
-  width: 5px;
-  height: calc(var(--b) * .76);
-  border-radius: 3px;
-  background: #ffb000;
-}
 
 /* The turn wheel: the ring with the arm, and the turtle to tap in the
    middle, stacked in one grid cell. */
@@ -424,69 +346,14 @@ turtle-tiles { display: block; }
   opacity: .6;
 }
 
-.tt-repeat {
-  flex: none;
-  max-width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 3px;
-  border-radius: calc(var(--b) * .2);
-  background: #ffe2b8;
-  box-shadow: inset 0 0 0 2px #f08c00;
-}
-.tt-repeat .tt-tile { width: calc(var(--b) * .64); height: calc(var(--b) * .64); }
-.tt-repeat .tt-repeat-head { width: calc(var(--b) * .76); height: calc(var(--b) * .76); }
-.tt-repeat-head { position: relative; }
-.tt-dots {
-  position: absolute;
-  bottom: 3px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  gap: 1px;
-}
-.tt-dot {
-  width: clamp(3px, calc(var(--b) * .07), 6px);
-  height: clamp(3px, calc(var(--b) * .07), 6px);
-  border-radius: 50%;
-  background: #fff;
-  opacity: .55;
-}
-.tt-dot.tt-on { opacity: 1; box-shadow: 0 0 0 1px #7a4500; }
-/* For big counts, a bar instead of dots. */
-.tt-progress {
-  position: absolute;
-  bottom: 4px;
-  left: 12%;
-  right: 12%;
-  height: clamp(3px, calc(var(--b) * .07), 6px);
-  border-radius: 3px;
-  background: rgba(255, 255, 255, .45);
-  overflow: hidden;
-}
-.tt-progress-fill { display: block; width: 0; height: 100%; background: #fff; }
-/* An open repeat, taking the tiles being recorded: its box is open at the
-   end, and the Repeat button pulses until it's tapped again to close it. */
-.tt-repeat.tt-open { box-shadow: inset 0 0 0 2px #f08c00; border-right: 3px dashed #f08c00; border-radius: calc(var(--b) * .2) 0 0 calc(var(--b) * .2); }
+/* The Repeat button pulses while a repeat is open, until it's tapped again
+   to close it (Strip.svelte draws the open repeat). */
 .tt-source.tt-open { animation: tt-open-repeat 1s ease-in-out infinite alternate; }
 @keyframes tt-open-repeat { to { box-shadow: 0 0 0 6px rgba(240, 140, 0, .45), 0 3px 0 rgba(0, 0, 0, .2); } }
 /* The count pop-up: up, the number, down. */
 .tt-count-pop:not([hidden]) { display: flex; flex-direction: column; align-items: center; gap: var(--gap); }
 .tt-count-step { border-radius: calc(var(--b) * .2); }
 .tt-count-num { min-width: var(--b); font: 800 calc(var(--b) * .6) / 1 Archivo, sans-serif; text-align: center; color: #3b3a36; }
-.tt-repeat-head svg { margin-bottom: 14%; width: 90%; height: 90%; }
-.tt-repeat-body {
-  display: flex;
-  flex-wrap: wrap;
-  min-width: 0;
-  align-items: center;
-  gap: 3px;
-  min-width: calc(var(--b) * .64);
-  min-height: calc(var(--b) * .64);
-}
 .tt-playing .tt-group, .tt-playing .tt-wheel { opacity: .5; }
 
 .tt-menu {

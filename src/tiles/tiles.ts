@@ -65,24 +65,29 @@
 //
 // What a program is, the tiles' names, colors and Logo, and a program as
 // Logo are in program.ts; share links are in share.ts.
+//
+// The strip and the program scroller are Svelte components (Strip.svelte,
+// ProgramScroller.svelte), drawn from the state in strip.svelte.ts: this
+// changes that state, and they redraw.
+import { mount } from 'svelte';
 import type { SpeedName, Stage, TurtleAt } from '../engine/index.js';
 import { logoPath, storageKey } from '../engine/host.js';
 import {
-  BLUE, CRAYONS, HOME, MAX_COUNT, MAX_UNITS, NAMES, NOTES, PROGRAM_COLORS, STEP, TILE, TILES, UNIT,
-  clean, codeFor, isName, moveLabel, namedLogo, normalize, plays, stepsOf, tileFor, toLogo, turnLabel, turnTint,
+  BLUE, CRAYONS, HOME, MAX_COUNT, MAX_UNITS, NAMES, NOTES, PROGRAM_COLORS, PROGRAM_INK, STEP, TILE, TILES, UNIT,
+  clean, codeFor, isName, moveLabel, namedLogo, normalize, plays, tileFor, toLogo, turnLabel, turnTint,
 } from './program.js';
 import type {
   Item, MoveItem, PlainTileId, ProgramName, Programs, RepeatItem, Step, Tile, TileGroup, TileInfo, TurnItem,
 } from './program.js';
 import { SHARE_PARAM, pack, unpack } from './share.js';
 import type { IncomingPayload, SharePayload } from './share.js';
+import { StripState } from './strip.svelte.js';
+import type { DropSpot, Face } from './strip.svelte.js';
+import Strip from './Strip.svelte';
+import ProgramScroller from './ProgramScroller.svelte';
 
 const { LogoStage } = self;
 const SAVE_KEY = storageKey('mckoss.logo.tiles');
-// Each program's color (PROGRAM_COLORS, pastel), and a deeper shade of it
-// for its letter.
-const PROGRAM_INK: Record<ProgramName, string> = { A: '#c62828', B: '#2e7d32', C: '#1565c0', D: '#5d4037' };
-let programs: Programs = { A: [], B: [], C: [], D: [] };
 const IMPORT_KEY = storageKey('mckoss.logo.import');
 const TITLE = 'Turtle Tiles';
 const PRELUDE = 'setpensize 2';
@@ -167,7 +172,6 @@ const ABOVE: Partial<Record<AnimalId, string>> = {
   bolt: ANIMALS.bolt,
 };
 const BOLT_TIP: [number, number] = [19, 61];  // where the lightning strikes: the turtle's place
-const DOTS_UP_TO = 8;  // its progress shows as dots up to here, else as a bar
 const FRIENDLY = [45, 60, 90, 120, 180];
 const SHORT_SIDE = 240;  // turtle steps across the stage's shorter side
 const HOLD_MS = 800;
@@ -318,14 +322,6 @@ interface Spinner {
   skipZero?: boolean;
   format?(n: number): string;
 }
-// Where a dragged item would land: in the strip or a repeat's body (the
-// element, and the list it shows), before an item's element (null for the
-// end).
-interface DropTarget {
-  container: Element;
-  list: Item[];
-  before: Element | null;
-}
 // A drag under way, as startDrag returns it: follows the pointer, then
 // ends, dropping the item (or not, if `cancelled`).
 interface Drag {
@@ -415,11 +411,12 @@ function iconButton(className: string, label: string, icon: string, parent?: Ele
 
 function init(root: HTMLElement) {
   // The programs, kept in this browser (a strip saved before there were
-  // programs becomes A). `program` is the one the strip shows, `current`
-  // its name; `top` is the one Play and Step go through, which may play
+  // programs becomes A), and the strip's state (strip.svelte.ts).
+  // `program` is the one the strip shows, `strip.current` its name;
+  // `strip.top` is the one Play and Step go through, which may play
   // others: while it does, the strip shows the one playing.
-  programs = { A: [], B: [], C: [], D: [] };
-  let current: ProgramName = 'A';
+  const strip = new StripState();
+  const { programs } = strip;
   try {
     // (What was saved, as SavedTiles describes, but unchecked: clean()
     // makes sense of it, as of a link's.)
@@ -427,11 +424,11 @@ function init(root: HTMLElement) {
     if (Array.isArray(saved)) programs.A = clean(saved);
     else if (saved && saved.programs) {
       NAMES.forEach(n => { programs[n] = clean(saved.programs![n]); });
-      if (isName(saved.current)) current = saved.current;
+      if (isName(saved.current)) strip.current = saved.current;
     }
   } catch (e) { /* none saved */ }
-  let program = programs[current];
-  let top = current;
+  let program = programs[strip.current];
+  strip.top = strip.current;
 
   // The page. The stylesheet's grid places each part, in one of two
   // arrangements (root.dataset.layout, chosen by layout()).
@@ -458,23 +455,8 @@ function init(root: HTMLElement) {
   // The strip's row: the program it shows (its letter, with arrows to
   // go up and down through A to D), then the strip.
   const stripRow = el('div', 'tt-strip-row', root);
-  const progBtn = el('div', 'tt-button tt-prog', stripRow);
-  progBtn.setAttribute('role', 'group');
-  const progLetter = el('div', 'tt-prog-letter', progBtn);
-  const progArrow = (className: string, label: string, d: string) => {
-    const b = el('button', 'tt-prog-step ' + className, progBtn);
-    b.type = 'button';
-    b.setAttribute('aria-label', label);
-    b.title = label;
-    b.innerHTML = svg(`<path d="${d}"/>`);
-    return b;
-  };
-  const progUp = progArrow('tt-prog-up', 'Previous program', 'M32 4 L44 14 H20 Z');
-  const progDown = progArrow('tt-prog-down', 'Next program', 'M32 60 L44 50 H20 Z');
-  const stripArea = el('div', 'tt-strip-area', stripRow);
-  const strip = el('div', 'tt-strip', stripArea);
-  strip.setAttribute('aria-label', 'Program');
-  strip.setAttribute('role', 'list');
+  mount(ProgramScroller, { target: stripRow, props: { strip, onstep: by => goTo(NAMES[NAMES.indexOf(strip.current) + by]) } });
+  const stripView = mount(Strip, { target: stripRow, props: { strip, face: faceOf } });
   const line = el('div', 'tt-line', root);
   line.setAttribute('role', 'group');
   line.setAttribute('aria-label', 'Recording');
@@ -582,74 +564,27 @@ function init(root: HTMLElement) {
   }
   // Going up and down through the programs, A at the top, D at the
   // bottom.
-  const progIcon = (p: ProgramName) => svg(`<text x="32" y="45" text-anchor="middle" font-family="Archivo, sans-serif" ` +
-    `font-size="34" font-weight="800" fill="${PROGRAM_INK[p]}">${p}</text>`);
-  ([[progUp, -1], [progDown, 1]] as const).forEach(([b, by]) => b.addEventListener('click', () => {
-    const p = NAMES[NAMES.indexOf(current) + by];
+  function goTo(p: ProgramName | undefined) {
     if (!p) return;
-    if (openRepeat) closeRepeat();
-    top = p;
-    playhead = 0;
+    if (strip.openRepeat) closeRepeat();
+    strip.top = p;
+    strip.playhead = 0;
     showProgram(p);
     save();
-  }));
-  let scrolls = false;  // (not the first time)
+  }
+  // Shows program `p` in the strip (scrolling to it).
   function showProgram(p: ProgramName) {
     // Showing another program stops recording, so tiles never go into
     // a program by surprise: Record has to be tapped again for it.
-    if (p !== current && recording) setRecording(false);
-    const by = Math.sign(NAMES.indexOf(p) - NAMES.indexOf(current));
-    const before = scrolls && by ? [snapshot(progLetter), snapshot(strip, 'tt-strip-ghost')] : null;
-    current = p;
+    if (p !== strip.current && recording) setRecording(false);
+    strip.current = p;
     program = programs[p];
-    progLetter.innerHTML = progIcon(p);
-    progBtn.dataset.program = p;
-    progBtn.style.setProperty('--tile-color', PROGRAM_COLORS[p]);
-    progBtn.setAttribute('aria-label', 'Program ' + p);
-    progUp.hidden = p === NAMES[0];
-    progDown.hidden = p === NAMES[NAMES.length - 1];
-    render();
-    scrolls = true;
-    if (before) {
-      scroll(progLetter, before[0], by);
-      scroll(strip, before[1], by);
-    }
-  }
-  // A copy of `node` as it looks now, laid over it, for scroll() to move
-  // away. (A copy of the strip is renamed, so it isn't taken for the
-  // strip, and hidden from screen readers.)
-  function snapshot(node: HTMLElement, className?: string) {
-    const copy = node.cloneNode(true) as HTMLElement;
-    if (className) copy.className = node.className.replace(/\btt-strip\b/, className);
-    copy.removeAttribute('role');
-    copy.setAttribute('aria-hidden', 'true');
-    copy.inert = true;
-    return copy;
-  }
-  // Scrolls `node`'s new look in as its old one (`copy`) goes: up when
-  // going down to a later program, `by` 1, and down when going up.
-  const still = self.matchMedia && self.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function scroll(node: HTMLElement, copy: HTMLElement, by: number) {
-    const box = node.parentNode as HTMLElement;
-    if (still || !node.animate) return;
-    Object.assign(copy.style, {
-      position: 'absolute', left: node.offsetLeft + 'px', top: node.offsetTop + 'px',
-      width: node.offsetWidth + 'px', margin: 0,
-    });
-    box.classList.add('tt-scrolling');
-    box.appendChild(copy);
-    const far = box.clientHeight;
-    const timing = { duration: 280, easing: 'ease-in-out' };
-    node.animate([{ transform: `translateY(${by * far}px)` }, { transform: 'none' }], timing);
-    copy.animate([{ transform: 'none' }, { transform: `translateY(${-by * far}px)` }], timing).onfinish = () => {
-      copy.remove();
-      if (!box.querySelector('[aria-hidden="true"][inert]')) box.classList.remove('tt-scrolling');
-    };
+    if (strip.selected && !placeOf(strip.selected)) select(null);
   }
   // The tiles that play a program. One that would play the program it
   // goes in (itself, or by way of another) is faded and does nothing.
   const callChoices = el('div', 'tt-group tt-calls', popups.plays.pop);
-  const blocked = (p: ProgramName) => p === current || plays(programs, p, current);
+  const blocked = (p: ProgramName) => p === strip.current || plays(programs, p, strip.current);
   NAMES.forEach(p => {
     const t = tileElement(lookOf({ t: 'call', p }), 'tt-source');
     t.dataset.p = p;
@@ -732,10 +667,6 @@ function init(root: HTMLElement) {
 
   // Tiles ---------------------------------------------------------------
 
-  const itemOf = new WeakMap<Element, Item>();  // strip element -> program item
-  const elementOf = new Map<Item, HTMLElement>();   // program item -> strip element
-  const bodyOf = new WeakMap<Element, RepeatItem>();  // repeat body element -> repeat item
-
   function tileElement(def: Pick<TileLook, 'id' | 'label' | 'icon' | 'color'>, className?: string) {
     const t = el('div', 'tt-tile ' + (className || ''));
     t.dataset.tile = def.id;
@@ -747,68 +678,35 @@ function init(root: HTMLElement) {
     return t;
   }
 
-  // How far a repeat has gone round: a dot for each time, or for big
-  // counts a bar.
-  function progress(item: RepeatItem) {
-    if (item.n > DOTS_UP_TO) {
-      const bar = el('span', 'tt-progress');
-      el('span', 'tt-progress-fill', bar);
-      return bar;
-    }
-    const d = el('span', 'tt-dots');
-    for (let i = 0; i < item.n; i++) el('span', 'tt-dot', d);
-    return d;
-  }
-  // Shows a repeat's count on its head.
-  function showCount(item: RepeatItem, head: HTMLElement) {
-    head.innerHTML = repeatCount(item.n);
-    head.setAttribute('aria-label', 'Repeat ' + item.n + (item.n === 1 ? ' time' : ' times'));
-    head.appendChild(progress(item));
-  }
-
-  function itemElement(item: Item): HTMLElement {
-    let node;
+  // How an item looks in the strip (Strip.svelte draws it): its tile
+  // and picture, or for a repeat, its head's.
+  function faceOf(item: Item): Face {
     if (item.t === 'repeat') {
-      node = el('div', 'tt-item tt-repeat');
-      node.classList.toggle('tt-open', item === openRepeat);
-      const head = tileElement(PICTURED.repeat, 'tt-repeat-head');
-      showCount(item, head);
-      node.appendChild(head);
-      const body = el('div', 'tt-repeat-body', node);
-      bodyOf.set(body, item);
-      item.body.forEach(child => body.appendChild(itemElement(child)));
-    } else if (TILE[item.t] && TILE[item.t].group === 'crayons' && item.t !== 'nextcolor') {
+      return { ...PICTURED.repeat, label: 'Repeat ' + item.n + (item.n === 1 ? ' time' : ' times'), icon: repeatCount(item.n) };
+    }
+    if (TILE[item.t] && TILE[item.t].group === 'crayons' && item.t !== 'nextcolor') {
       // In the strip, a crayon is a colored pencil on a white tile, like
       // the Colors button (the white one, Invisible, a white pencil).
       const def = TILE[item.t];
-      node = tileElement({ ...def, color: '#fff', icon: crayon(item.t === 'invisible' ? '#fff' : def.color) },
-        'tt-item tt-crayon-item');
-    } else {
-      node = tileElement(lookOf(item), 'tt-item');
+      return { ...def, color: '#fff', icon: crayon(item.t === 'invisible' ? '#fff' : def.color), crayon: true };
     }
-    node.setAttribute('role', 'listitem');
-    itemOf.set(node, item);
-    elementOf.set(item, node);
-    return node;
+    return lookOf(item);
   }
 
-  // The playhead: the next tile Play or Step will play, as an index
-  // into the steps of the program Play plays (`top`).
-  let playhead = 0;
+  // The playhead (strip.playhead): the next tile Play or Step will
+  // play, as an index into the steps of the program Play plays
+  // (strip.top).
 
-  // The tile picked by tapping it in the strip, if any: recording goes
-  // in just after it, and the new tile is picked in its place, so taps go
-  // in in order. A repeat picked by its count (`selectedInto`) takes
-  // recording at the end of its body. With nothing picked, recording goes
-  // on the end of the strip (or of the open repeat).
-  let selected: Item | null = null;
+  // The item picked by tapping it in the strip (strip.selected), if any:
+  // recording goes in just after it, and the new tile is picked in its
+  // place, so taps go in in order. A repeat picked by its count
+  // (`selectedInto`) takes recording at the end of its body. With nothing
+  // picked, recording goes on the end of the strip (or of the open
+  // repeat).
   let selectedInto = false;
   function select(item: Item | null | undefined, into = false) {
-    selected = item || null;
-    selectedInto = Boolean(selected && into && selected.t === 'repeat');
-    root.querySelectorAll('.tt-selected').forEach(n => n.classList.remove('tt-selected'));
-    const node = selected && elementOf.get(selected);
-    if (node) node.classList.add('tt-selected');
+    strip.selected = item || null;
+    selectedInto = Boolean(item && into && item.t === 'repeat');
   }
   // The list `item` is in (the strip, or a repeat's body), and where.
   function placeOf(item: Item): { list: Item[]; index: number; repeat: RepeatItem | null } | null {
@@ -821,6 +719,7 @@ function init(root: HTMLElement) {
   }
   // Where a recorded tile goes: into `list` at `at`.
   function insertionPoint(): { list: Item[]; at: number; repeat: RepeatItem | null } {
+    const { selected, openRepeat } = strip;
     const place = selected && placeOf(selected);
     if (place && selectedInto) {
       const into = selected as RepeatItem;  // (only a repeat is selectedInto)
@@ -830,41 +729,13 @@ function init(root: HTMLElement) {
     if (openRepeat) return { list: openRepeat.body, at: openRepeat.body.length, repeat: openRepeat };
     return { list: program, at: program.length, repeat: null };
   }
-  let openRepeat: RepeatItem | null = null;  // the repeat that tiles being recorded go into
-  const steps = () => stepsOf(programs, programs[top], top);
+  // (strip.openRepeat: the repeat that tiles being recorded go into.)
+  // Part way through, the strip shows the program playing; at the start,
+  // the one Play plays. (The strip marks the playhead itself.)
   function showPlayhead() {
-    root.querySelectorAll('.tt-next, .tt-dot.tt-on').forEach(n => n.classList.remove('tt-next', 'tt-on'));
-    root.querySelectorAll<HTMLElement>('.tt-progress-fill').forEach(f => { f.style.width = '0'; });
-    const step = steps()[playhead];
-    // Part way through, the strip shows the program playing; at the
-    // start, the one Play plays.
-    const showing = playhead > 0 && step ? step.prog : top;
-    if (showing !== current) {
-      showProgram(showing);
-      return;
-    }
-    // (At the start, the first tile to play may be in a program the
-    // first one plays, which the strip doesn't show.)
-    if (!step || step.prog !== current) return;
-    const node = elementOf.get(step.item);
-    if (node) node.classList.add('tt-next');
-    if (step.repeat && elementOf.has(step.repeat)) {
-      const node = elementOf.get(step.repeat)!;
-      const i = step.i!;  // (which time round: set with the repeat)
-      const dotEls = node.querySelectorAll('.tt-dot');
-      if (dotEls[i]) dotEls[i].classList.add('tt-on');
-      const fill = node.querySelector<HTMLElement>('.tt-progress-fill');
-      if (fill) fill.style.width = (100 * (i + 1) / step.repeat.n) + '%';
-    }
-  }
-
-  function render() {
-    elementOf.clear();
-    strip.textContent = '';
-    program.forEach(item => strip.appendChild(itemElement(item)));
-    strip.classList.toggle('tt-empty', !program.length);
-    select(selected && placeOf(selected) ? selected : null, selectedInto);
-    showPlayhead();
+    const step = strip.steps[strip.playhead];
+    const showing = strip.playhead > 0 && step ? step.prog : strip.top;
+    if (showing !== strip.current) showProgram(showing);
   }
 
   // The Move and Back buttons go as far as Step size says.
@@ -883,13 +754,13 @@ function init(root: HTMLElement) {
   // Closes the open repeat (dropping it if nothing went in), unless it's
   // already `gone` from the strip.
   function closeRepeat(gone?: boolean) {
-    const item = openRepeat!;  // (called only with one open)
-    openRepeat = null;
+    const item = strip.openRepeat!;  // (called only with one open)
+    strip.openRepeat = null;
     repeatBtn.classList.remove('tt-open');
     repeatBtn.setAttribute('aria-pressed', 'false');
     if (gone) return;
     const at = program.indexOf(item);
-    const picked = selected === item || item.body.includes(selected as Tile);
+    const picked = strip.selected === item || item.body.includes(strip.selected as Tile);
     if (!item.body.length) program.splice(at, 1);
     // Recording into it went after a picked tile: what comes next goes
     // after the repeat.
@@ -945,9 +816,6 @@ function init(root: HTMLElement) {
       label: 'Repeat count', value: item.n, min: 0, max: MAX_COUNT,
       set(n) {
         item.n = n;
-        const node = elementOf.get(item)!.querySelector<HTMLElement>('.tt-repeat-head')!;
-        showCount(item, node);
-        popups.count.btn = node;
         edited();
       },
     });
@@ -958,9 +826,6 @@ function init(root: HTMLElement) {
       label: 'How far', value: Math.abs(item.d) / UNIT, min: 1, max: MAX_UNITS,
       set(n) {
         item.d = Math.sign(item.d) * n * UNIT;
-        const def = lookOf(item);
-        node.innerHTML = def.icon;
-        node.setAttribute('aria-label', def.label);
         setDistance(n);
         edited();
       },
@@ -974,10 +839,6 @@ function init(root: HTMLElement) {
       format: a => (a > 0 ? '+' : '\u2212') + Math.abs(a),
       set(a) {
         item.a = a;
-        const def = lookOf(item);
-        node.innerHTML = def.icon;
-        node.setAttribute('aria-label', def.label);
-        node.style.setProperty('--tile-color', def.color);
         setAngle(a);
         edited();
       },
@@ -987,7 +848,7 @@ function init(root: HTMLElement) {
   // on it.
   function edited() {
     save();
-    if (playhead >= steps().length) playhead = 0;
+    if (strip.playhead >= strip.steps.length) strip.playhead = 0;
     showPlayhead();
   }
   ([[upBtn, 1], [downBtn, -1]] as const).forEach(([b, delta]) => {
@@ -1165,18 +1026,17 @@ function init(root: HTMLElement) {
   });
 
   function save() {
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ programs, current })); } catch (e) { /* storage blocked */ }
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ programs, current: strip.current })); } catch (e) { /* storage blocked */ }
   }
 
 
   // After the recording changes, the playhead goes back to the start.
   function changed() {
-    if (openRepeat && !program.includes(openRepeat)) closeRepeat(true);
-    if (selected && !placeOf(selected)) select(null);
-    playhead = 0;
-    top = current;
+    if (strip.openRepeat && !program.includes(strip.openRepeat)) closeRepeat(true);
+    if (strip.selected && !placeOf(strip.selected)) select(null);
+    strip.playhead = 0;
+    strip.top = strip.current;
     save();
-    render();
   }
 
   // Layout ------------------------------------------------------------------
@@ -1337,7 +1197,6 @@ function init(root: HTMLElement) {
     return Math.abs(Math.log(ratio)) > 0.25;
   }
 
-  showProgram(current);
   layout();
   makeStage();
 
@@ -1419,7 +1278,7 @@ function init(root: HTMLElement) {
 
   let recording = false;
   function setRecording(on: boolean) {
-    if (!on && openRepeat) closeRepeat();
+    if (!on && strip.openRepeat) closeRepeat();
     recording = on;
     root.classList.toggle('tt-recording', on);
     recordBtn.setAttribute('aria-pressed', String(on));
@@ -1437,16 +1296,11 @@ function init(root: HTMLElement) {
   // Plays the tile at the playhead, lit up, and moves the playhead on
   // (back to the start after the last tile).
   async function playStep(steps: Step[]) {
-    const step = steps[playhead];
-    const node = elementOf.get(step.item);
-    if (node) {
-      node.classList.remove('tt-next');
-      node.classList.add('tt-active');
-    }
+    const step = steps[strip.playhead];
+    strip.active = step.item;
     await perform(codeFor(programs, step.item), codeFor(programs, step.item, true));
-
-    if (node) node.classList.remove('tt-active');
-    playhead = (playhead + 1) % steps.length;
+    strip.active = null;
+    strip.playhead = (strip.playhead + 1) % steps.length;
     showPlayhead();
   }
 
@@ -1455,7 +1309,7 @@ function init(root: HTMLElement) {
       pausing = true;
       return;
     }
-    if (!steps().length) {
+    if (!strip.steps.length) {
       flash(playBtn);
       return;
     }
@@ -1464,10 +1318,10 @@ function init(root: HTMLElement) {
       setPlaying(true);
       pausing = false;
       try {
-        const list = steps();
+        const list = strip.steps;
         do {
           await playStep(list);
-        } while (playhead !== 0 && !pausing);
+        } while (strip.playhead !== 0 && !pausing);
       } finally {
         setPlaying(false);
       }
@@ -1476,7 +1330,7 @@ function init(root: HTMLElement) {
 
   function step() {
     if (playing) return;
-    const list = steps();
+    const list = strip.steps;
     if (!list.length) {
       flash(stepBtn);
       return;
@@ -1514,35 +1368,36 @@ function init(root: HTMLElement) {
     if (node.dataset.tile === 'repeat') {
       if (!recording) {
         flash(node);
-      } else if (openRepeat) {
+      } else if (strip.openRepeat) {
         closeRepeat();
       } else {
         // After the picked tile (or the repeat it's in), if any, and
         // taking what's recorded next.
-        openRepeat = { t: 'repeat', n: 1, body: [] };
+        const { selected } = strip;
         const place = selected && placeOf(selected);
-        program.splice(place ? program.indexOf(place.repeat || selected!) + 1 : program.length, 0, openRepeat);
-        if (place) select(openRepeat, true);
+        const at = place ? program.indexOf(place.repeat || selected!) + 1 : program.length;
+        program.splice(at, 0, { t: 'repeat', n: 1, body: [] });
+        const repeat = strip.openRepeat = program[at] as RepeatItem;  // (the strip's own: see strip.svelte.ts)
+        if (place) select(repeat, true);
         repeatBtn.classList.add('tt-open');
         repeatBtn.setAttribute('aria-pressed', 'true');
         changed();
-        elementOf.get(openRepeat)!.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        stripView.reveal(repeat);
       }
       return;
     }
     const item = newItem(node);
     flash(node);
-    let added: HTMLElement | null | undefined = null;
+    let added: Item | null = null;
     if (recording) {
-      const merged = record(item);
+      added = record(item);
       changed();
-      added = merged && elementOf.get(merged);
-      if (added) added.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      stripView.reveal(added);
     }
     schedule(async () => {
-      if (added) added.classList.add('tt-active');
+      if (added) strip.active = added;
       await perform(codeFor(programs, item as Tile), codeFor(programs, item as Tile, true));  // (not a repeat)
-      if (added) added.classList.remove('tt-active');
+      if (added) strip.active = null;
     });
   }
 
@@ -1566,7 +1421,7 @@ function init(root: HTMLElement) {
   // turn, or back to where it began) goes away. Returns the tile that
   // shows it, or null if it went away.
   function record(item: Item): Item | null {
-    const picking = Boolean(selected && placeOf(selected));
+    const picking = Boolean(strip.selected && placeOf(strip.selected));
     const { list, at, repeat } = insertionPoint();
     const last = list[at - 1];
     // (Whether the pen is up is only known at the end of the recording.)
@@ -1591,6 +1446,7 @@ function init(root: HTMLElement) {
       shown = last;
     } else {
       list.splice(at, 0, item);
+      shown = list[at];  // (the strip's own: see strip.svelte.ts)
     }
     if (picking) select(shown);
     return shown;
@@ -1600,15 +1456,15 @@ function init(root: HTMLElement) {
   // tile moves the playhead to it; a move or a turn opens the spinner to
   // change it (and sets Move and Back, or the wheel, to it).
   function tapItem(node: HTMLElement) {
-    const item = itemOf.get(node)!;
+    const item = stripView.itemOf(node)!;
     if (item.t === 'repeat') {
       select(item, true);
       openCount(item, node.querySelector<HTMLElement>('.tt-repeat-head')!);
       return;
     }
     select(item);
-    top = current;
-    playhead = Math.max(0, steps().findIndex(s => s.item === item));
+    strip.top = strip.current;
+    strip.playhead = Math.max(0, strip.steps.findIndex(s => s.item === item));
     showPlayhead();
     if (item.t === 'turn') {
       setAngle(item.a);
@@ -1624,41 +1480,6 @@ function init(root: HTMLElement) {
 
   // Dragging --------------------------------------------------------------
 
-  // Where a dragged item would land at (x, y): the strip or a repeat's
-  // body, and the item to go before (null for the end). Repeats can't go
-  // inside repeats.
-  function dropTarget(x: number, y: number, item: Item): DropTarget | null {
-    const under = document.elementFromPoint(x, y);
-    if (!under || !stripArea.contains(under)) return null;
-    let container: Element = under.closest('.tt-repeat-body') || strip;
-    if (item.t === 'repeat') container = strip;
-    const list: Item[] = container === strip ? program : bodyOf.get(container)!.body;
-    const kids = [...container.children].filter(c =>
-      c.classList.contains('tt-item') && !c.classList.contains('tt-lifted'));
-    let index = kids.length;
-    let best = Infinity;
-    kids.forEach((k, i) => {
-      const r = k.getBoundingClientRect();
-      const cx = (r.left + r.right) / 2;
-      const distanceTo = Math.abs(y - (r.top + r.bottom) / 2) * 3 + Math.abs(x - cx);
-      if (distanceTo < best) {
-        best = distanceTo;
-        index = x < cx ? i : i + 1;
-      }
-    });
-    return { container, list, before: kids[index] || null };
-  }
-
-  let marker: HTMLDivElement | null = null;
-  function showMarker(target: DropTarget | null) {
-    if (!target) {
-      if (marker) marker.remove();
-      return;
-    }
-    marker = marker || el('div', 'tt-marker');
-    target.container.insertBefore(marker, target.before);
-  }
-
   function removeItem(item: Item) {
     const lists: Item[][] = [program, ...program.filter(i => i.t === 'repeat').map(i => i.body)];
     lists.forEach(list => {
@@ -1668,7 +1489,7 @@ function init(root: HTMLElement) {
   }
 
   function startDrag(e: PointerEvent, node: HTMLElement, fromSource: boolean): Drag {
-    const item = fromSource ? null : itemOf.get(node);
+    const item = fromSource ? null : stripView.itemOf(node);
     const r = node.getBoundingClientRect();
     const ghost = node.cloneNode(true) as HTMLElement;
     // No bounce or highlight on the ghost: an animation would move it.
@@ -1680,30 +1501,29 @@ function init(root: HTMLElement) {
     ghost.style.transform = `translate(${r.left}px, ${r.top}px)`;
     document.body.appendChild(ghost);
     const offset = { x: e.clientX - r.left, y: e.clientY - r.top };
-    if (!fromSource) node.classList.add('tt-lifted');
+    strip.lifted = item;
     if (openPopup && popups[openPopup].pop.contains(node)) closePopup();
     const moving = item || newItem(node);
-    // Where it lands: a place in the strip, or (for a tile from the
-    // strip) the trash can. Dropped anywhere else, it goes back.
-    let target: DropTarget | null = null;
+    // Where it lands: a place in the strip (Strip.svelte finds it, and
+    // marks it), or (for a tile from the strip) the trash can. Dropped
+    // anywhere else, it goes back.
+    let target: DropSpot | null = null;
     let trashing = false;
     return {
       move(ev: PointerEvent) {
         ghost.style.transform = `translate(${ev.clientX - offset.x}px, ${ev.clientY - offset.y}px)`;
         const under = document.elementFromPoint(ev.clientX, ev.clientY);
         trashing = Boolean(item && under && trashBtn.contains(under));
-        target = trashing ? null : dropTarget(ev.clientX, ev.clientY, moving);
-        showMarker(target);
+        strip.drop = target = trashing ? null : stripView.dropAt(ev.clientX, ev.clientY, moving);
         trashBtn.classList.toggle('tt-drop', trashing);
         ghost.classList.toggle('tt-ghost-trash', trashing);
       },
       end(cancelled: boolean) {
         ghost.remove();
-        showMarker(null);
-        node.classList.remove('tt-lifted');
+        strip.drop = strip.lifted = null;
         trashBtn.classList.remove('tt-drop');
         if (cancelled || (!target && !trashing)) return;
-        const before = target && target.before ? itemOf.get(target.before) : null;
+        const before = target && target.before;
         if (trashing && item && item.t === 'repeat') {  // (only a tile from the strip is trashing)
           // A repeat in the trash lets go of its tiles: they stay where
           // it was.
@@ -1770,7 +1590,7 @@ function init(root: HTMLElement) {
   clearBtn.addEventListener('click', () => {
     flash(clearBtn);
     select(null);
-    playhead = 0;
+    strip.playhead = 0;
     showPlayhead();
     schedule(() => perform('clean ' + HOME));
   });
@@ -1780,7 +1600,7 @@ function init(root: HTMLElement) {
   rewindBtn.addEventListener('click', () => {
     flash(rewindBtn);
     select(null);
-    playhead = 0;
+    strip.playhead = 0;
     showPlayhead();
   });
   // The trash can: drag a tile from the strip onto it to throw the tile
@@ -1832,7 +1652,7 @@ function init(root: HTMLElement) {
     }
   });
   const closeMenu = () => { menu.hidden = true; };
-  const pretty = () => '; Made with Turtle Tiles\n' + PRELUDE + '\n' + namedLogo(programs, current);
+  const pretty = () => '; Made with Turtle Tiles\n' + PRELUDE + '\n' + namedLogo(programs, strip.current);
   textButton('Snapshot', () => stage!.download(TITLE));
   // A video of the whole recording, from a clean page with the turtle
   // at home; the drawing it leaves stays.
@@ -1862,7 +1682,7 @@ function init(root: HTMLElement) {
   // the phone's share sheet, or copied).
   const shareBtn = textButton('Share a link', async () => {
     const shared = NAMES.filter(n => programs[n].length);
-    const data: SharePayload = { current, programs: Object.fromEntries(shared.map(n => [n, programs[n]])) };
+    const data: SharePayload = { current: strip.current, programs: Object.fromEntries(shared.map(n => [n, programs[n]])) };
     const url = location.origin + location.pathname + '?' + SHARE_PARAM + '=' + await pack(data);
     if (navigator.share) {
       try {
@@ -1902,13 +1722,12 @@ function init(root: HTMLElement) {
       NAMES.forEach(n => { incoming[n] = clean(data.programs && data.programs[n]); });
       const differs = NAMES.some(n => programs[n].length && JSON.stringify(programs[n]) !== JSON.stringify(incoming[n]));
       if (!differs || self.confirm('Open the shared programs? They replace the programs here.')) {
-        if (openRepeat) closeRepeat(true);
+        if (strip.openRepeat) closeRepeat(true);
         NAMES.forEach(n => { programs[n] = incoming[n]; });
         const p = isName(data.current) ? data.current : 'A';
         select(null);
-        top = p;
-        playhead = 0;
-        if (p === current) program = programs[p];
+        strip.top = p;
+        strip.playhead = 0;
         showProgram(p);
         save();
       }

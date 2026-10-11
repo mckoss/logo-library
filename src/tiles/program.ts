@@ -13,6 +13,8 @@ export const NAMES: ProgramName[] = ['A', 'B', 'C', 'D'];
 export const isName = (p: unknown): p is ProgramName => NAMES.includes(p as ProgramName);
 // Each program's color, pastel (the color of a tile that plays it).
 export const PROGRAM_COLORS: Record<ProgramName, string> = { A: '#ef9a9a', B: '#a5d6a7', C: '#90caf9', D: '#bcaaa4' };
+// And a deeper shade of it, for its letter.
+export const PROGRAM_INK: Record<ProgramName, string> = { A: '#c62828', B: '#2e7d32', C: '#1565c0', D: '#5d4037' };
 
 // The fixed tiles' ids: the crayons, the notes and the rest.
 export type CrayonId = 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'black';
