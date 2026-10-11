@@ -8,6 +8,10 @@ import { LogoTiles } from './tiles.js';
 import { version } from '../version.js';
 
 export class TurtleTiles extends HTMLElement {
+  // Whether it has started (connecting again, after a move, doesn't start
+  // it again).
+  private started = false;
+
   connectedCallback() {
     if (this.started) return;
     this.started = true;
