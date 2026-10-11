@@ -50,7 +50,9 @@ host gives it, and adds no styles outside itself.
 The host styles the content it writes inside the elements, before and
 without the script (the code's colors, the worksheet's printable boxes), by
 the element names (`logo-example`, `logo-worksheet`). It makes those
-elements `display: block`.
+elements `display: block`. A `<logo-example>`'s stage panel tucks 8px under
+it, so the example keeps a bottom margin (20px by default, at zero
+specificity, so a host's own wins).
 
 ### `<logo-example>`
 

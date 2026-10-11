@@ -11,6 +11,12 @@
 :where(logo-playground, logo-reference, turtle-tiles, .logo-toolbar, .logo-stage, .logo-panel, .logo-tip, .tt-ghost) *::after {
     box-sizing: border-box;
 }
+:where(logo-example) {
+    /* The stage panel tucks 8px under the example (.logo-panel), so the
+       example needs room below it; the host may set its own (mckoss.com:
+       20px, the same). */
+    margin-bottom: 20px;
+}
 :where(logo-example, logo-worksheet, logo-playground, logo-reference, turtle-tiles, .logo-panel, .tt-ghost) button {
     font: inherit; color: inherit;
 }

@@ -32,6 +32,9 @@
     white-space: pre-wrap;
 }
 :is(.logo-panel, .logo-worksheet, .logo-playground) .logo-output.logo-error { color: var(--color-accent-700, #ae1800); }
+/* Hidden while there's nothing to show (a worksheet's rule for its rows'
+   <pre>s would otherwise show it as an empty strip in the box). */
+.logo-output[hidden] { display: none; }
 
 /* Zoom and pan on a Logo stage. */
 .logo-stage { overflow: hidden; touch-action: none; cursor: grab; }
