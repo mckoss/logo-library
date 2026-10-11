@@ -15,17 +15,17 @@ import '../engine/index.js';
 import '../reference/index.js';
 import { LogoBlocks } from './blocks.js';
 
-const queue = [];
+const queue: LessonElement[] = [];
 let scheduled = false;
 
-function flush() {
+function flush(): void {
   scheduled = false;
   const elements = queue.splice(0).filter(el => el.isConnected);
   elements.sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
   elements.forEach(el => el.build().forEach(node => LogoBlocks.setup(node)));
 }
 
-function enqueue(el) {
+function enqueue(el: LessonElement): void {
   queue.push(el);
   if (scheduled) return;
   scheduled = true;
@@ -33,12 +33,19 @@ function enqueue(el) {
   else queueMicrotask(flush);
 }
 
-class LessonElement extends HTMLElement {
-  connectedCallback() {
+abstract class LessonElement extends HTMLElement {
+  // Set when first connected: the element is queued and set up only once.
+  private started = false;
+
+  connectedCallback(): void {
     if (this.started) return;
     this.started = true;
     enqueue(this);
   }
+
+  // Makes the element the wrapper the site wrote; returns the examples and
+  // worksheet rows in it, for LogoBlocks.setup.
+  abstract build(): HTMLElement[];
 }
 
 // <logo-example try="…" view="600x360" name="…" lesson="…"><pre><code>…</code></pre></logo-example>
@@ -47,7 +54,7 @@ export class LogoExample extends LessonElement {
   // <div class="logo-code" data-try data-view data-name> was: it takes that
   // class and those data attributes (and data-lesson). The toolbar goes in
   // it, and the stage, once the example runs, after it.
-  build() {
+  build(): HTMLElement[] {
     this.classList.add('logo-code');
     ['try', 'view', 'name', 'lesson'].forEach(attr => {
       const value = this.getAttribute(attr);
@@ -61,7 +68,7 @@ export class LogoExample extends LessonElement {
 export class LogoWorksheet extends LessonElement {
   // The element is the worksheet (class logo-worksheet); each <pre> is a row
   // and the box after it is where its Check draws.
-  build() {
+  build(): HTMLElement[] {
     this.classList.add('logo-worksheet');
     return [...this.querySelectorAll('pre')];
   }
