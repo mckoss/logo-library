@@ -2,7 +2,7 @@
   "name": "@mckoss/logo-library",
   "version": "2.0.0",
   "description": "The Logo programs of mckoss.com as custom elements: lesson examples and worksheets, the Logo Playground, the language reference and Turtle Tiles.",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "files": ["dist"],
   "repository": { "type": "git", "url": "https://github.com/mckoss/logo-library.git" },

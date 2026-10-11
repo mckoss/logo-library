@@ -10,26 +10,26 @@
 }
 .logo-btn, .logo-speed {
     padding: 4px 10px;
-    border: 1px solid var(--color-divider); background: var(--color-bg);
-    color: var(--color-text); font: 600 13px/1.4 inherit; cursor: pointer;
+    border: 1px solid var(--color-divider, color-mix(in srgb, #201e1d 40%, transparent)); background: var(--color-bg, #f3f2f2);
+    color: var(--color-text, #201e1d); font: 600 13px/1.4 inherit; cursor: pointer;
 }
-.logo-btn:hover:not(:disabled) { border-color: var(--color-text); }
+.logo-btn:hover:not(:disabled) { border-color: var(--color-text, #201e1d); }
 .logo-btn:disabled { opacity: 0.45; cursor: default; }
-.logo-btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
-.logo-btn-primary:hover:not(:disabled) { background: var(--color-accent-700); border-color: var(--color-accent-700); }
-.logo-btn.logo-running { background: var(--color-text); border-color: var(--color-text); }
+.logo-btn-primary { background: var(--color-accent, #ec3013); border-color: var(--color-accent, #ec3013); color: #fff; }
+.logo-btn-primary:hover:not(:disabled) { background: var(--color-accent-700, #ae1800); border-color: var(--color-accent-700, #ae1800); }
+.logo-btn.logo-running { background: var(--color-text, #201e1d); border-color: var(--color-text, #201e1d); }
 
 .logo-stage {
     position: relative; width: 100%;
-    background: #fff; border: 1px solid var(--color-divider);
+    background: #fff; border: 1px solid var(--color-divider, color-mix(in srgb, #201e1d 40%, transparent));
 }
 .logo-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 div.post-content .logo-output {
     margin: 0; padding: 8px 12px; max-height: 12em; overflow: auto;
-    background: var(--color-surface); font: 13px/1.5 ui-monospace, Menlo, monospace;
+    background: var(--color-surface, #eae9e9); font: 13px/1.5 ui-monospace, Menlo, monospace;
     white-space: pre-wrap;
 }
-div.post-content .logo-output.logo-error { color: var(--color-accent-700); }
+div.post-content .logo-output.logo-error { color: var(--color-accent-700, #ae1800); }
 
 /* Zoom and pan on a Logo stage. */
 .logo-stage { overflow: hidden; touch-action: none; cursor: grab; }
@@ -43,7 +43,7 @@ div.post-content .logo-output.logo-error { color: var(--color-accent-700); }
 .logo-stage:hover .logo-view-tools, .logo-view-tools:focus-within { opacity: 1; }
 .logo-view-tools button {
     min-width: 28px; padding: 2px 6px;
-    border: 1px solid var(--color-divider); background: rgba(255, 255, 255, 0.9);
-    color: var(--color-text); font: 600 12px/1.4 inherit; cursor: pointer;
+    border: 1px solid var(--color-divider, color-mix(in srgb, #201e1d 40%, transparent)); background: rgba(255, 255, 255, 0.9);
+    color: var(--color-text, #201e1d); font: 600 12px/1.4 inherit; cursor: pointer;
 }
-.logo-view-tools button:hover { border-color: var(--color-text); }
+.logo-view-tools button:hover { border-color: var(--color-text, #201e1d); }

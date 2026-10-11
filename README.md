@@ -27,3 +27,9 @@ To run it locally: `npm install`, `git submodule update --init`, then
 http://localhost:8790/logo/ (or /logo-library/logo/ for the GitHub Pages
 build). `npm test` runs the type check, the unit tests and the end-to-end
 tests.
+
+## License
+
+Copyright 2026 Mike Koss. Licensed under the Apache License, Version 2.0: see
+[LICENSE](LICENSE). jslogo, bundled in `dist/`, is Copyright Joshua Bell,
+also Apache 2.0 (`dist/LICENSE-jslogo.md`).
