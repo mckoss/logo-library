@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The music player | logo-library</title>
+<link rel="icon" href="data:,">
+<style>
+  body { max-width: 50rem; margin: 0 auto; padding: 1rem 1rem 3rem; font: 16px/1.5 system-ui, sans-serif; color: #201e1d; background: #fff; }
+  pre { overflow-x: auto; }
+  .markup { padding: .75rem 1rem; border: 1px solid #ccc; font-size: 14px; }
+  logo-example { display: block; margin: 0 0 1.5rem; }
+  logo-example pre { margin: 0; padding: 1rem; background: #f3f2f2; }
+</style>
+<!--#logo-entry lessons-->
+</head>
+<body>
+<p><a href="../">logo-library</a></p>
+<h1>The music player</h1>
+<p>Every program runs with the music player loaded: notes (<code>do re mi fa sol la ti</code>),
+lengths (<code>eighth quarter half whole</code>), octaves (<code>low middle high</code>) and
+instruments (<code>piano</code>, <code>flute</code>, <code>banjo</code>…), built on the
+package's <code>playnote</code>, <code>setinstrument</code> and <code>settempo</code> commands.
+Its source, <a href="../logo/assets/player.lgo">player.lgo</a>, ships in the package's
+<code>dist/</code>. The reference links here, as <code>../player/</code> from its own page.
+This page's markup:</p>
+
+<pre class="markup">&lt;logo-example try="flute tune" name="Tune"&gt;
+&lt;pre&gt;&lt;code&gt;to tune
+  quarter do mi sol mi
+  half fa re
+  quarter low ti middle re sol ti
+  whole high do
+end&lt;/code&gt;&lt;/pre&gt;
+&lt;/logo-example&gt;</pre>
+
+<logo-example try="flute tune" name="Tune">
+<pre><code>to tune
+  quarter do mi sol mi
+  half fa re
+  quarter low ti middle re sol ti
+  whole high do
+end</code></pre>
+</logo-example>
+</body>
+</html>

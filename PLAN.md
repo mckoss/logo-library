@@ -274,7 +274,10 @@ behavior through each change.
    enhancements. The Playground can be weighed later, once Turtle Tiles has
    shown what Svelte costs and buys.
 7. **Move the e2e tests.** App-behavior tests live here; the site keeps the
-   contract and screenshot tests.
+   contract and screenshot tests. Once the site's own suite covers the
+   integration, the imported `demo/pages/` fixture (mckoss.com's pages, frozen
+   at the fork point) is deleted, with the tests that only exercise it; the
+   hand-written `examples/` pages stay as this repo's demo and test hosts.
 
 Persisted formats (localStorage JSON, share-link payloads) stay compatible
 through every step.
@@ -344,4 +347,7 @@ Open questions are tracked as issues in this repo.
   - [x] One fix found on the way: a Tiles tile named after a built-in object key (`constructor`)
         made `clean()` throw, so the whole link failed to open; now it's dropped like any unknown tile
 - [ ] Steps 4–5: Svelte spike on Turtle Tiles, and the decision
-- [ ] Step 7: e2e tests split between here and the site
+- [x] Example pages (`examples/`): hand-written plain HTML, one per element, with their own
+      Playground and music player pages, deployed at mckoss.com/logo-library/ and tested on
+      their own (`tests/e2e/standalone.spec.js`)
+- [ ] Step 7: e2e tests split between here and the site; then `demo/pages/` deleted

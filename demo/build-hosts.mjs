@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // Builds the demo host site, demo/site/, from the committed page templates
 // in demo/pages/ and the package's build in dist/: the stand-in for the
-// Hugo templates that will embed this package on mckoss.com.
+// Hugo templates that will embed this package on mckoss.com. It also builds
+// the library's own example pages, examples/, into the site's root (/ is
+// their index, /playground/ their Playground, and so on).
 //
 // As CONTRACT.md's "Loading" section tells a host to, it
 // - copies dist/ verbatim to /logo/assets/ (no renaming: the chunks import
@@ -14,6 +16,11 @@
 //   Imports and CSS are followed through the imported chunks too, as Vite's
 //   own HTML output (and its backend-integration guide) does.
 // - fills in <!--#logo-version--> with the package's version.
+// The example pages also get, in their head, a <meta name="logo-library-root">
+// naming the site's root (they hold their own playground/ and player/
+// pages, which the controls link to: CONTRACT.md, "Paths") and the
+// <meta name="logo-library-storage"> below, in both builds. Their links are
+// relative, so unlike the demo pages they need no moving under SITE_BASE.
 // It replaces only its own output: build the root site first, then any
 // SITE_BASE ones (npm run hosts builds both).
 //
@@ -35,6 +42,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pages = path.join(root, 'demo/pages');
+const examples = path.join(root, 'examples');
 const site = path.join(root, 'demo/site');
 const dist = path.resolve(root, process.env.LOGO_DIST || 'dist');  // (LOGO_DIST: another build)
 const SITE_BASE = (process.env.SITE_BASE || '/').replace(/\/?$/, '/').replace(/^\/?/, '/');
@@ -91,7 +99,7 @@ function copyTree(from, to, transform) {
 const tags = new Map();
 const used = new Map();
 function render(html, file) {
-  const rel = path.relative(pages, file);
+  const rel = path.relative(root, file);
   html = html.replace(/<!--#logo-entry (\w+)-->/g, (all, name) => {
     if (!tags.has(name)) tags.set(name, entryTags(name));
     used.set(rel, name);
@@ -99,6 +107,9 @@ function render(html, file) {
   });
   html = html.replace(/<!--#logo-version-->/g, version);
   if (/<!--#logo-/.test(html)) throw new Error(`${rel}: unknown <!--#logo-…--> marker`);
+  if (file.startsWith(examples + path.sep)) return html.replace(/<head>/, `<head>
+<meta name="logo-library-root" content="${SITE_BASE}">
+<meta name="logo-library-storage" content="logo-library-demo.">`);
   if (SITE_BASE !== '/') html = underBase(html);
   return html;
 }
@@ -120,6 +131,7 @@ function underBase(html) {
 
 fs.rmSync(out, { recursive: true, force: true });
 copyTree(pages, out, render);
+copyTree(examples, out, render);
 copyTree(dist, path.join(site, BASE));
 
 for (const [rel, name] of [...used].sort()) console.log(`${rel}: ${name}`);
