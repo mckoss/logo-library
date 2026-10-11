@@ -66,6 +66,7 @@
 // What a program is, the tiles' names, colors and Logo, and a program as
 // Logo are in program.ts; share links are in share.ts.
 import type { SpeedName, Stage, TurtleAt } from '../engine/index.js';
+import { logoPath } from '../engine/paths.js';
 import {
   BLUE, CRAYONS, HOME, MAX_COUNT, MAX_UNITS, NAMES, NOTES, PROGRAM_COLORS, STEP, TILE, TILES, UNIT,
   clean, codeFor, isName, moveLabel, namedLogo, normalize, plays, stepsOf, tileFor, toLogo, turnLabel, turnTint,
@@ -83,7 +84,6 @@ const SAVE_KEY = 'mckoss.logo.tiles';
 const PROGRAM_INK: Record<ProgramName, string> = { A: '#c62828', B: '#2e7d32', C: '#1565c0', D: '#5d4037' };
 let programs: Programs = { A: [], B: [], C: [], D: [] };
 const IMPORT_KEY = 'mckoss.logo.import';
-const PLAYGROUND = '/logo/playground/';
 const TITLE = 'Turtle Tiles';
 const PRELUDE = 'setpensize 2';
 // The colors Next color goes round: setpencolor "rainbow (see
@@ -727,7 +727,7 @@ function init(root: HTMLElement) {
     return b;
   };
   const lessons = el('a', 'tt-menu-link', menu);
-  lessons.href = '/logo/';
+  lessons.href = logoPath();
   lessons.textContent = 'Logo lessons';
 
   // Tiles ---------------------------------------------------------------
@@ -1856,7 +1856,7 @@ function init(root: HTMLElement) {
     try {
       localStorage.setItem(IMPORT_KEY, JSON.stringify({ name: TITLE, code: pretty() }));
     } catch (e) { /* storage blocked: open the playground anyway */ }
-    location.href = PLAYGROUND + '?import';
+    location.href = logoPath('playground/') + '?import';
   });
   // Share a link: a link to this page that carries all the programs (by
   // the phone's share sheet, or copied).

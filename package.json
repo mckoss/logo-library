@@ -1,6 +1,6 @@
 {
   "name": "@mckoss/logo-library",
-  "version": "1.9.0-dev",
+  "version": "2.0.0",
   "description": "The Logo programs of mckoss.com as custom elements: lesson examples and worksheets, the Logo Playground, the language reference and Turtle Tiles.",
   "license": "UNLICENSED",
   "type": "module",
@@ -9,7 +9,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "hosts": "node demo/build-hosts.mjs",
+    "hosts": "node demo/build-hosts.mjs && SITE_BASE=/logo-library/ node demo/build-hosts.mjs",
     "serve": "node demo/serve.mjs",
     "typecheck": "tsc --noEmit",
     "test:unit": "vitest run",
