@@ -270,3 +270,14 @@ export const playsIcon = (colors: string[]) => svg(colors.map((color, i) => {
   '<path d="M25 18 L45 32 L25 46 Z" fill="#fff" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>');
 // A menu button: three lines.
 export const MENU = svg('<path d="M14 18 H50 M14 32 H50 M14 46 H50" stroke="#fff" stroke-width="7" stroke-linecap="round"/>');
+// The grown-ups menu's buttons: line drawings in the text color.
+const line = (body: string) => svg(`<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" ` +
+  `stroke-linejoin="round">${body}</g>`, 24);
+export const MENU_ICONS = {
+  picture: line('<path d="M4 8 H7 L9 5 H15 L17 8 H20 V19 H4 Z"/><circle cx="12" cy="13" r="3.5"/>'),
+  video: line('<rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10 L21 7 V17 L16 14 Z"/>'),
+  playground: line('<path d="M8 7 L3 12 L8 17 M16 7 L21 12 L16 17"/>'),
+  share: line('<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/>' +
+    '<path d="M8.2 10.8 L15.8 6.4 M8.2 13.2 L15.8 17.6"/>'),
+  close: line('<path d="M6 6 L18 18 M18 6 L6 18"/>'),
+};
