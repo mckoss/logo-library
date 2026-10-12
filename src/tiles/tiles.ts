@@ -58,8 +58,9 @@
 // itself, even by way of another: those choices are faded. In the
 // playground each program played is a Logo word (TO B ... END).
 //
-// A grown-ups button, opened by holding it down, has Snapshot, Make
-// Recording and Open in Playground, which shows the strip as Logo.
+// A grown-ups button, opened by holding it down, has a short overview and
+// tips, and Save picture, Save video, Open in Playground (which shows the
+// strip as Logo) and Share a link.
 //
 // The <turtle-tiles> element (element.ts) calls init() on itself.
 //
@@ -81,7 +82,7 @@ import type { Item, ProgramName, Programs, Step, Tile, TileGroup } from './progr
 import { FORMAT, SHARE_PARAM, pack, unpack } from './share.js';
 import type { IncomingPayload, SharePayload } from './share.js';
 import {
-  ABOVE, BOLT_TIP, BUTTONS, LOOKS, MENU, MUSIC, PICTURED, TURTLE, animal, arcArrow, arrowIcon, crayon, lookOf,
+  ABOVE, BOLT_TIP, BUTTONS, LOOKS, MENU, MENU_ICONS, MUSIC, PICTURED, TURTLE, animal, arcArrow, arrowIcon, crayon, lookOf,
   playsIcon, polar, progIcon, rulerIcon, svg, wedge,
 } from './pictures.js';
 import {
@@ -315,26 +316,30 @@ function init(root: HTMLElement) {
   const menu = el('div', 'tt-menu', root);
   menu.setAttribute('role', 'dialog');
   menu.setAttribute('aria-label', 'Grown-ups');
-  menu.innerHTML = '<h2>Grown-ups <small class="tt-menu-version"></small></h2><p>Tap the picture tiles to make the turtle move, draw and ' +
-    'play notes; the rainbow changes to the next color, and the white one draws nothing. The step size button sets how far the arrow moves; to turn, move the wheel\'s arm to where ' +
-    'the turtle should face, then tap the turtle. While the red Record button is on, each tile ' +
-    'tapped is added to the strip (after the tile you last tapped in the strip, if any: Rewind lets go of it); ' +
-    'tap it again to stop recording. Play plays the strip from the ' +
-    'dashed tile, Step plays one tile, and Rewind goes back to the start. Playing doesn\'t clear ' +
-    'the drawing or send the turtle home: use the eraser (which does both) and the house for that (the house can be ' +
-    'recorded too, to start from the middle each time). Drag tiles to ' +
-    'move them, or onto the trash can to throw them away; tap the trash can twice to empty the program it shows. While recording, ' +
-    'Repeat starts a group and the tiles tapped next go in it; tap Repeat again to close it. Tap a ' +
-    'group\'s number to set how many times it goes round (0 to 99) and to record on the end of it; drag the number to the trash ' +
-    'to undo the group and keep its tiles. There are four programs, A to D: the arrows on the letter by the strip go up ' +
-    'and down through them (showing another stops recording), and the Play program button plays one (and records it), so programs can be made ' +
-    'of other programs. Share a link sends all four programs: opening it loads them here.</p>';
+  menu.innerHTML = '<h2>Grown-ups <small class="tt-menu-version"></small></h2><p>Turtle Tiles writes Logo programs by ' +
+    'example: turn on Record, then tap tiles. There are four program slots, A to D, and any program can play another ' +
+    'as a subroutine.</p>';
   menu.querySelector('.tt-menu-version')!.textContent = 'Turtle Tiles v' + (root.dataset.version || '');
   const menuTools = el('div', 'tt-menu-tools', menu);
-  const textButton = (label: string, onClick: () => unknown) => {
-    const b = el('button', 'logo-btn', menuTools);
+  // Tips: only what a grown-up wouldn't find by trying the buttons.
+  const tips = el('div', 'tt-menu-tips', menu);
+  const repeatIcon = `<span class="tt-menu-icon" aria-hidden="true" style="--tile-color: ${PICTURED.repeat.color}">` +
+    `${PICTURED.repeat.icon}</span>`;
+  tips.innerHTML = '<h3>Tips</h3><ul>' + [
+    'To turn: set the wheel\'s arm, then tap the turtle',
+    repeatIcon + ' Repeat makes a loop: tap it, record tiles, tap it again',
+    'Tap a number in the program to change it (move distance, turn angle, repeat count)',
+    'Drag tiles in the program to reorder them, or move to the trash',
+    'Drag a repeat\'s number to the trash to remove the loop but keep its tiles',
+    'Tap the trash twice to empty the program shown',
+  ].map(tip => `<li>${tip}</li>`).join('') + '</ul>';
+  // A picture over a one-word caption; `label` is its full name.
+  const menuButton = (label: string, caption: string, icon: string, onClick: () => unknown) => {
+    const b = el('button', 'tt-menu-button', menuTools);
     b.type = 'button';
-    b.textContent = label;
+    b.setAttribute('aria-label', label);
+    b.title = label;
+    b.innerHTML = icon + `<span>${caption}</span>`;
     b.addEventListener('click', onClick);
     return b;
   };
@@ -347,10 +352,10 @@ function init(root: HTMLElement) {
     commit();
   };
   const pretty = () => '; Made with Turtle Tiles\n' + PRELUDE + '\n' + namedLogo(state.programs, state.current);
-  textButton('Snapshot', () => stage!.download(TITLE));
+  menuButton('Save picture', 'Picture', MENU_ICONS.picture, () => stage!.download(TITLE));
   // A video of the whole recording, from a clean page with the turtle
   // at home; the drawing it leaves stays.
-  const rec = textButton('Make Recording', () => {
+  const rec = menuButton('Save video', 'Video', MENU_ICONS.video, () => {
     closeMenu();
     schedule(async () => {
       state.playing = true;
@@ -366,9 +371,10 @@ function init(root: HTMLElement) {
   });
   if (!LogoStage.canRecord()) {
     rec.disabled = true;
-    rec.textContent = 'Video not supported';
+    rec.setAttribute('aria-label', 'Video not supported');
+    rec.title = 'Video not supported';
   }
-  textButton('Open in Playground', () => {
+  menuButton('Open in Playground', 'Playground', MENU_ICONS.playground, () => {
     try {
       localStorage.setItem(IMPORT_KEY, JSON.stringify({ name: TITLE, code: pretty() }));
     } catch (e) { /* storage blocked: open the playground anyway */ }
@@ -376,7 +382,7 @@ function init(root: HTMLElement) {
   });
   // Share a link: a link to this page that carries all the programs (by
   // the phone's share sheet, or copied).
-  const shareBtn = textButton('Share a link', async () => {
+  const shareBtn = menuButton('Share a link', 'Share', MENU_ICONS.share, async () => {
     const shared = NAMES.filter(n => state.programs[n].length);
     const data: SharePayload = {
       v: FORMAT, current: state.current, programs: Object.fromEntries(shared.map(n => [n, state.programs[n]])),
@@ -402,7 +408,13 @@ function init(root: HTMLElement) {
       self.prompt('Copy this link:', url);
     }
   });
-  textButton('Close', closeMenu);
+  const closeBtn = el('button', 'tt-menu-close');
+  closeBtn.type = 'button';
+  closeBtn.setAttribute('aria-label', 'Close');
+  closeBtn.title = 'Close';
+  closeBtn.innerHTML = MENU_ICONS.close;
+  closeBtn.addEventListener('click', closeMenu);
+  menu.prepend(closeBtn);
 
   // The source tiles: Move and Back (as far as Step size says), and the
   // fixed tiles in their groups.
@@ -713,8 +725,10 @@ function init(root: HTMLElement) {
   function renderMenu() {
     menu.hidden = !state.menu;
     grownUps.classList.toggle('tt-holding', state.holding);
-    const share = state.copied ? 'Link copied' : 'Share a link';
-    if (shareBtn.textContent !== share) shareBtn.textContent = share;
+    attr(shareBtn, 'aria-label', state.copied ? 'Link copied' : 'Share a link');
+    const caption = shareBtn.querySelector('span')!;
+    const share = state.copied ? 'Copied' : 'Share';
+    if (caption.textContent !== share) caption.textContent = share;
   }
 
   // The ghost of a dragged tile, under the pointer, faded over the trash.

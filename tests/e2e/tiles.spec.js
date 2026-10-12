@@ -482,6 +482,25 @@ test('the grown-ups menu opens only after holding its button', async ({ page }) 
   await expect(menu).toBeHidden();
 });
 
+// The menu's actions sit in one row; the whole menu fits a small phone
+// and, beside its tips, a landscape one.
+for (const [screen, width, height] of [['a small phone', 360, 640], ['a landscape phone', 667, 375]]) {
+  test(`the grown-ups menu fits on ${screen}, with its actions in one row`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    await button(page, 'Grown-ups (hold)').focus();
+    await page.keyboard.press('Enter');
+    const menu = page.getByRole('dialog', { name: 'Grown-ups' });
+    await expect(menu.getByRole('listitem')).toHaveCount(6);
+    const tops = await Promise.all(['Save picture', 'Save video', 'Open in Playground', 'Share a link']
+      .map(name => menu.getByRole('button', { name }).boundingBox().then(b => b.y)));
+    expect(new Set(tops).size).toBe(1);
+    const box = await menu.boundingBox();
+    expect(box.x).toBeGreaterThanOrEqual(16);
+    expect(box.y).toBeGreaterThanOrEqual(0);
+    expect(await menu.evaluate(m => m.scrollHeight <= m.clientHeight)).toBe(true);
+  });
+}
+
 test('tiles can be dragged into the strip, moved, and dragged onto the trash to throw away', async ({ page }) => {
   await step(page, 'Large');
   await tile(page, 'Move 3').tap();

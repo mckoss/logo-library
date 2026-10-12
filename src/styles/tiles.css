@@ -493,7 +493,8 @@ turtle-tiles { display: block; }
   position: fixed;
   inset: auto 16px 16px auto;
   z-index: 20;
-  max-width: 360px;
+  max-width: min(360px, calc(100% - 32px));
+  box-sizing: border-box;
   max-height: calc(100% - 32px);
   overflow: auto;
   padding: 16px 20px;
@@ -503,7 +504,71 @@ turtle-tiles { display: block; }
   -webkit-user-select: text;
   user-select: text;
 }
-.tt-menu h2 { margin: 0 0 6px; font-size: 1.2rem; }
+.tt-menu[hidden] { display: none; }
+.tt-menu h2 { margin: 0 32px 6px 0; font-size: 1.2rem; }
+.tt-menu-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.tt-menu-close:hover { background: rgba(0, 0, 0, .06); }
+.tt-menu-close svg { width: 100%; height: 100%; }
 .tt-menu p { margin: 0 0 12px; font-size: .95rem; line-height: 1.4; }
-.tt-menu-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.tt-menu-tools { display: flex; gap: 6px; margin-bottom: 12px; }
+.tt-menu-button {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 2px 6px;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 10px;
+  background: #f6f5f4;
+  color: inherit;
+  font: inherit;
+  font-size: .75rem;
+  cursor: pointer;
+}
+.tt-menu-button:hover:not(:disabled) { border-color: currentColor; }
+.tt-menu-button:disabled { opacity: .4; cursor: default; }
+.tt-menu-button svg { width: 26px; height: 26px; }
 .tt-menu-link { font-size: .95rem; }
+.tt-menu h3 { margin: 0 0 4px; font-size: 1rem; }
+.tt-menu ul { margin: 0 0 12px; padding-left: 1.2em; font-size: .95rem; line-height: 1.35; }
+.tt-menu li + li { margin-top: 4px; }
+.tt-menu-icon {
+  display: inline-flex;
+  width: 1.4em;
+  height: 1.4em;
+  vertical-align: -.35em;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: var(--tile-color);
+}
+.tt-menu-icon svg { width: 80%; height: 80%; }
+/* A landscape phone: the tips beside the rest, so it all fits. */
+@media (min-width: 600px) and (max-height: 500px) {
+  .tt-menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto 1fr;
+    column-gap: 24px;
+    max-width: min(720px, calc(100% - 32px));
+  }
+  .tt-menu > :not(.tt-menu-tips, .tt-menu-close) { grid-column: 1; }
+  .tt-menu-tips { grid-column: 2; grid-row: 1 / span 4; }
+  .tt-menu-tips ul { margin-bottom: 0; }
+  .tt-menu-close + h2 { margin-right: 0; }
+  .tt-menu-tips h3 { margin-right: 32px; }
+}
