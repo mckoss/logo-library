@@ -42,6 +42,14 @@ needs to load it.
 The package's version is `version` in its `package.json`. Hosts show it
 where they show the Logo version.
 
+## Offline
+
+Once a page has loaded an entry's files (the entry and the chunks and CSS it
+imports, as listed in the manifest), the controls make no network requests:
+no fetches, no lazy imports, no images or sounds from files. A host that
+caches those files with its page can run the page offline (mckoss.com does,
+for Turtle Tiles). `tests/e2e/offline.spec.js` holds the package to it.
+
 ## Elements
 
 All are custom elements in light DOM (no shadow DOM). Each fills the box its
