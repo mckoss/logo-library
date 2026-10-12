@@ -15,6 +15,7 @@ import {
 import type {
   Item, MoveItem, PlainTileId, ProgramName, Programs, RepeatItem, Step, Tile, TurnItem,
 } from './program.js';
+import { FORMAT } from './share.js';
 import type { IncomingPayload } from './share.js';
 
 // The animals, picked for a speed (the turtle is the turtle), and how fast
@@ -162,7 +163,7 @@ export function createState(programs: Programs = emptyPrograms(), current: Progr
 }
 
 // What's saved in this browser: the programs and the one shown.
-export const saved = (s: TilesState): string => JSON.stringify({ programs: s.programs, current: s.current });
+export const saved = (s: TilesState): string => JSON.stringify({ v: FORMAT, programs: s.programs, current: s.current });
 
 // The program the strip shows.
 export const program = (s: TilesState): Item[] => s.programs[s.current];

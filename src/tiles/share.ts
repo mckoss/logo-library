@@ -8,15 +8,23 @@ import type { ProgramName, Programs } from './program.js';
 
 export const SHARE_PARAM = 'p';
 
+// The format of the JSON a link carries and the browser saves, as its `v`.
+// Data with no `v` (made before 2.0.2) is format 1. Bump it only for a
+// change of meaning that can't be made by adding (SHARE-LINKS.md); loading
+// must then turn older formats into the new one.
+export const FORMAT = 1;
+
 // What a link carries: the program to show, and the programs that have
 // tiles.
 export interface SharePayload {
+  v: typeof FORMAT;
   current: ProgramName;
   programs: Partial<Programs>;
 }
 // A payload as a link brings it, which could be anything: clean() makes
 // sense of its programs, and a `current` that isn't a program shows A.
 export interface IncomingPayload {
+  v?: unknown;  // (format 1 is all there is so far; see FORMAT)
   current?: unknown;
   programs?: Partial<Record<ProgramName, unknown>>;
 }

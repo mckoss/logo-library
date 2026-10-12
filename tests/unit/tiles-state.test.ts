@@ -57,9 +57,17 @@ describe('what was saved', () => {
     }
   });
 
-  it('saves the programs and the one shown in the same JSON as before', () => {
+  it('saves the programs and the one shown, with their format first', () => {
     const s = createState(loadPrograms(JSON.stringify({ current: 'C', programs: { A: [{ t: 'red' }] } })).programs, 'C');
-    expect(saved(s)).toBe('{"programs":{"A":[{"t":"red"}],"B":[],"C":[],"D":[]},"current":"C"}');
+    expect(saved(s)).toBe('{"v":1,"programs":{"A":[{"t":"red"}],"B":[],"C":[],"D":[]},"current":"C"}');
+  });
+
+  it('loads what earlier versions saved (no format) and what this one saves, and what it saves loads back', () => {
+    const before = JSON.stringify({ programs: { A: [{ t: 'red' }] }, current: 'C' });
+    const now = JSON.stringify({ v: 1, programs: { A: [{ t: 'red' }] }, current: 'C', later: 'a field from a newer version' });
+    expect(loadPrograms(before)).toEqual(loadPrograms(now));
+    const s = createState(loadPrograms(now).programs, 'C');
+    expect(loadPrograms(saved(s))).toEqual(loadPrograms(now));
   });
 
   it('loads the turtle display choice (the old dot is an arrow) and the speed', () => {

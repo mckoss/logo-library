@@ -78,7 +78,7 @@ import {
   turnLabel, turnTint,
 } from './program.js';
 import type { Item, ProgramName, Programs, Step, Tile, TileGroup } from './program.js';
-import { SHARE_PARAM, pack, unpack } from './share.js';
+import { FORMAT, SHARE_PARAM, pack, unpack } from './share.js';
 import type { IncomingPayload, SharePayload } from './share.js';
 import {
   ABOVE, BOLT_TIP, BUTTONS, LOOKS, MENU, MUSIC, PICTURED, TURTLE, animal, arcArrow, arrowIcon, crayon, lookOf,
@@ -379,7 +379,7 @@ function init(root: HTMLElement) {
   const shareBtn = textButton('Share a link', async () => {
     const shared = NAMES.filter(n => state.programs[n].length);
     const data: SharePayload = {
-      current: state.current, programs: Object.fromEntries(shared.map(n => [n, state.programs[n]])),
+      v: FORMAT, current: state.current, programs: Object.fromEntries(shared.map(n => [n, state.programs[n]])),
     };
     const url = location.origin + location.pathname + '?' + SHARE_PARAM + '=' + await pack(data);
     if (navigator.share) {

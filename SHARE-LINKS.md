@@ -18,6 +18,7 @@ The JSON:
 
 ```json
 {
+  "v": 1,
   "current": "A",
   "programs": {
     "A": [{ "t": "repeat", "n": 4, "body": [{ "t": "move", "d": 50 }, { "t": "turn", "a": 90 }] },
@@ -27,7 +28,8 @@ The JSON:
 }
 ```
 
-`current` is the program to show (`"A"` to `"D"`). `programs` has a list of
+`v` is the format, 1 so far. Links and saves made before 2.0.2 have no `v`,
+which means 1. `current` is the program to show (`"A"` to `"D"`). `programs` has a list of
 tiles for each of `"A"` to `"D"` (links leave out empty ones). A tile is an
 object whose `t` says what it is:
 
@@ -53,12 +55,11 @@ To keep old links working:
   rounds and clamps numbers into range, and turns old names into new tiles.
   Never refuse a whole link over one tile.
 - Don't rename or remove a `t` value or a field, and don't change what one
-  means; add new ones. A change the old format can't express gets a new
-  payload letter, and `z` and `j` keep decoding.
-- The e2e tests open links frozen from 1.8.11 (`OLD_LINKS` in the tiles spec).
-  Never change them. When the format grows, add a link made by the new
-  version.
-
-To update jslogo: sync the fork with upstream on GitHub, then
-`git -C third_party/jslogo pull`, run `npm test`, and commit the submodule
-change.
+  means; add new ones (older versions ignore what they don't know). A change
+  of meaning that can't be made by adding bumps `v` (`FORMAT` in
+  `src/tiles/share.ts`), and loading turns every older format into the new
+  one. A new encoding gets a new payload letter, and `z` and `j` keep
+  decoding.
+- The tests open links frozen from 1.8.11 (`OLD_LINKS`, no `v`) and 2.0.2
+  (`LINKS_2_0_2`, `"v": 1`) in the tiles e2e spec and its unit tests. Never
+  change them. When the format grows, add a link made by the new version.
