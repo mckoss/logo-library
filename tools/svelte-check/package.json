@@ -1,0 +1,15 @@
+{
+  "name": "logo-library-svelte-check",
+  "private": true,
+  "description": "svelte-check and its own TypeScript 6, apart from the repo's TypeScript 7 (svelte-check doesn't support 7 yet). Installed by the repo's prepare script; run by npm run typecheck.",
+  "type": "module",
+  "scripts": {
+    "check": "svelte-check --workspace ../.. --tsconfig ./tsconfig.json --fail-on-warnings --output human && node emit-types.mjs"
+  },
+  "devDependencies": {
+    "svelte": "5.57.1",
+    "svelte-check": "4.7.6",
+    "svelte2tsx": "0.7.61",
+    "typescript": "6.0.3"
+  }
+}

@@ -5,29 +5,36 @@ Tiles are rebuilt as Svelte 5 components (runes), mounted from inside the
 existing `<turtle-tiles>` code. The rest of `tiles.ts` stays as it was. This
 note compares the two versions and recommends what to do in step 5.
 
+Both versions are TypeScript, and both are fully type-checked. The choice is
+between Svelte components (`<script lang="ts">` with typed props, markup
+checked by `svelte-check`) and hand-written TypeScript DOM code. The repo
+stays on TypeScript 7 for every `.ts` file; `svelte-check` runs on its own
+TypeScript 6 until it supports 7 (see "Type checking").
+
 **Result:** the slice works with no visible change and no test changes. All
 126 unit tests and all 194 e2e tests pass, including every Tiles test and
 the frozen 1.8.11 share links. The strip's state handling is clearly
-cleaner. But the slice isn't any smaller, the Tiles entry's JavaScript
-doubles (+17.8 kB gzipped), the `.svelte` files get no type checking under
-TypeScript 7, and Svelte adds new ways to get it wrong. **Recommendation:
-don't port the rest of Tiles to Svelte. Take step 5's other branch: plain
-TypeScript with a single state object and one render pass, reusing the state
-shape this spike found** (details at the end).
+cleaner, and with `svelte-check` the components are checked as strictly as
+the rest. But the slice isn't any smaller, the Tiles entry's JavaScript
+doubles (+17.8 kB gzipped), checking it needs a second TypeScript, and
+Svelte adds new ways to get it wrong. **Recommendation: don't port the rest
+of Tiles to Svelte. Take step 5's other branch: TypeScript with a single
+state object and one render pass, reusing the state shape this spike
+found** (details at the end).
 
 ## What was built
 
 | File | What |
 | --- | --- |
-| `src/tiles/strip.svelte.ts` | `StripState`, the explicit interface between `tiles.ts` and the components. It holds `programs` (deep `$state`), `current`, `top`, `playhead`, `selected`, `openRepeat`, `active`, `lifted` and `drop` (`$state.raw`), plus the derived `steps` and `next`. It also holds the props and exports types. |
-| `src/tiles/Strip.svelte` | The strip: a keyed `{#each}` of items, repeats with their heads (count, dots or bar) and bodies (a recursive snippet), and the playhead, picked, active, lifted, open-repeat and drop-marker states, all derived from `StripState`. It exports `itemOf(node)`, `reveal(item)` and `dropAt(x, y, item)` for `tiles.ts`'s pointer code, and has scoped CSS. |
+| `src/tiles/strip.svelte.ts` | `StripState`, the explicit interface between `tiles.ts` and the components. It holds `programs` (deep `$state`), `current`, `top`, `playhead`, `selected`, `openRepeat`, `active`, `lifted` and `drop` (`$state.raw`), plus the derived `steps` and `next`. |
+| `src/tiles/Strip.svelte` | The strip (its props typed in its own `<script lang="ts">`): a keyed `{#each}` of items, repeats with their heads (count, dots or bar) and bodies (a recursive snippet), and the playhead, picked, active, lifted, open-repeat and drop-marker states, all derived from `StripState`. It exports `itemOf(node)`, `reveal(item)` and `dropAt(x, y, item)` for `tiles.ts`'s pointer code, and has scoped CSS. |
 | `src/tiles/ProgramScroller.svelte` | The A–D letter with its up and down triangles, and scoped CSS. |
 | `src/tiles/scroll.ts` | The scroll between programs as Svelte `in:`/`out:` transitions on a `{#key}` block. It replaces the clone-and-slide. |
-| `src/tiles/*.svelte.d.ts` | Typed shims, so `tsc` knows the components' props and exports (see "Friction"). |
+| `tools/svelte-check/` | A small private package with its own `svelte-check` 4.7.6, TypeScript 6.0.3, `svelte2tsx` 0.7.61 and `svelte` 5.57.1, plus `emit-types.mjs`, which generates the components' declarations for `tsc` (see "Type checking"). |
 | `src/tiles/tiles.ts` | Mounts both components into `.tt-strip-row` with `mount()` (PLAN's decision #4: no custom-element mode). It talks to the strip only through `StripState`, a `face(item)` callback (the tile pictures stay in `tiles.ts`) and the three exports. |
 | `src/tiles/program.ts` | `PROGRAM_INK` moved here from `tiles.ts`, so the scroller can use it. |
 | `src/styles/tiles.css` | The strip, repeat and scroller rules moved out into the components. |
-| `package.json`, `vite.config.js` | `svelte` 5.57.1 and `@sveltejs/vite-plugin-svelte` 7.3.1 (published 2026-09-18 and 09-23; peers Vite ^8 and Svelte ^5.46), and `svelte()` in the plugins. jslogo's eval-safe minify settings are untouched. |
+| `package.json`, `vite.config.js`, `tsconfig.json` | `svelte` 5.57.1 and `@sveltejs/vite-plugin-svelte` 7.3.1 (published 2026-09-18 and 09-23; peers Vite ^8 and Svelte ^5.46), and `svelte()` in the plugins. TypeScript stays 7.0.2. A `prepare` script installs `tools/svelte-check`, and `typecheck` runs it, then `tsc`. `tsconfig.json` gains `rootDirs` for the generated declarations. jslogo's eval-safe minify settings are untouched. |
 
 Persisted formats are unchanged. `save()` and Share a link still
 `JSON.stringify` the programs; they're Svelte proxies now, which serialize to
@@ -42,10 +49,11 @@ Code lines here means non-blank, non-comment lines.
 | | Before (main) | After |
 | --- | --- | --- |
 | `tiles.ts` | 1,924 lines (1,518 code) | 1,743 lines (1,349 code): **−169 code** |
-| New TS and Svelte logic | none | `Strip.svelte` 94 (script 47, markup 47), `ProgramScroller.svelte` 25, `strip.svelte.ts` 53, `scroll.ts` 34, `.d.ts` shims 8: **+214 code** |
+| New TS and Svelte logic | none | `Strip.svelte` 98 (script 51, markup 47), `ProgramScroller.svelte` 29, `strip.svelte.ts` 40, `scroll.ts` 34: **+201 code** |
+| Type-checking tooling | none | `tools/svelte-check/emit-types.mjs` 29, its `package.json`, 3 lines of `tsconfig.json` |
 | CSS for the slice | about 125 lines in `tiles.css` | about 127 lines in the components' `<style>` (moved, nearly verbatim) |
 
-**Net: about +45 code lines for the slice (+3%).** The imperative DOM code
+**Net: about +32 code lines for the slice (+2%), plus the checking tooling.** The imperative DOM code
 went away, and declarations, the explicit interface and glue replaced it.
 
 What went from `tiles.ts`, with lines on main (including comments):
@@ -240,14 +248,9 @@ from its old spot, behind the others. I dropped it for three reasons:
   Vite 8.3 with no configuration (it logs "no Svelte config found"). Vitest
   and the jslogo build settings were unaffected. The Svelte runtime went
   into the Tiles chunk without changing `codeSplitting`.
-- **Types:** `svelte-check` supports TypeScript ^5 and ^6 only. TypeScript
-  7 is the native compiler, with no JS API for it to drive, so I didn't add
-  it. **`.svelte` files are not type-checked.** `npm run typecheck` (tsc)
-  still checks the `.ts` and `.svelte.ts` modules (the runes are ambient
-  types from the `svelte` package). The props and exports interfaces live in
-  `strip.svelte.ts`, used by both sides. Hand-written `Strip.svelte.d.ts`
-  and `ProgramScroller.svelte.d.ts` type the imports for `tsc`, but nothing
-  checks that the components match them.
+- **Types:** see "Type checking" below. In short, the components are now
+  checked as strictly as the `.ts` code, at the cost of a second, isolated
+  TypeScript (6) just for `svelte-check`.
 - **Light DOM and custom elements:** no problems. `mount(Component, {
   target })` from the existing element's code works, and scoped styles work
   in light DOM. Svelte 5 adds the scoping class once per selector (later
@@ -265,12 +268,86 @@ from its old spot, behind the others. I dropped it for three reasons:
   names) still holds. The full suite and three more runs of the Tiles and
   standalone specs all pass.
 
+## Type checking
+
+`svelte-check` 4.7.6 supports TypeScript ^5 and ^6 only. TypeScript 7 is the
+native compiler, with no JS API for it to drive. The repo keeps TypeScript
+7.0.2 for all `.ts` code, and `svelte-check` gets its own TypeScript 6:
+
+- **`tools/svelte-check/`** is a private package with its own lockfile:
+  `svelte-check` 4.7.6, `typescript` 6.0.3, `svelte2tsx` 0.7.61 and
+  `svelte` 5.57.1, all published at least two weeks ago. Node resolves
+  `svelte-check`'s `require('typescript')` to that package's own
+  TypeScript 6, so the root `typescript` stays 7.0.2 for everything else.
+  An npm alias (`"typescript6": "npm:typescript@6"`) can't work, because
+  `svelte-check` requires the name `typescript`. A workspace would likely hoist
+  `svelte-check` next to TypeScript 7. The root's `prepare` script
+  (`npm ci --prefix tools/svelte-check`) installs it, so CI's plain `npm ci`
+  and `npm run typecheck` work unchanged. `prepare` doesn't run for the
+  site's tarball install, and `files: ["dist"]` keeps `tools/` out of the
+  package.
+- **`npm run typecheck`** runs `svelte-check --tsconfig ./tsconfig.json
+  --fail-on-warnings` (TypeScript 6, with the same strict tsconfig). It
+  checks every `.svelte` file (script and markup) and, along the way, every
+  `.ts` file. Then `emit-types.mjs` regenerates the declarations, and
+  `tsc --noEmit` (TypeScript 7) checks every `.ts` file.
+- **No hand-written shims.** `tsc` can't read `.svelte` files, so
+  `import Strip from './Strip.svelte'` needs a declaration. `emit-types.mjs`
+  generates one per component with `svelte2tsx`'s `emitDts` into the
+  git-ignored `.svelte-types/src/tiles/Strip.svelte.d.ts` (props and
+  exports, taken from the component). The `rootDirs` setting in
+  `tsconfig.json` makes the import find it. Only the components'
+  declarations are kept: a generated `strip.svelte.d.ts` would be a second
+  `StripState`, which TypeScript rejects because of its `#private` field.
+  The declarations are regenerated on every typecheck, so they can't drift.
+  The props interfaces moved into the components themselves, and the
+  hand-written `Strip.svelte.d.ts` and `ProgramScroller.svelte.d.ts` are
+  deleted.
+- **Proof that it catches errors.** Each of these was introduced
+  temporarily, failed `npm run typecheck`, and was reverted:
+  - (a) A wrong prop type from `tiles.ts`, `face: 42`:
+    `tiles.ts:459:70 Error: Type 'number' is not assignable to type '(item: Item) => Face'.`
+  - (b) A type error in `Strip.svelte`'s script, `const shownCount: number = strip.current;`:
+    `Strip.svelte:30:9 Error: Type 'string' is not assignable to type 'number'.`
+    It also gave a Svelte warning: "This reference only captures the
+    initial value of `strip`".
+  - (c) Misuse of `StripState` in the markup,
+    `class:tt-next={strip.next?.itm === item && strip.playhead.length > 0}`:
+    `Strip.svelte:110:36 Error: Property 'itm' does not exist on type 'Step'. Did you mean 'item'?` and
+    `Strip.svelte:110:67 Error: Property 'length' does not exist on type 'number'.`
+  - (d) A prop renamed in the component only (`face` to `look`), with
+    `tiles.ts` unchanged. `svelte-check` reported
+    `tiles.ts:459:70 Error: Object literal may only specify known properties, and 'face' does not exist in type 'Props'.`
+    After regenerating, TypeScript 7 reported the same against the
+    generated declaration:
+    `src/tiles/tiles.ts(459,70): error TS2353: Object literal may only specify known properties, and 'face' does not exist in type 'Props'.`
+  - (e) A misnamed export, `stripView.itemAt(node)`, was also caught
+    (`Property 'itemAt' does not exist on type '{ itemOf: …; reveal: …; dropAt: … }'`).
+    A plain `.ts` error elsewhere (`src/engine/host.ts`) fails both
+    checkers.
+- **Costs.**
+  - Two TypeScripts to keep in step, and the `.ts` code checked twice (by 6
+    through `svelte-check`, and by 7). A construct only one of them accepts
+    would need care. None came up: the code passes both with no new casts
+    or loosening.
+  - A second lockfile, and 39 MB in `tools/svelte-check/node_modules`. The
+    nested `npm ci` takes about 1 s here.
+  - `npm run typecheck` goes from 0.7 s (`tsc` alone) to about 6.6 s
+    (`svelte-check` 3.4 s, generating declarations 2.3 s, `tsc` 0.7 s).
+  - Before the first typecheck (a fresh clone in an editor), `tsc` falls
+    back to Svelte's loose ambient `*.svelte` type. The typecheck script
+    always generates first, so this affects editors, not CI.
+  - All of this can go once `svelte-check` supports TypeScript 7: move it
+    back to the root and drop the generated declarations.
+
 ## Recommendation for step 5: stay TypeScript, with a single state object and one render pass
 
-Svelte made the strip clearly easier to reason about. But this slice was
-the best case for it, and even here it isn't clearly better overall:
+Svelte made the strip clearly easier to reason about. With `svelte-check`,
+typing no longer counts against it: components, props and markup are
+checked as strictly as the TypeScript. But this slice was the best case for
+Svelte, and even here it isn't clearly better overall:
 
-1. **No smaller.** The slice is about 45 code lines bigger, and the
+1. **No smaller.** The slice is about 32 code lines bigger, and the
    scroller's DOM tricks are still there, moved into transitions (which
    are a little longer than the clone-and-slide).
 2. **Twice the JavaScript for Tiles.** The entry goes from 16.7 to 34.5 kB
@@ -278,11 +355,14 @@ the best case for it, and even here it isn't clearly better overall:
    porting more would spread thinner, but nothing else in the package would
    share it (PLAN step 6 keeps the engine, lessons and reference in plain
    TypeScript).
-3. **Weaker checking and new failure modes.** `.svelte` files get no type
-   checking with TypeScript 7. Deep `$state` gives every item two
-   identities in a codebase that compares items by identity throughout. DOM
-   updates become asynchronous for imperative code (`flushSync`). Key-block
-   reuse produced a real bug that the tests happened to catch.
+3. **New failure modes, and heavier tooling.** Deep `$state` gives every
+   item two identities in a codebase that compares items by identity
+   throughout. The type checker can't catch that, since a proxy has the
+   item's type. DOM updates become asynchronous for imperative code
+   (`flushSync`). Key-block reuse produced a real bug that the tests
+   happened to catch. Type checking is now complete, but it needs a second,
+   pinned TypeScript, generated declarations, and a typecheck about nine
+   times slower, until `svelte-check` supports TypeScript 7.
 4. **The rest of Tiles gains less.** What's left is mostly static buttons
    with a few state-driven attributes: `setPace`, `setLook`,
    `setRecording`, `setPlaying`, `setDistance` and `setAngle` are each "set
@@ -311,8 +391,15 @@ ports directly to TypeScript:
   version and looks the same. Keep `animate:flip`-style motion out unless it's wanted
   for itself, and then slow the tests down for it.
 
-This keeps the current bundle and full `tsc` checking, and retires the same
+This keeps the current bundle and one TypeScript, and retires the same
 bug surface: `render`, `showPlayhead` and `select` become reads of one
 object. If Svelte comes up again (say, for the Playground), this spike's
 numbers are the baseline: about 17 kB gzipped of runtime per entry that uses
 it, unless the entries share a chunk.
+
+With the typing gap closed, the case against Svelte rests on the bundle
+(+17.8 kB gzipped), the lack of a code-size win, and the proxy and
+asynchronous-DOM pitfalls. It no longer rests on weaker checking. If the
+owner values declarative markup and scoped styles enough to pay that, Svelte
+is a workable choice. The evidence still favors TypeScript with one state
+object.

@@ -1,8 +1,10 @@
-// Type checking only (`npm run typecheck`); Vite builds the code. The engine
-// is TypeScript, strict. The modules still in JavaScript are part of the
-// program (allowJs) so TypeScript sees their imports, but aren't checked
-// until they're converted (checkJs off). jslogo (vendor/jslogo) stays plain
-// JavaScript outside the program; src/types/jslogo.d.ts describes it.
+// Type checking only (`npm run typecheck`: svelte-check, which checks this
+// program and the .svelte components with these options); Vite builds the
+// code. The engine is TypeScript, strict. The modules still in JavaScript
+// are part of the program (allowJs) so TypeScript sees their imports, but
+// aren't checked until they're converted (checkJs off). jslogo
+// (vendor/jslogo) stays plain JavaScript outside the program;
+// src/types/jslogo.d.ts describes it.
 {
   "compilerOptions": {
     "target": "ESNext",
@@ -14,6 +16,9 @@
     "allowJs": true,
     "checkJs": false,
     "noEmit": true,
+    // The components' generated declarations (.svelte-types, see
+    // tools/svelte-check/emit-types.mjs) count as if beside them.
+    "rootDirs": [".", ".svelte-types"],
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "resolveJsonModule": true,

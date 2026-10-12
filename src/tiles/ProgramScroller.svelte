@@ -7,9 +7,14 @@
 <script lang="ts">
   import { NAMES, PROGRAM_COLORS, PROGRAM_INK } from './program.js';
   import { scrollIn, scrollOut } from './scroll.js';
-  import type { ScrollerProps } from './strip.svelte.js';
+  import type { StripState } from './strip.svelte.js';
 
-  let { strip, onstep }: ScrollerProps = $props();
+  interface Props {
+    strip: StripState;
+    // Going up (-1) or down (1) a program.
+    onstep(by: -1 | 1): void;
+  }
+  let { strip, onstep }: Props = $props();
   let scrolling = $state(0);
 </script>
 

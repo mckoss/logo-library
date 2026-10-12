@@ -16,9 +16,14 @@
   import { flushSync } from 'svelte';
   import { scrollIn, scrollOut } from './scroll.js';
   import type { Item } from './program.js';
-  import type { DropSpot, StripProps } from './strip.svelte.js';
+  import type { DropSpot, Face, StripState } from './strip.svelte.js';
 
-  let { strip, face }: StripProps = $props();
+  interface Props {
+    strip: StripState;
+    // How an item looks (tiles.ts draws the pictures).
+    face(item: Item): Face;
+  }
+  let { strip, face }: Props = $props();
 
   const DOTS_UP_TO = 8;  // a repeat's progress shows as dots up to here, else as a bar
   const program = $derived(strip.programs[strip.current]);

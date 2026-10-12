@@ -71,21 +71,3 @@ export interface Face {
   color: string;
   crayon?: boolean;
 }
-
-export interface StripProps {
-  strip: StripState;
-  face(item: Item): Face;
-}
-export interface StripExports {
-  // The item a strip element shows (null if none).
-  itemOf(node: Element): Item | null;
-  // Scrolls an item into view in the strip, once it's drawn.
-  reveal(item: Item | null | undefined): void;
-  // Where `item`, dragged to (x, y), would land; null if not over the strip.
-  dropAt(x: number, y: number, item: Item): DropSpot | null;
-}
-export interface ScrollerProps {
-  strip: StripState;
-  // Going up (-1) or down (1) a program.
-  onstep(by: -1 | 1): void;
-}
