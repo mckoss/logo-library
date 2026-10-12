@@ -391,7 +391,8 @@ Open questions are tracked as issues in this repo.
         made `clean()` throw, so the whole link failed to open; now it's dropped like any unknown tile
 - [x] Styles scoped to the controls (#6): no rule depends on the site's `.post-content` any more, the
       Playground page's paragraph width moved to the site's CSS, and the demo pages are pixel-identical
-- [ ] Steps 4–5: Svelte spike on Turtle Tiles, and the decision
+- [x] Step 4: Svelte spike on Turtle Tiles' strip and program scroller (closed #21; `svelte-spike` branch and its SPIKE.md kept for reference)
+- [x] Step 5: decided to stay TypeScript; Turtle Tiles restructured around one state object (`src/tiles/state.ts`, pure transitions with unit tests) and one render pass, with a keyed strip (`src/tiles/strip.ts`)
 - [x] Example pages (`examples/`): hand-written plain HTML, one per element, with their own
       Playground and music player pages, deployed at mckoss.com/logo-library/ and tested on
       their own (`tests/e2e/standalone.spec.js`)
