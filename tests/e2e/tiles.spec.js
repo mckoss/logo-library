@@ -1290,14 +1290,21 @@ test('a page opens with Record off: tiles move the turtle until Record is tapped
 });
 
 // Share links are out in the world: every version must still open the
-// links earlier versions made. These were made by 1.8.11 (LOGO.md has
-// the format); never change them, add new ones instead.
+// links earlier versions made. These were made by 1.8.11 (SHARE-LINKS.md
+// has the format); never change them, add new ones instead.
 const OLD_LINKS = {
   z: 'zZY3BCoMwEET_Zc4reFBKc6u_UTxEs7RCzMoapUXy78UW00KP-2Z23oZ-UeUQYdCAMKnc1I4zzIYLzHXDnihPbCMIAaYidOKeORtlZRAcTF0m-rC4aADBwpzL1B60t97vircqtYTmR-Bw1L6Dxan-XyyqDJ3kp7uMnI_Aj9iLF81kCOswD51npDalFw',
   j: 'jeyJjdXJyZW50IjoiQiIsInByb2dyYW1zIjp7IkEiOlt7InQiOiJyZXBlYXQiLCJuIjo0LCJib2R5IjpbeyJ0IjoibW92ZSIsImQiOjUwfSx7InQiOiJ0dXJuIiwiYSI6OTB9XX0seyJ0IjoiY2FsbCIsInAiOiJCIn1dLCJCIjpbeyJ0IjoicmVkIn0seyJ0IjoibW92ZSIsImQiOi03NX0seyJ0IjoidHVybiIsImEiOi00NX0seyJ0IjoiZG8ifSx7InQiOiJob21lIn0seyJ0IjoibmV4dGNvbG9yIn0seyJ0IjoiaW52aXNpYmxlIn1dfX0',
 };
-for (const [kind, link] of Object.entries(OLD_LINKS)) {
-  test(`share links from 1.8.11 still open (${kind === 'z' ? 'compressed' : 'plain'})`, async ({ browser }) => {
+// The same programs as links 2.0.2 made, with the format they carry from
+// then on (`"v": 1`). Never change them either.
+const LINKS_2_0_2 = {
+  z: 'zZY3BCsIwEET_Zc5bqFAR92Z_Q3pIm0ULaVK2aVFK_l2qNAoe983svBUL-EDoZlXxEYwahFHDTc0wgVdcwNcVW6IyiokgeHBFaIN95mwIi4Bgwccy0YfFWT0IBnwuU7PTzji3Kd6q1BDqH4HFXvsOFqfj_2JRZWhDfrqHQfLh5RG74IJm0vuln_rWCVKT0gs',
+  j: 'jeyJ2IjoxLCJjdXJyZW50IjoiQiIsInByb2dyYW1zIjp7IkEiOlt7InQiOiJyZXBlYXQiLCJuIjo0LCJib2R5IjpbeyJ0IjoibW92ZSIsImQiOjUwfSx7InQiOiJ0dXJuIiwiYSI6OTB9XX0seyJ0IjoiY2FsbCIsInAiOiJCIn1dLCJCIjpbeyJ0IjoicmVkIn0seyJ0IjoibW92ZSIsImQiOi03NX0seyJ0IjoidHVybiIsImEiOi00NX0seyJ0IjoiZG8ifSx7InQiOiJob21lIn0seyJ0IjoibmV4dGNvbG9yIn0seyJ0IjoiaW52aXNpYmxlIn1dfX0',
+};
+for (const [kind, link] of [...Object.entries(OLD_LINKS).map(([k, l]) => ['1.8.11 ' + k, l]),
+  ...Object.entries(LINKS_2_0_2).map(([k, l]) => ['2.0.2 ' + k, l])]) {
+  test(`share links from ${kind.split(' ')[0]} still open (${kind.endsWith('z') ? 'compressed' : 'plain'})`, async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true });
     const page = await context.newPage();
     await page.goto('/logo/tiles/?p=' + link);

@@ -2,7 +2,7 @@
 // programs into a link's payload and back, compressed ("z") and plain
 // ("j"), and the links 1.8.11 handed out, which must keep opening.
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { pack, unpack, SHARE_PARAM } from '../../src/tiles/share.js';
+import { FORMAT, pack, unpack, SHARE_PARAM } from '../../src/tiles/share.js';
 import type { SharePayload } from '../../src/tiles/share.js';
 import { NAMES, clean } from '../../src/tiles/program.js';
 import type { Programs } from '../../src/tiles/program.js';
@@ -12,6 +12,12 @@ import type { Programs } from '../../src/tiles/program.js';
 const OLD_LINKS = {
   z: 'zZY3BCoMwEET_Zc4reFBKc6u_UTxEs7RCzMoapUXy78UW00KP-2Z23oZ-UeUQYdCAMKnc1I4zzIYLzHXDnihPbCMIAaYidOKeORtlZRAcTF0m-rC4aADBwpzL1B60t97vircqtYTmR-Bw1L6Dxan-XyyqDJ3kp7uMnI_Aj9iLF81kCOswD51npDalFw',
   j: 'jeyJjdXJyZW50IjoiQiIsInByb2dyYW1zIjp7IkEiOlt7InQiOiJyZXBlYXQiLCJuIjo0LCJib2R5IjpbeyJ0IjoibW92ZSIsImQiOjUwfSx7InQiOiJ0dXJuIiwiYSI6OTB9XX0seyJ0IjoiY2FsbCIsInAiOiJCIn1dLCJCIjpbeyJ0IjoicmVkIn0seyJ0IjoibW92ZSIsImQiOi03NX0seyJ0IjoidHVybiIsImEiOi00NX0seyJ0IjoiZG8ifSx7InQiOiJob21lIn0seyJ0IjoibmV4dGNvbG9yIn0seyJ0IjoiaW52aXNpYmxlIn1dfX0',
+};
+// The same programs as links 2.0.2 made, with their format (`"v": 1`)
+// first. Frozen too (LINKS_2_0_2 in tests/e2e/tiles.spec.js).
+const LINKS_2_0_2 = {
+  z: 'zZY3BCsIwEET_Zc5bqFAR92Z_Q3pIm0ULaVK2aVFK_l2qNAoe983svBUL-EDoZlXxEYwahFHDTc0wgVdcwNcVW6IyiokgeHBFaIN95mwIi4Bgwccy0YfFWT0IBnwuU7PTzji3Kd6q1BDqH4HFXvsOFqfj_2JRZWhDfrqHQfLh5RG74IJm0vuln_rWCVKT0gs',
+  j: 'jeyJ2IjoxLCJjdXJyZW50IjoiQiIsInByb2dyYW1zIjp7IkEiOlt7InQiOiJyZXBlYXQiLCJuIjo0LCJib2R5IjpbeyJ0IjoibW92ZSIsImQiOjUwfSx7InQiOiJ0dXJuIiwiYSI6OTB9XX0seyJ0IjoiY2FsbCIsInAiOiJCIn1dLCJCIjpbeyJ0IjoicmVkIn0seyJ0IjoibW92ZSIsImQiOi03NX0seyJ0IjoidHVybiIsImEiOi00NX0seyJ0IjoiZG8ifSx7InQiOiJob21lIn0seyJ0IjoibmV4dGNvbG9yIn0seyJ0IjoiaW52aXNpYmxlIn1dfX0',
 };
 const OLD_PROGRAMS: Programs = {
   A: [{ t: 'repeat', n: 4, body: [{ t: 'move', d: 50 }, { t: 'turn', a: 90 }] }, { t: 'call', p: 'B' }],
@@ -28,6 +34,7 @@ const opened = (data: unknown) => {
 };
 
 const payload: SharePayload = {
+  v: 1,
   current: 'C',
   programs: {
     A: [{ t: 'repeat', n: 12, body: [{ t: 'move', d: 2475 }, { t: 'turn', a: -165 }, { t: 'high-do' }] }],
@@ -63,7 +70,7 @@ describe('share links', () => {
   });
 
   it('are shorter compressed', async () => {
-    const big: SharePayload = { current: 'A', programs: { A: Array.from({ length: 40 }, () => ({ t: 'move', d: 50 })) } };
+    const big: SharePayload = { v: 1, current: 'A', programs: { A: Array.from({ length: 40 }, () => ({ t: 'move', d: 50 })) } };
     const z = await pack(big);
     vi.stubGlobal('CompressionStream', undefined);
     const j = await pack(big);
@@ -92,11 +99,24 @@ describe('share links', () => {
     });
   }
 
-  it('made now open as the same programs', async () => {
-    const data = { current: 'B' as const, programs: { A: OLD_PROGRAMS.A, B: OLD_PROGRAMS.B } };
-    expect(opened(await unpack(await pack(data)))).toEqual(OLD_PROGRAMS);
-    // The plain one is the very link 1.8.11 made.
+  it('made now open as the same programs, and carry their format', async () => {
+    const data: SharePayload = { v: FORMAT, current: 'B', programs: { A: OLD_PROGRAMS.A, B: OLD_PROGRAMS.B } };
+    const text = await pack(data);
+    expect(opened(await unpack(text))).toEqual(OLD_PROGRAMS);
+    expect(await unpack(text)).toMatchObject({ v: 1 });
+    // The same payload without `v` is the very link 1.8.11 made: the
+    // encoding hasn't changed, only `v` was added.
     vi.stubGlobal('CompressionStream', undefined);
-    expect(await pack(data)).toBe(OLD_LINKS.j);
+    const { v, ...old } = data;
+    expect(v).toBe(1);
+    expect(await pack(old as unknown as SharePayload)).toBe(OLD_LINKS.j);
   });
+
+  for (const [kind, link] of Object.entries(LINKS_2_0_2)) {
+    it(`from 2.0.2, with their format, still open (${kind === 'z' ? 'compressed' : 'plain'})`, async () => {
+      const data = await unpack(link);
+      expect(data).toMatchObject({ v: 1, current: 'B' });
+      expect(opened(data)).toEqual(OLD_PROGRAMS);
+    });
+  }
 });
